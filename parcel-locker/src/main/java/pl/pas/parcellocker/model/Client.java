@@ -6,7 +6,7 @@ public class Client {
     private final String firstName;
     private final String lastName;
     private final String telNumber;
-    private final boolean archive;
+    private final boolean isArchive;
 
     public Client(String firstName, String lastName, String telNumber) {
         validateName(firstName);
@@ -17,7 +17,7 @@ public class Client {
         this.lastName = lastName;
         this.telNumber = telNumber;
 
-        archive = false;
+        isArchive = false;
     }
 
     private void validateName(String name) {
@@ -30,4 +30,19 @@ public class Client {
             throw new ClientException("Empty lastName variable!");
     }
 
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public String getTelNumber() {
+        return telNumber;
+    }
+
+    public boolean isArchive() {
+        return isArchive;
+    }
 }
