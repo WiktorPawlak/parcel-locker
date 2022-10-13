@@ -6,7 +6,7 @@ public class Client {
     private final String firstName;
     private final String lastName;
     private final String telNumber;
-    private final boolean isArchive;
+    private boolean isArchive;
 
     public Client(String firstName, String lastName, String telNumber) {
         validateName(firstName);
@@ -44,5 +44,9 @@ public class Client {
 
     public boolean isArchive() {
         return isArchive;
+    }
+
+    public void setArchive(boolean archive) {
+        this.isArchive = archive;
     }
 }
