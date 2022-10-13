@@ -1,6 +1,7 @@
 package pl.pas.parcellocker.managers;
 
-import org.apache.commons.lang3.NotImplementedException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import pl.pas.parcellocker.exceptions.DeliveryManagerException;
 import pl.pas.parcellocker.exceptions.NotFoundException;
 import pl.pas.parcellocker.model.Client;
@@ -12,11 +13,11 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.UUID;
 
-import static pl.pas.parcellocker.configuration.ListConfig.ADDITIONAL_COST;
 import static pl.pas.parcellocker.model.DeliveryStatus.READY_TO_PICKUP;
 import static pl.pas.parcellocker.model.DeliveryStatus.RECEIVED;
 
 public class DeliveryManager {
+    private static final Logger logger = LoggerFactory.getLogger(DeliveryManager.class);
 
     private DeliveryRepository currentDeliveries;
     private DeliveryRepository archivedDeliveries;
@@ -62,7 +63,7 @@ public class DeliveryManager {
         try {
             delivery = currentDeliveries.findById(deliveryId);
         } catch (NotFoundException exception) {
-            //TODO: logger
+            logger.error(exception.getMessage());
             return false;
         }
 
