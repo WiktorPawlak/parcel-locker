@@ -40,7 +40,7 @@ public class Parcel extends Package {
     }
 
     private void validateSize(double size) {
-        if (weight <= MIN_PARCEL_SIZE || weight > MAX_PARCEL_SIZE)
+        if (size <= MIN_PARCEL_SIZE || size > MAX_PARCEL_SIZE)
             throw new ParcelException("invalid size value!");
     }
 
@@ -75,9 +75,9 @@ public class Parcel extends Package {
         List<Double> dims = Arrays.asList(width, length, height);
         ParcelType type;
 
-        if (dims.stream().anyMatch(dim -> dim > LARGE_SIZE)) {
+        if (dims.stream().anyMatch(dim -> dim >= LARGE_SIZE)) {
             type = ParcelType.LARGE;
-        } else if (dims.stream().anyMatch(dim -> dim > MEDIUM_SIZE)) {
+        } else if (dims.stream().anyMatch(dim -> dim >= MEDIUM_SIZE)) {
             type = ParcelType.MEDIUM;
         } else {
             type = ParcelType.SMALL;

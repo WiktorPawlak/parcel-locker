@@ -13,7 +13,11 @@ import java.util.Arrays;
 public class ClientManager {
     private static final Logger logger = LoggerFactory.getLogger(ClientManager.class);
 
-    private ClientRepository clientRepository;
+    private final ClientRepository clientRepository;
+
+    public ClientManager() {
+        clientRepository = new ClientRepository();
+    }
 
     public Client getClient(String telNumber) {
         validateIfEmpty(telNumber);

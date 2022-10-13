@@ -19,8 +19,13 @@ import static pl.pas.parcellocker.model.DeliveryStatus.RECEIVED;
 public class DeliveryManager {
     private static final Logger logger = LoggerFactory.getLogger(DeliveryManager.class);
 
-    private DeliveryRepository currentDeliveries;
-    private DeliveryRepository archivedDeliveries;
+    private final DeliveryRepository currentDeliveries;
+    private final DeliveryRepository archivedDeliveries;
+
+    public DeliveryManager() {
+        currentDeliveries = new DeliveryRepository();
+        archivedDeliveries = new DeliveryRepository();
+    }
 
     public Delivery makeParcelDelivery(
         BigDecimal basePrice,

@@ -1,37 +1,42 @@
 package pl.pas.parcellocker.model;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import pl.pas.parcellocker.exceptions.LockerException;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
 public class Locker {
+    private static final Logger logger = LoggerFactory.getLogger(Locker.class);
 
-    private List<DepositBox> depositBoxes;
+    private final List<DepositBox> depositBoxes;
 
     public Locker(int boxAmount) {
         try {
             if (boxAmount < 0)
                 throw new LockerException("Locker with 0 boxes can not be created!");
         } catch (LockerException e) {
-            //TODO (logger)
+            logger.error(e.getMessage());
         }
 
+        depositBoxes = new ArrayList<>();
         for (int i = 0; i < boxAmount; i++) {
             depositBoxes.add(new DepositBox(String.valueOf(i)));
         }
     }
 
     public void putIn(UUID id, String telNumber, String accessCode) {
-
         for (DepositBox depositBox : depositBoxes) {
-            if (!depositBox.isEmpty()) {
+            if (depositBox.isEmpty()) {
                 depositBox.setAccessCode(accessCode);
-                depositBox.setIsEmpty(true);
+                depositBox.setIsEmpty(false);
                 depositBox.setTelNumber(telNumber);
                 depositBox.setDeliveryId(id);
+                return;
             } else {
-                throw new LockerException("Not able to put package with id = " + depositBox + " into box.");
+                throw new LockerException("Not able to put package with id = " + depositBox.getId() + " into box.");
             }
         }
     }
@@ -49,7 +54,7 @@ public class Locker {
                     + "and phone number: "
                     + telNumber);
         } catch (LockerException e){
-            //TODO logger
+            logger.error(e.getMessage());
         }
         return null;
     }

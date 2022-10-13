@@ -42,7 +42,7 @@ public class Client {
         return telNumber;
     }
 
-    public boolean isArchive() {
+    public boolean isArchived() {
         return isArchive;
     }
 

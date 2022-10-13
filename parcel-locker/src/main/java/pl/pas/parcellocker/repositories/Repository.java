@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.function.Predicate;
 
 public class Repository<T> {
-    protected List<T> objects;
+    protected List<T> objects = new ArrayList<>();
 
     public T get(int index) {
         if (objects.size() >= index && index >= 0) {
