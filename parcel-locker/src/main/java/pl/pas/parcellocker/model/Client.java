@@ -49,4 +49,9 @@ public class Client {
     public void setArchive(boolean archive) {
         this.isArchive = archive;
     }
+
+    @Override
+    public String toString() {
+        return firstName + " " + lastName + " phone: " + telNumber + (isArchive ? " Archived" : " Actual");
+    }
 }
