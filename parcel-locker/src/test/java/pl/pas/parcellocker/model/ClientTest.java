@@ -1,0 +1,21 @@
+package pl.pas.parcellocker.model;
+
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
+import pl.pas.parcellocker.exceptions.ClientException;
+
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
+class ClientTest {
+
+    @ParameterizedTest(name = "when firstName = {0}, lastName = {1}, telNumber = {2} should throw exception")
+    @CsvSource({
+        "'',a,123456",
+        "a,'',123",
+        "a,a,''"
+    })
+    void whenIncorrectDataShouldThrowException(String firstName, String lastName, String telNumber) {
+        assertThrows(ClientException.class, () -> new Client(firstName, lastName, telNumber));
+    }
+
+}

@@ -2,6 +2,7 @@ package pl.pas.parcellocker.model;
 
 import pl.pas.parcellocker.exceptions.LockerException;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -11,29 +12,28 @@ public class Locker {
 
     public Locker(int boxAmount) {
         try {
-            if (boxAmount < 0)
+            if (boxAmount <= 0)
                 throw new LockerException("Locker with 0 boxes can not be created!");
         } catch (LockerException e) {
             //TODO (logger)
         }
-
+        depositBoxes = new ArrayList<>();
         for (int i = 0; i < boxAmount; i++) {
             depositBoxes.add(new DepositBox(String.valueOf(i)));
         }
     }
 
-    public void putIn(UUID id, String telNumber, String accessCode) {
+    public String putIn(UUID id, String telNumber, String accessCode) {
 
         for (DepositBox depositBox : depositBoxes) {
-            if (!depositBox.isEmpty()) {
-                depositBox.setAccessCode(accessCode);
-                depositBox.setIsEmpty(true);
-                depositBox.setTelNumber(telNumber);
-                depositBox.setDeliveryId(id);
+            if (depositBox.isEmpty()) {
+                depositBox.putIn(id, telNumber, accessCode);
+                return depositBox.getId();
             } else {
                 throw new LockerException("Not able to put package with id = " + depositBox + " into box.");
             }
         }
+        return null;
     }
 
     public UUID takeOut(String telNumber, String code) {

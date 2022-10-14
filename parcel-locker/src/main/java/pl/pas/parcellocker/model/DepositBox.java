@@ -12,27 +12,27 @@ public class DepositBox {
 
     public DepositBox(String id) {
         this.id = id;
-        isEmpty = false;
+        isEmpty = true;
         telNumber = "";
         accessCode = "";
     }
 
     public boolean canAccess(String code, String telNumber) {
-        if (code.equals(this.accessCode)
-                && telNumber.equals(this.telNumber)
-                && !code.isEmpty()
-                && !telNumber.isEmpty()) {
-            isEmpty = false;
-            this.accessCode = "";
-            this.telNumber = "";
-            return true;
-        } else {
-            return false;
-        }
+        return code.equals(this.accessCode)
+            && telNumber.equals(this.telNumber)
+            && !code.isEmpty()
+            && !telNumber.isEmpty();
+    }
+
+    public void putIn(UUID deliveryId, String telNumber, String accessCode) {
+        this.accessCode = accessCode;
+        this.isEmpty = false;
+        this.telNumber = telNumber;
+        this.deliveryId = deliveryId;
     }
 
     public void clean() {
-        isEmpty = false;
+        isEmpty = true;
         this.accessCode = "";
         this.telNumber = "";
     }
