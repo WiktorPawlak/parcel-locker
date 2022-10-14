@@ -24,7 +24,6 @@ public class List extends Package {
         return cost;
     }
 
-
     @Override
     public String toString() {
         String ifPriority = priority ? "Priority" : "Registered";
