@@ -1,5 +1,7 @@
 package pl.pas.parcellocker.model;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import pl.pas.parcellocker.exceptions.LockerException;
 
 import java.util.ArrayList;
@@ -7,15 +9,16 @@ import java.util.List;
 import java.util.UUID;
 
 public class Locker {
+    private static final Logger logger = LoggerFactory.getLogger(Locker.class);
 
-    private List<DepositBox> depositBoxes;
+    private final List<DepositBox> depositBoxes;
 
     public Locker(int boxAmount) {
         try {
             if (boxAmount <= 0)
                 throw new LockerException("Locker with 0 boxes can not be created!");
         } catch (LockerException e) {
-            //TODO (logger)
+            logger.error(e.getMessage());
         }
         depositBoxes = new ArrayList<>();
         for (int i = 0; i < boxAmount; i++) {
@@ -49,7 +52,7 @@ public class Locker {
                     + "and phone number: "
                     + telNumber);
         } catch (LockerException e){
-            //TODO logger
+            logger.error(e.getMessage());
         }
         return null;
     }

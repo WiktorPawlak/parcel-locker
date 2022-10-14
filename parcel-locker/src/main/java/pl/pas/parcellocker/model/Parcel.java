@@ -24,7 +24,7 @@ public class Parcel extends Package {
     private final double weight;
     private final boolean fragile;
 
-    public Parcel(double width, double length, double height, double weight, boolean fragile, BigDecimal basePrice) {
+    public Parcel(BigDecimal basePrice, double width, double length, double height, double weight, boolean fragile) {
         super(basePrice);
 
         validateSize(width);
@@ -40,7 +40,7 @@ public class Parcel extends Package {
     }
 
     private void validateSize(double size) {
-        if (weight <= MIN_PARCEL_SIZE || weight > MAX_PARCEL_SIZE)
+        if (size <= MIN_PARCEL_SIZE || size > MAX_PARCEL_SIZE)
             throw new ParcelException("invalid size value!");
     }
 
@@ -75,9 +75,9 @@ public class Parcel extends Package {
         List<Double> dims = Arrays.asList(width, length, height);
         ParcelType type;
 
-        if (dims.stream().anyMatch(dim -> dim > LARGE_SIZE)) {
+        if (dims.stream().anyMatch(dim -> dim >= LARGE_SIZE)) {
             type = ParcelType.LARGE;
-        } else if (dims.stream().anyMatch(dim -> dim > MEDIUM_SIZE)) {
+        } else if (dims.stream().anyMatch(dim -> dim >= MEDIUM_SIZE)) {
             type = ParcelType.MEDIUM;
         } else {
             type = ParcelType.SMALL;
@@ -88,13 +88,8 @@ public class Parcel extends Package {
 
     @Override
     public String toString() {
-        return new ToStringBuilder(this)
-            .append(width).append("x").append(length).append("x").append(height)
-            .append(" ")
-            .append(weight).append("kg")
-            .append(" cost: ").append(getCost())
-            .append(super.toString())
-            .toString();
+        return "Parcel " + width + "x" + length + "x" + height +
+            " "+ weight + "kg"+" cost: " + this.getCost() + " " + super.toString();
     }
 
     private enum ParcelType {SMALL, MEDIUM, LARGE}

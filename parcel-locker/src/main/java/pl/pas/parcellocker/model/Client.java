@@ -42,11 +42,16 @@ public class Client {
         return telNumber;
     }
 
-    public boolean isArchive() {
+    public boolean isArchived() {
         return isArchive;
     }
 
     public void setArchive(boolean archive) {
         this.isArchive = archive;
+    }
+
+    @Override
+    public String toString() {
+        return firstName + " " + lastName + " phone: " + telNumber + (isArchive ? " Archived" : " Actual");
     }
 }

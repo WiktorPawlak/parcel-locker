@@ -13,35 +13,41 @@ public class Delivery {
     private Locker locker;
 
     public Delivery(BigDecimal basePrice,
-                    UUID id,
-                    float width,
-                    float height,
-                    float length,
-                    float weight,
+                    double width,
+                    double length,
+                    double height,
+                    double weight,
                     boolean isFragile,
                     Client shipper,
                     Client receiver,
                     Locker locker) {
-        //TODO id should be generate here
-        this.shipper = shipper;
-        this.receiver = receiver;
-        this.locker = locker;
+        this(shipper, receiver, locker);
 
-        this.pack = new Parcel(width, length, height, weight, isFragile, basePrice);
+        this.pack = new Parcel(basePrice, width, length, height, weight, isFragile);
     }
 
     public Delivery(BigDecimal basePrice,
-                    UUID id,
                     boolean isPriority,
                     Client shipper,
                     Client receiver,
                     Locker locker) {
-        //TODO id should be generate here
+        this(shipper, receiver, locker);
+
+        this.pack = new List(basePrice, isPriority);
+    }
+
+    private Delivery(Client shipper,
+                     Client receiver,
+                     Locker locker) {
+        this.id = UUID.randomUUID();
         this.shipper = shipper;
         this.receiver = receiver;
         this.locker = locker;
+        this.status = DeliveryStatus.READY_TO_SHIP;
+    }
 
-        this.pack = new List(basePrice, isPriority);
+    public BigDecimal getCost() {
+        return pack.getCost();
     }
 
     public UUID getId() {
