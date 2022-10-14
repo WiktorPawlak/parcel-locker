@@ -17,7 +17,7 @@ struct ClientFixture
 
     ClientFixture()
     {
-        c = std::make_shared<Client>("Maciej", "Nowak", "606123654");
+        c = std::make_shared<Client>('"Maciej", "Nowak", "606123654"');
     }
 };
 
