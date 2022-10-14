@@ -15,8 +15,6 @@ public abstract class Package {
 
     @Override
     public String toString() {
-        return new ToStringBuilder(this)
-                .append("basePrice: ", basePrice)
-                .toString();
+        return "basePrice: " + this.basePrice;
     }
 }

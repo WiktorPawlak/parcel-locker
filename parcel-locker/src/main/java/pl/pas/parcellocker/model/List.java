@@ -27,9 +27,7 @@ public class List extends Package {
 
     @Override
     public String toString() {
-        return new ToStringBuilder(this)
-            .append("priority", priority ? "Priority" : "Registered")
-            .append(super.toString())
-            .toString();
+        String ifPriority = priority ? "Priority" : "Registered";
+        return ifPriority + " letter cost: " + this.getCost() + " " + super.toString();
     }
 }

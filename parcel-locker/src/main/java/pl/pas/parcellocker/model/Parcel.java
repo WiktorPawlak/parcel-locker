@@ -24,7 +24,7 @@ public class Parcel extends Package {
     private final double weight;
     private final boolean fragile;
 
-    public Parcel(double width, double length, double height, double weight, boolean fragile, BigDecimal basePrice) {
+    public Parcel(BigDecimal basePrice, double width, double length, double height, double weight, boolean fragile) {
         super(basePrice);
 
         validateSize(width);
@@ -88,13 +88,8 @@ public class Parcel extends Package {
 
     @Override
     public String toString() {
-        return new ToStringBuilder(this)
-            .append(width).append("x").append(length).append("x").append(height)
-            .append(" ")
-            .append(weight).append("kg")
-            .append(" cost: ").append(getCost())
-            .append(super.toString())
-            .toString();
+        return "Parcel " + width + "x" + length + "x" + height +
+            " "+ weight + "kg"+" cost: " + this.getCost() + " " + super.toString();
     }
 
     private enum ParcelType {SMALL, MEDIUM, LARGE}

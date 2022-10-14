@@ -14,8 +14,8 @@ public class Delivery {
 
     public Delivery(BigDecimal basePrice,
                     double width,
-                    double height,
                     double length,
+                    double height,
                     double weight,
                     boolean isFragile,
                     Client shipper,
@@ -23,7 +23,7 @@ public class Delivery {
                     Locker locker) {
         this(shipper, receiver, locker);
 
-        this.pack = new Parcel(width, length, height, weight, isFragile, basePrice);
+        this.pack = new Parcel(basePrice, width, length, height, weight, isFragile);
     }
 
     public Delivery(BigDecimal basePrice,
@@ -43,6 +43,7 @@ public class Delivery {
         this.shipper = shipper;
         this.receiver = receiver;
         this.locker = locker;
+        this.status = DeliveryStatus.READY_TO_SHIP;
     }
 
     public BigDecimal getCost() {
