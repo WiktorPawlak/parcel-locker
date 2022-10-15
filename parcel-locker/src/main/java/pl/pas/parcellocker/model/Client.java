@@ -1,11 +1,26 @@
 package pl.pas.parcellocker.model;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.TableGenerator;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 import pl.pas.parcellocker.exceptions.ClientException;
 
+@Entity
+@AllArgsConstructor
+@NoArgsConstructor
+@TableGenerator(name="clientTable", initialValue=100000, allocationSize=1)
 public class Client {
-    private final String firstName;
-    private final String lastName;
-    private final String telNumber;
+
+    @Id
+    @GeneratedValue(strategy=GenerationType.TABLE, generator="clientTable")
+    private Long id;
+    private String firstName;
+    private String lastName;
+    private String telNumber;
     private boolean isArchive;
 
     public Client(String firstName, String lastName, String telNumber) {
@@ -53,5 +68,9 @@ public class Client {
     @Override
     public String toString() {
         return firstName + " " + lastName + " phone: " + telNumber + (isArchive ? " Archived" : " Actual");
+    }
+
+    public Long getId() {
+        return id;
     }
 }
