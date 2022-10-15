@@ -24,4 +24,9 @@ class ClientRepositoryTest {
         clientRepository.add(c1);
         assertEquals(c, clientRepository.findByTelNumber("606123654"));
     }
+
+    @Test
+    void save() {
+       clientRepository.save();
+    }
 }
