@@ -9,8 +9,10 @@
         <exclude-unlisted-classes>true</exclude-unlisted-classes>
 
         <properties>
+<!--            <property name="jakarta.persistence.jdbc.driver" value="org.testcontainers.jdbc.ContainerDatabaseDriver"/>-->
+<!--            <property name="jakarta.persistence.jdbc.url" value="jdbc:tc:postgresql:15:///database"/>-->
             <property name="jakarta.persistence.jdbc.driver" value="org.postgresql.Driver"/>
-            <property name="jakarta.persistence.jdbc.url" value="jdbc:postgresql://localhost:5432/database"/>
+            <property name="jakarta.persistence.jdbc.url" value="jdbc:postgresql://localhost:${db.port}/database"/>
             <property name="jakarta.persistence.jdbc.user" value="admin"/>
             <property name="jakarta.persistence.jdbc.password" value="admin"/>
 

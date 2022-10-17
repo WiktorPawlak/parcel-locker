@@ -2,11 +2,12 @@ package pl.pas.parcellocker.repositories;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import pl.pas.parcellocker.config.TestsConfig;
 import pl.pas.parcellocker.model.Client;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class ClientRepositoryTest {
+class ClientRepositoryTest extends TestsConfig {
     public ClientRepository clientRepository;
     public Client c;
     public Client c1;
