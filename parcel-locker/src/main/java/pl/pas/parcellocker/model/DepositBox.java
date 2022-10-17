@@ -18,15 +18,17 @@ public class DepositBox {
     }
 
     public boolean canAccess(String code, String telNumber) {
-        if (code.equals(this.accessCode)
+        return code.equals(this.accessCode)
             && telNumber.equals(this.telNumber)
             && !code.isEmpty()
-            && !telNumber.isEmpty()
-        ) {
-            return true;
-        } else {
-            return false;
-        }
+            && !telNumber.isEmpty();
+    }
+
+    public void putIn(UUID deliveryId, String telNumber, String accessCode) {
+        this.accessCode = accessCode;
+        this.isEmpty = false;
+        this.telNumber = telNumber;
+        this.deliveryId = deliveryId;
     }
 
     public void clean() {
