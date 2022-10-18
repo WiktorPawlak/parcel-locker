@@ -1,6 +1,5 @@
 package pl.pas.parcellocker.managers;
 
-import org.apache.commons.lang3.NotImplementedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import pl.pas.parcellocker.exceptions.ClientManagerException;
@@ -32,7 +31,7 @@ public class ClientManager {
         }
 
         Client newClient = new Client(firstName, lastName, telNumber);
-        clientRepository.add(newClient);
+        clientRepository.save(newClient);
         return newClient;
     }
 
