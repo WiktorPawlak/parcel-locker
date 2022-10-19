@@ -91,11 +91,5 @@ public class Parcel extends Package {
         return type;
     }
 
-    @Override
-    public String toString() {
-        return "Parcel " + width + "x" + length + "x" + height +
-            " " + weight + "kg" + " cost: " + this.getCost() + " " + super.toString();
-    }
-
     private enum ParcelType {SMALL, MEDIUM, LARGE}
 }

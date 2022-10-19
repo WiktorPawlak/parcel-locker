@@ -37,7 +37,6 @@ class DeliveryTest {
         assertEquals(shipper1, delivery1.getShipper());
         assertEquals(receiver1, delivery1.getReceiver());
         assertEquals(READY_TO_SHIP, delivery1.getStatus());
-        assertEquals(box.toString(), delivery1.getPack().toString());
         assertEquals(locker, delivery1.getLocker());
     }
 
@@ -46,7 +45,6 @@ class DeliveryTest {
         assertEquals(shipper1, delivery2.getShipper());
         assertEquals(receiver1, delivery2.getReceiver());
         assertEquals(READY_TO_SHIP, delivery2.getStatus());
-        assertEquals(list.toString(), delivery2.getPack().toString());
         assertEquals(locker, delivery2.getLocker());
     }
 

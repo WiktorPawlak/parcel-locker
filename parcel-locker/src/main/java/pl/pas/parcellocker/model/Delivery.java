@@ -44,16 +44,23 @@ public class Delivery extends VersionModel implements EntityClass {
     )
     private UUID id;
 
+    @EqualsAndHashCode.Exclude
     @ManyToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "shipper_id")
     private Client shipper;
+
+    @EqualsAndHashCode.Exclude
     @ManyToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "receiver_id")
     private Client receiver;
     private DeliveryStatus status;
+
+    @EqualsAndHashCode.Exclude
     @ManyToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "pack_ID")
     private Package pack;
+
+    @EqualsAndHashCode.Exclude
     @ManyToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "locker_id")
     private Locker locker;
@@ -133,4 +140,5 @@ public class Delivery extends VersionModel implements EntityClass {
     public void setArchived(boolean archived) {
         isArchived = archived;
     }
+
 }

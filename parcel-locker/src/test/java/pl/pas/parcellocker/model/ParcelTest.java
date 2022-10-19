@@ -20,7 +20,6 @@ class ParcelTest {
     @Test
     void constructorAndGettersConformance() {
         assertEquals(new BigDecimal("10.0"), p.getCost());
-        assertEquals("Parcel 1.0x2.0x3.0 4.0kg cost: 10.0 basePrice: 10", p.toString());
     }
 
     @Test

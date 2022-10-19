@@ -41,10 +41,4 @@ public class List extends Package {
         if (priority) cost = cost.add(ADDITIONAL_COST);
         return cost;
     }
-
-    @Override
-    public String toString() {
-        String ifPriority = priority ? "Priority" : "Registered";
-        return ifPriority + " letter cost: " + this.getCost() + " " + super.toString();
-    }
 }

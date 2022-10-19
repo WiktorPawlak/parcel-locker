@@ -39,14 +39,14 @@ class DeliveryManagerTest extends TestsConfig {
         assertEquals(empty - 1, locker.countEmpty());
     }
 
-//    @Test
-//    void takeOutDeliveryConformance() {
-//        deliveryManager.putInLocker(delivery, "1234");
-//        int empty = locker.countEmpty();
-//        deliveryManager.takeOutDelivery(locker, receiver1, "1234");
-//        assertEquals(empty + 1, locker.countEmpty());
-//    }
-//
+    @Test
+    void takeOutDeliveryConformance() {
+        deliveryManager.putInLocker(delivery, "1234");
+        int empty = locker.countEmpty();
+        deliveryManager.takeOutDelivery(locker, receiver1, "1234");
+        assertEquals(empty + 1, locker.countEmpty());
+    }
+
 //    @Test
 //    void getAllClientDeliveriesConformance() {
 //        Delivery delivery1 = deliveryManager.makeParcelDelivery(basePrice, 10, 20, 30, 10, false, shipper1, receiver1, locker);

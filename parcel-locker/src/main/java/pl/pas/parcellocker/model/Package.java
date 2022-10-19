@@ -27,9 +27,4 @@ public abstract class Package extends VersionModel {
     }
 
     public abstract BigDecimal getCost();
-
-    @Override
-    public String toString() {
-        return "basePrice: " + this.basePrice;
-    }
 }

@@ -21,7 +21,7 @@ class ClientRepositoryTest extends TestsConfig {
     @BeforeEach
     void setup() {
         clientRepository = new ClientRepository();
-        c1 = new Client("Maciej", "Nowak", "12345");
+        c1 = new Client("Maciej", "Nowak", "123452137");
         c2 = new Client("Maciej", "Kowal", "123456");
         c3 = new Client("Maciej", "Kowal", "1234567");
         c4 = new Client("Maciej", "Kowal", "12345678");

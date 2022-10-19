@@ -41,7 +41,6 @@ public class DeliveryManager {
     ) {
         Delivery delivery = new Delivery(basePrice, width, height, length, weight, isFragile, shipper, receiver, locker);
         deliveries.add(delivery);
-        List<Delivery> all = deliveries.findAll();
         return delivery;
     }
 
@@ -62,7 +61,6 @@ public class DeliveryManager {
         locker.putIn(delivery, delivery.getReceiver().getTelNumber(), accessCode);
         delivery.setStatus(READY_TO_PICKUP);
         deliveries.update(delivery);
-        //lockerRepository.update(locker);
     }
 
     public boolean takeOutDelivery(Locker locker, Client receiver, String accessCode) {
