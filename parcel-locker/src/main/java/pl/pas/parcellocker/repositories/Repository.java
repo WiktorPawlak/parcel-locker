@@ -1,12 +1,10 @@
 package pl.pas.parcellocker.repositories;
 
 import jakarta.persistence.EntityManager;
-import jakarta.persistence.EntityManagerFactory;
-import jakarta.persistence.Persistence;
 import jakarta.persistence.PersistenceException;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import pl.pas.parcellocker.model.Delivery;
+import pl.pas.parcellocker.exceptions.RepositoryException;
 import pl.pas.parcellocker.model.EntityClass;
 
 import java.util.List;
@@ -14,14 +12,11 @@ import java.util.UUID;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
+import static pl.pas.parcellocker.repositories.EntityManagerUtil.getEntityManager;
+
 @Slf4j
 @AllArgsConstructor
 public class Repository<T extends EntityClass> {
-
-    protected static EntityManagerFactory emf = Persistence.createEntityManagerFactory("ParcelLocker");
-    public EntityManager getEntityManager() {
-        return emf.createEntityManager();
-    }
 
     private Class<T> entityClass;
 
@@ -44,7 +39,7 @@ public class Repository<T extends EntityClass> {
 
                 entityManager.getTransaction().commit();
             } catch (PersistenceException e) {
-                log.error(e.getMessage());
+                throw new RepositoryException(e);
             }
         }
     }
@@ -57,7 +52,7 @@ public class Repository<T extends EntityClass> {
             entityManager.merge(object);
             entityManager.getTransaction().commit();
         } catch (PersistenceException e) {
-            log.error(e.getMessage());
+            throw new RepositoryException(e);
         }
     }
 
@@ -75,7 +70,7 @@ public class Repository<T extends EntityClass> {
 
                 entityManager.getTransaction().commit();
             } catch (PersistenceException e) {
-                log.error(e.getMessage());
+                throw new RepositoryException(e);
             }
         }
     }

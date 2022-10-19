@@ -39,14 +39,14 @@ class ClientRepositoryTest extends TestsConfig {
         clientRepository.add(c2);
         clientRepository.archive(c2.getId());
 
-        assertTrue(clientRepository.findById(c2.getId()).isArchived());
+        assertTrue(clientRepository.get(c2.getId()).isArchived());
     }
 
     @Test
     void shouldAddClientIntoDB() {
        clientRepository.add(c3);
 
-       assertNotNull(clientRepository.findById(c3.getId()));
+       assertNotNull(clientRepository.get(c3.getId()));
     }
 
     @Test

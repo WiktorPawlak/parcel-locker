@@ -2,15 +2,14 @@ package pl.pas.parcellocker.repositories;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceException;
-import lombok.extern.slf4j.Slf4j;
-import pl.pas.parcellocker.model.Client;
+import pl.pas.parcellocker.exceptions.RepositoryException;
 import pl.pas.parcellocker.model.Delivery;
 import pl.pas.parcellocker.model.DeliveryStatus;
-import pl.pas.parcellocker.model.Locker;
 
 import java.util.UUID;
 
-@Slf4j
+import static pl.pas.parcellocker.repositories.EntityManagerUtil.getEntityManager;
+
 public class DeliveryRepository extends Repository<Delivery> {
 
     public DeliveryRepository() {
@@ -29,7 +28,7 @@ public class DeliveryRepository extends Repository<Delivery> {
 
             entityManager.getTransaction().commit();
         } catch (PersistenceException e) {
-            log.error(e.getMessage());
+            throw new RepositoryException(e);
         }
     }
 

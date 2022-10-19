@@ -1,16 +1,12 @@
 package pl.pas.parcellocker.managers;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import pl.pas.parcellocker.exceptions.ClientManagerException;
-import pl.pas.parcellocker.exceptions.NotFoundException;
 import pl.pas.parcellocker.model.Client;
 import pl.pas.parcellocker.repositories.ClientRepository;
 
 import java.util.Arrays;
 
 public class ClientManager {
-    private static final Logger logger = LoggerFactory.getLogger(ClientManager.class);
 
     private final ClientRepository clientRepository;
 
@@ -25,8 +21,10 @@ public class ClientManager {
     }
 
     public Client registerClient(String firstName, String lastName, String telNumber) {
+        validateIfEmpty(firstName, lastName, telNumber);
+
         for (Client client : clientRepository.findAll()) {
-            if(client.getTelNumber().equals(telNumber))
+            if (client.getTelNumber().equals(telNumber))
                 return client;
         }
 
@@ -37,14 +35,9 @@ public class ClientManager {
 
     public Client unregisterClient(Client client) {
         if (client == null)
-            throw new ClientManagerException("client is a nullptr!");
+            throw new ClientManagerException("client is a null!");
 
-        try {
-            getClient(client.getTelNumber());
-        } catch (NotFoundException exception) {
-            logger.error(exception.getMessage());
-        }
-
+        getClient(client.getTelNumber());
         clientRepository.archive(client.getId());
         return client;
     }
