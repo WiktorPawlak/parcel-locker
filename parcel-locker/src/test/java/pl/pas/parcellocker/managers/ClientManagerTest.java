@@ -1,14 +1,16 @@
 package pl.pas.parcellocker.managers;
 
+import jakarta.persistence.NoResultException;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import pl.pas.parcellocker.config.TestsConfig;
 import pl.pas.parcellocker.exceptions.ClientManagerException;
 import pl.pas.parcellocker.exceptions.NotFoundException;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class ClientManagerTest {
+class ClientManagerTest extends TestsConfig {
 
     public ClientManager clientManager;
 
@@ -36,7 +38,7 @@ class ClientManagerTest {
     void getClientConformance() {
         clientManager.registerClient("Bartosh", "Byniowski", "123456789");
         assertEquals(clientManager.getClient("123456789").getFirstName(), "Bartosh");
-        assertThrows(NotFoundException.class, () -> clientManager.getClient("987654321"));
+        assertThrows(NoResultException.class, () -> clientManager.getClient("987654321"));
     }
 
     @Test

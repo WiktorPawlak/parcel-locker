@@ -5,19 +5,28 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.TableGenerator;
+import jakarta.persistence.Version;
 import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.GenericGenerator;
 import pl.pas.parcellocker.exceptions.ClientException;
+
+import java.util.UUID;
 
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
-@TableGenerator(name="clientTable", initialValue=100000, allocationSize=1)
-public class Client {
+@EqualsAndHashCode
+public class Client extends VersionModel implements EntityClass{
 
     @Id
-    @GeneratedValue(strategy=GenerationType.TABLE, generator="clientTable")
-    private Long id;
+    @GeneratedValue(generator = "UUID")
+    @GenericGenerator(
+        name = "UUID",
+        strategy = "org.hibernate.id.UUIDGenerator"
+    )
+    private UUID id;
     private String firstName;
     private String lastName;
     private String telNumber;
@@ -45,6 +54,11 @@ public class Client {
             throw new ClientException("Empty lastName variable!");
     }
 
+    @Override
+    public UUID getId() {
+        return id;
+    }
+
     public String getFirstName() {
         return firstName;
     }
@@ -68,9 +82,5 @@ public class Client {
     @Override
     public String toString() {
         return firstName + " " + lastName + " phone: " + telNumber + (isArchive ? " Archived" : " Actual");
-    }
-
-    public Long getId() {
-        return id;
     }
 }

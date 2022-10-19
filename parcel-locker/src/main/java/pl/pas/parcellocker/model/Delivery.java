@@ -1,16 +1,63 @@
 package pl.pas.parcellocker.model;
 
+import jakarta.persistence.Access;
+import jakarta.persistence.AccessType;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.DiscriminatorColumn;
+import jakarta.persistence.DiscriminatorType;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Inheritance;
+import jakarta.persistence.InheritanceType;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.TableGenerator;
+import jakarta.persistence.Transient;
+import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.GenericGenerator;
+
 import java.math.BigDecimal;
 import java.util.UUID;
 
-public class Delivery {
+@Entity
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@DiscriminatorColumn(name = "package_type",
+    discriminatorType = DiscriminatorType.INTEGER)
+@Access(AccessType.FIELD)
+@AllArgsConstructor
+@NoArgsConstructor
+@EqualsAndHashCode
+public class Delivery extends VersionModel implements EntityClass {
 
+    @Id
+    @GeneratedValue(generator = "UUID")
+    @GenericGenerator(
+        name = "UUID",
+        strategy = "org.hibernate.id.UUIDGenerator"
+    )
     private UUID id;
+
+    @ManyToOne(cascade = CascadeType.PERSIST)
+    @JoinColumn(name = "shipper_id")
     private Client shipper;
+    @ManyToOne(cascade = CascadeType.PERSIST)
+    @JoinColumn(name = "receiver_id")
     private Client receiver;
     private DeliveryStatus status;
+    @ManyToOne(cascade = CascadeType.PERSIST)
+    @JoinColumn(name = "pack_ID")
     private Package pack;
+    @ManyToOne(cascade = CascadeType.PERSIST)
+    @JoinColumn(name = "locker_id")
     private Locker locker;
+    private boolean isArchived;
 
     public Delivery(BigDecimal basePrice,
                     double width,
@@ -50,6 +97,7 @@ public class Delivery {
         return pack.getCost();
     }
 
+    @Override
     public UUID getId() {
         return id;
     }
@@ -76,5 +124,13 @@ public class Delivery {
 
     public void setStatus(DeliveryStatus status) {
         this.status = status;
+    }
+
+    public boolean isArchived() {
+        return isArchived;
+    }
+
+    public void setArchived(boolean archived) {
+        isArchived = archived;
     }
 }

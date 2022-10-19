@@ -45,7 +45,7 @@ public class ClientManager {
             logger.error(exception.getMessage());
         }
 
-        client.setArchive(true);
+        clientRepository.archive(client.getId());
         return client;
     }
 

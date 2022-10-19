@@ -1,28 +1,18 @@
 package pl.pas.parcellocker.repositories;
 
 import jakarta.persistence.EntityManager;
-import jakarta.persistence.EntityManagerFactory;
-import jakarta.persistence.Persistence;
 import jakarta.persistence.PersistenceException;
 import pl.pas.parcellocker.model.Client;
 
-import java.util.List;
+import java.util.UUID;
 
 public class ClientRepository extends Repository<Client> {
 
-    EntityManagerFactory emf = Persistence.createEntityManagerFactory("ParcelLocker");
-
-    public EntityManager getEntityManager() {
-        return emf.createEntityManager();
+    public ClientRepository() {
+        super(Client.class);
     }
 
-    public List<Client> findAll() {
-        return (List<Client>) getEntityManager()
-            .createQuery("select c from Client c")
-            .getResultList();
-    }
-
-    public Client findById(long id) {
+    public Client findById(UUID id) {
         EntityManager entityManager = getEntityManager();
 
         Client client = entityManager.find(Client.class, id);
@@ -31,7 +21,7 @@ public class ClientRepository extends Repository<Client> {
         return client;
     }
 
-    public long save(Client client) {
+    public UUID save(Client client) {
         try {
             EntityManager entityManager = getEntityManager();
 
@@ -47,7 +37,7 @@ public class ClientRepository extends Repository<Client> {
         return client.getId();
     }
 
-    public void archive(long id) {
+    public void archive(UUID id) {
         try {
             EntityManager entityManager = getEntityManager();
 

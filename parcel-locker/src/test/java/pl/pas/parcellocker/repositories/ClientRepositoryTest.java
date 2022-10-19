@@ -5,6 +5,9 @@ import org.junit.jupiter.api.Test;
 import pl.pas.parcellocker.config.TestsConfig;
 import pl.pas.parcellocker.model.Client;
 
+import java.util.List;
+import java.util.UUID;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class ClientRepositoryTest extends TestsConfig {
@@ -27,30 +30,29 @@ class ClientRepositoryTest extends TestsConfig {
 
     @Test
     void whenFindByTelNumberShouldReturnClientWithAppropriateTelNumber() {
-        long expectedClientId = clientRepository.save(c1);
-
+        clientRepository.add(c1);
         assertNotNull(clientRepository.findByTelNumber(c1.getTelNumber()));
     }
 
     @Test
     void shouldArchiveClient() {
-        long expectedClientId = clientRepository.save(c2);
-        clientRepository.archive(expectedClientId);
+        clientRepository.add(c2);
+        clientRepository.archive(c2.getId());
 
-        assertTrue(clientRepository.findById(expectedClientId).isArchived());
+        assertTrue(clientRepository.findById(c2.getId()).isArchived());
     }
 
     @Test
     void shouldAddClientIntoDB() {
-       long expectedClientId = clientRepository.save(c3);
+       clientRepository.add(c3);
 
-       assertNotNull(clientRepository.findById(expectedClientId));
+       assertNotNull(clientRepository.findById(c3.getId()));
     }
 
     @Test
     void shouldReturnAllClients() {
-        clientRepository.save(c4);
-        clientRepository.save(c5);
+        clientRepository.add(c4);
+        clientRepository.add(c5);
 
         assertTrue(clientRepository.findAll().size() > 0);
     }

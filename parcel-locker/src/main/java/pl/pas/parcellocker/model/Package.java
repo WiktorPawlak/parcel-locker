@@ -1,13 +1,28 @@
 package pl.pas.parcellocker.model;
 
-import org.apache.commons.lang3.builder.ToStringBuilder;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Id;
+import lombok.NoArgsConstructor;
+import org.hibernate.annotations.GenericGenerator;
 
 import java.math.BigDecimal;
+import java.util.UUID;
 
-public abstract class Package {
-    public final BigDecimal basePrice;
+@Entity
+@NoArgsConstructor
+public abstract class Package extends VersionModel {
 
-    public Package(BigDecimal basePrice) {
+    @Id
+    @GeneratedValue(generator = "UUID")
+    @GenericGenerator(
+        name = "UUID",
+        strategy = "org.hibernate.id.UUIDGenerator"
+    )
+    private UUID id;
+    public BigDecimal basePrice;
+
+    public Package(double basePrice) {
         this.basePrice = basePrice;
     }
 

@@ -3,11 +3,13 @@ package pl.pas.parcellocker.model;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.UUID;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class DepositBoxTest {
 
-    DepositBox depositBox = new DepositBox("1");
+    DepositBox depositBox = new DepositBox();
 
     @BeforeEach
     void setUp() {
