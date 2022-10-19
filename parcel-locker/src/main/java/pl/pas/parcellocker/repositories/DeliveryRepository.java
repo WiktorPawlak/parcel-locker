@@ -23,22 +23,15 @@ public class DeliveryRepository extends Repository<Delivery> {
 
             entityManager.getTransaction().begin();
 
-            entityManager.find(Delivery.class, id).setStatus(DeliveryStatus.RECEIVED);
+            Delivery delivery = entityManager.find(Delivery.class, id);
+            delivery.setStatus(DeliveryStatus.RECEIVED);
+            delivery.setArchived(true);
+
             entityManager.getTransaction().commit();
         } catch (PersistenceException e) {
             log.error(e.getMessage());
         }
     }
 
-    public void update(Delivery delivery) {
-        try {
-            EntityManager entityManager = getEntityManager();
 
-            entityManager.getTransaction().begin();
-            entityManager.merge(delivery);
-            entityManager.getTransaction().commit();
-        } catch (PersistenceException e) {
-            log.error(e.getMessage());
-        }
-    }
 }

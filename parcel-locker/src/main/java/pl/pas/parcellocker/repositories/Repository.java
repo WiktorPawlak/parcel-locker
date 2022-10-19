@@ -6,6 +6,7 @@ import jakarta.persistence.Persistence;
 import jakarta.persistence.PersistenceException;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import pl.pas.parcellocker.model.Delivery;
 import pl.pas.parcellocker.model.EntityClass;
 
 import java.util.List;
@@ -48,6 +49,18 @@ public class Repository<T extends EntityClass> {
         }
     }
 
+    public void update(T object) {
+        try {
+            EntityManager entityManager = getEntityManager();
+
+            entityManager.getTransaction().begin();
+            entityManager.merge(object);
+            entityManager.getTransaction().commit();
+        } catch (PersistenceException e) {
+            log.error(e.getMessage());
+        }
+    }
+
     public void remove(T object) {
         if (object != null) {
             try {
@@ -65,14 +78,6 @@ public class Repository<T extends EntityClass> {
                 log.error(e.getMessage());
             }
         }
-    }
-
-    public String report() {
-        StringBuilder stringBuilder = new StringBuilder();
-        for (T object : findAll()) {
-            stringBuilder.append(object.toString());
-        }
-        return stringBuilder.toString();
     }
 
     public int size() {

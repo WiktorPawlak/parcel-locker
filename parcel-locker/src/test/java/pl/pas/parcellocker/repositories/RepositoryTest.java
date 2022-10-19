@@ -18,7 +18,7 @@ class RepositoryTest extends TestsConfig {
     @BeforeEach
     void setup() {
         c = new Client("Maciej", "Nowak", "606123654");
-        c1 = new Client("Maciej", "Kowal", "606123654");
+        c1 = new Client("Maciej", "Kowalski", "606123654");
     }
 
     @Test
@@ -35,18 +35,11 @@ class RepositoryTest extends TestsConfig {
     }
 
     @Test
-    void reportConformance() {
-        clientRepository.add(c);
-        assertEquals("Maciej Nowak phone: 606123654 Actual", clientRepository.report());
-
-    }
-
-    @Test
     void findByConformance() {
         clientRepository.add(c);
         clientRepository.add(c1);
         clientRepository.add(c);
-        assertEquals(c1, clientRepository.findBy(client -> client.getLastName().equals("Kowal")).get(0));
+        assertEquals(c1, clientRepository.findBy(client -> client.getLastName().equals("Kowalski")).get(0));
     }
 
     @Test

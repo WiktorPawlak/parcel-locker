@@ -78,7 +78,7 @@ public class DeliveryManager {
         if (client == null)
             throw new DeliveryManagerException("client is a nullptr!");
         for (Delivery delivery : deliveries.findAll()) {
-            if (delivery.getShipper() == client)
+            if (delivery.getShipper().equals(client))
                 balance = balance.add(delivery.getCost());
         }
 

@@ -31,7 +31,7 @@ public class ClientManager {
         }
 
         Client newClient = new Client(firstName, lastName, telNumber);
-        clientRepository.save(newClient);
+        clientRepository.add(newClient);
         return newClient;
     }
 

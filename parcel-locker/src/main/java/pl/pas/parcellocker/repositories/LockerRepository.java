@@ -12,16 +12,4 @@ public class LockerRepository extends Repository<Locker> {
     public LockerRepository() {
         super(Locker.class);
     }
-
-    public void update(Locker locker) {
-        try {
-            EntityManager entityManager = getEntityManager();
-
-            entityManager.getTransaction().begin();
-            entityManager.merge(locker);
-            entityManager.getTransaction().commit();
-        } catch (PersistenceException e) {
-            log.error(e.getMessage());
-        }
-    }
 }

@@ -54,7 +54,7 @@ class ClientRepositoryTest extends TestsConfig {
         clientRepository.add(c4);
         clientRepository.add(c5);
 
-        assertTrue(clientRepository.findAll().size() > 0);
+        assertTrue(clientRepository.findAll().size() > 1);
     }
 
 }

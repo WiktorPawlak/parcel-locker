@@ -2,10 +2,12 @@ package pl.pas.parcellocker.repositories;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceException;
+import lombok.extern.slf4j.Slf4j;
 import pl.pas.parcellocker.model.Client;
 
 import java.util.UUID;
 
+@Slf4j
 public class ClientRepository extends Repository<Client> {
 
     public ClientRepository() {
@@ -21,22 +23,6 @@ public class ClientRepository extends Repository<Client> {
         return client;
     }
 
-    public UUID save(Client client) {
-        try {
-            EntityManager entityManager = getEntityManager();
-
-            entityManager.getTransaction().begin();
-
-            entityManager.persist(client);
-            entityManager.flush();
-
-            entityManager.getTransaction().commit();
-        } catch (PersistenceException e) {
-            //logger
-        }
-        return client.getId();
-    }
-
     public void archive(UUID id) {
         try {
             EntityManager entityManager = getEntityManager();
@@ -45,7 +31,7 @@ public class ClientRepository extends Repository<Client> {
             entityManager.find(Client.class, id).setArchive(true);
             entityManager.getTransaction().commit();
         } catch (PersistenceException e) {
-            //loger
+            log.error(e.getMessage());
         }
     }
 
