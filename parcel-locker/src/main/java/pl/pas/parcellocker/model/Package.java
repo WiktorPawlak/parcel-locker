@@ -22,7 +22,7 @@ public abstract class Package extends VersionModel {
     private UUID id;
     public BigDecimal basePrice;
 
-    public Package(double basePrice) {
+    public Package(BigDecimal basePrice) {
         this.basePrice = basePrice;
     }
 
