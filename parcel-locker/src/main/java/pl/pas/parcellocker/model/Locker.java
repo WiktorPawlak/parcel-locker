@@ -31,17 +31,20 @@ public class Locker extends VersionModel implements EntityClass {
         strategy = "org.hibernate.id.UUIDGenerator"
     )
     private UUID id;
+    private String name;
 
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<DepositBox> depositBoxes;
 
-    public Locker(int boxAmount) {
+    public Locker(String name, int boxAmount) {
         try {
             if (boxAmount <= 0)
                 throw new LockerException("Locker with 0 boxes can not be created!");
         } catch (LockerException e) {
             log.error(e.getMessage());
         }
+
+        this.name = name;
         depositBoxes = new ArrayList<>();
         for (int i = 0; i < boxAmount; i++) {
             depositBoxes.add(new DepositBox());
@@ -96,6 +99,10 @@ public class Locker extends VersionModel implements EntityClass {
             }
         }
         return null;
+    }
+
+    public String getName() {
+        return name;
     }
 
     @Override
