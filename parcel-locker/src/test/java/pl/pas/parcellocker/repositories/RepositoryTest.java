@@ -1,12 +1,15 @@
 package pl.pas.parcellocker.repositories;
 
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.NoResultException;
+import jakarta.persistence.OptimisticLockException;
+import jakarta.persistence.Persistence;
+import jakarta.persistence.RollbackException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import pl.pas.parcellocker.config.TestsConfig;
 import pl.pas.parcellocker.model.Client;
-
-import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -50,5 +53,32 @@ class RepositoryTest extends TestsConfig {
         clientRepository.add(c1);
         assertTrue(2 <= clientRepository.findAll().size());
         assertTrue(clientRepository.findAll().containsAll(List.of(c, c1)));
+    }
+
+    @Test
+    void triggersOptimisticLockWhenUnregisteringClientTwice() {
+        EntityManagerFactory emf1 = Persistence.createEntityManagerFactory("parcel-locker-unit");
+        EntityManager em1 = emf1.createEntityManager();
+
+        EntityManager em2 = emf1.createEntityManager();
+
+        clientRepository.add(c);
+
+        Client client1 = em1.find(Client.class, c.getId());
+        Client client2 = em2.find(Client.class, c.getId());
+
+        em1.getTransaction().begin();
+        client1.setArchive(true);
+        em1.getTransaction().commit();
+
+        RollbackException rollback = new RollbackException();
+        try {
+            em2.getTransaction().begin();
+            client2.setArchive(true);
+            em2.getTransaction().commit();
+        } catch (RollbackException e) {
+            rollback = e;
+        }
+        assertTrue(rollback.getCause() instanceof OptimisticLockException);
     }
 }
