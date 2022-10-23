@@ -11,6 +11,8 @@ import org.junit.jupiter.api.Test;
 import pl.pas.parcellocker.config.TestsConfig;
 import pl.pas.parcellocker.model.Client;
 
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -56,7 +58,7 @@ class RepositoryTest extends TestsConfig {
     }
 
     @Test
-    void triggersOptimisticLockWhenUnregisteringClientTwice() {
+    void Should_TriggerOptimisticLock_WhenUnregisteringClientTwice() {
         EntityManagerFactory emf1 = Persistence.createEntityManagerFactory("parcel-locker-unit");
         EntityManager em1 = emf1.createEntityManager();
 
