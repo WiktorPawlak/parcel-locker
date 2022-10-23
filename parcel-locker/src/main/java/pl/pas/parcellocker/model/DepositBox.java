@@ -1,5 +1,6 @@
 package pl.pas.parcellocker.model;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
@@ -70,10 +71,6 @@ public class DepositBox extends VersionModel {
 
     public boolean isEmpty() {
         return isEmpty;
-    }
-
-    public void setIsEmpty(boolean empty) {
-        this.isEmpty = empty;
     }
 
     public String getAccessCode() {

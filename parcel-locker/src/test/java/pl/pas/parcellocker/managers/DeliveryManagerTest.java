@@ -1,55 +1,51 @@
 package pl.pas.parcellocker.managers;
 
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import pl.pas.parcellocker.config.TestsConfig;
 import pl.pas.parcellocker.exceptions.DeliveryManagerException;
+import pl.pas.parcellocker.exceptions.LockerException;
 import pl.pas.parcellocker.model.Client;
 import pl.pas.parcellocker.model.Delivery;
 import pl.pas.parcellocker.model.Locker;
-import pl.pas.parcellocker.repositories.ClientRepository;
-import pl.pas.parcellocker.repositories.LockerRepository;
 
 import java.math.BigDecimal;
-import java.util.UUID;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class DeliveryManagerTest extends TestsConfig {
 
-    public DeliveryManager deliveryManager;
-    public ClientRepository clientRepository;
-    public LockerRepository lockerRepository;
-    public Client shipper1;
-    public Client receiver1;
-    public Locker locker;
-    public Delivery delivery;
-    public BigDecimal basePrice = BigDecimal.TEN;
+    private final DeliveryManager deliveryManager = new DeliveryManager();
+    private Client shipper1;
+    private Client receiver1;
+    private Locker locker;
+    private Delivery delivery;
+    private final BigDecimal basePrice = BigDecimal.TEN;
 
     @BeforeEach
     void setup() {
-        deliveryManager = new DeliveryManager();
-        clientRepository = new ClientRepository();
-        lockerRepository = new LockerRepository();
-        locker = new Locker(20);
+        locker = new Locker("LDZ01", 20);
         shipper1 = new Client("Oscar", "Trel", "321312312");
         receiver1 = new Client("Bartosh", "Siekan", "123123123");
         clientRepository.add(shipper1);
         clientRepository.add(receiver1);
         lockerRepository.add(locker);
-        delivery = deliveryManager.makeParcelDelivery(basePrice, 10, 20, 30, 10, false, shipper1, receiver1, locker);
+        delivery = deliveryManager.makeParcelDelivery(
+            basePrice, 10, 20, 30, 10, false, shipper1, receiver1, locker
+        );
     }
 
     @Test
-    void putInLockerConformance() {
+    void Should_BlockDepositBox_WhenDeliveryPutInLocker() {
         int empty = locker.countEmpty();
         deliveryManager.putInLocker(delivery, "1234");
         assertEquals(empty - 1, locker.countEmpty());
     }
 
     @Test
-    void takeOutDeliveryConformance() {
+    void Should_UnlockDepositBox_WhenDeliveryTookOut() {
         deliveryManager.putInLocker(delivery, "1234");
         int empty = locker.countEmpty();
         deliveryManager.takeOutDelivery(locker, receiver1, "1234");
@@ -57,27 +53,42 @@ class DeliveryManagerTest extends TestsConfig {
     }
 
     @Test
-    void getAllClientDeliveriesConformance() {
-        Delivery delivery1 = deliveryManager.makeParcelDelivery(basePrice, 10, 20, 30, 10, false, shipper1, receiver1, locker);
+    void Should_ThrowException_WhenLockerIsFull() {
+        Locker oneBoxLocker = new Locker("LDZ12", 1);
+        lockerRepository.add(oneBoxLocker);
+        Delivery testDelivery = deliveryManager.makeParcelDelivery(
+            basePrice, 10, 20, 30, 10, false, shipper1, receiver1, oneBoxLocker
+        );
+        deliveryManager.putInLocker(testDelivery, "1234");
+        assertThrows(LockerException.class, () -> deliveryManager.putInLocker(testDelivery, "1234"));
+    }
+
+    @Test
+    void Should_ReturnAllClientDeliveries() {
+        Delivery delivery1 = deliveryManager.makeParcelDelivery(
+            basePrice, 10, 20, 30, 10, false, shipper1, receiver1, locker
+        );
         assertEquals(delivery, deliveryManager.getAllClientDeliveries(receiver1).get(0));
         assertEquals(delivery1, deliveryManager.getAllClientDeliveries(receiver1).get(1));
     }
 
     @Test
-    void getAllReceivedClientDeliveriesConformance() {
-        Delivery delivery1 = deliveryManager.makeParcelDelivery(basePrice, 10, 20, 30, 10, false, shipper1, receiver1, locker);
+    void Should_ReturnAllReceivedDeliveriesForGivenClient() {
+        Delivery delivery1 = deliveryManager.makeParcelDelivery(
+            basePrice, 10, 20, 30, 10, false, shipper1, receiver1, locker
+        );
         deliveryManager.putInLocker(delivery1 ,"123");
         deliveryManager.takeOutDelivery(locker, receiver1,"123");
         assertTrue(0 < deliveryManager.getAllReceivedClientDeliveries(receiver1).size());
     }
 
     @Test
-    void checkClientShipmentBalanceConformance() {
+    void Should_ReturnCorrectBalanceForClientShipments() {
         assertEquals(new BigDecimal("15.000"), deliveryManager.checkClientShipmentBalance(shipper1));
     }
 
     @Test
-    void exceptionConformance() {
+    void Should_ThrowException_WhenInvalidValuesPassed() {
         assertThrows(DeliveryManagerException.class, () -> deliveryManager.checkClientShipmentBalance(null));
     }
 }

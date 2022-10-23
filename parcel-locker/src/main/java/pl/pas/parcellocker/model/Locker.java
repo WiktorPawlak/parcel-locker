@@ -5,8 +5,6 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -33,7 +31,7 @@ public class Locker extends VersionModel implements EntityClass {
     private UUID id;
     private String name;
 
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
     private List<DepositBox> depositBoxes;
 
     public Locker(String name, int boxAmount) {
@@ -71,15 +69,10 @@ public class Locker extends VersionModel implements EntityClass {
                 return depositBox.getDeliveryId();
             }
         }
-        try {
-            throw new LockerException("Couldn't get any package out with access code: "
-                    + code
-                    + "and phone number: "
-                    + telNumber);
-        } catch (LockerException e){
-            log.error(e.getMessage());
-        }
-        return null;
+        throw new LockerException("Couldn't get any package out with access code: "
+            + code
+            + "and phone number: "
+            + telNumber);
     }
 
     public int countEmpty() {
@@ -93,7 +86,7 @@ public class Locker extends VersionModel implements EntityClass {
     }
 
     public DepositBox getDepositBox(UUID id) {
-        for (DepositBox depositBox: depositBoxes) {
+        for (DepositBox depositBox : depositBoxes) {
             if (depositBox.getId().equals(id)) {
                 return depositBox;
             }

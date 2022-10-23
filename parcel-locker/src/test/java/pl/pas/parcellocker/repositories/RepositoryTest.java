@@ -1,19 +1,22 @@
 package pl.pas.parcellocker.repositories;
 
 import jakarta.persistence.NoResultException;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import pl.pas.parcellocker.config.TestsConfig;
 import pl.pas.parcellocker.model.Client;
 
-import static org.junit.jupiter.api.Assertions.*;
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class RepositoryTest extends TestsConfig {
 
-    public Repository<Client> clientRepository = new Repository<>(Client.class);;
-    public Client c;
-    public Client c1;
+    private final Repository<Client> clientRepository = new Repository<>(Client.class);
+    private Client c;
+    private Client c1;
 
     @BeforeEach
     void setup() {
@@ -22,32 +25,30 @@ class RepositoryTest extends TestsConfig {
     }
 
     @Test
-    void addAndGetConformance() {
+    void Should_AddAndGetClient() {
         clientRepository.add(c);
         assertEquals(c, clientRepository.get(c.getId()));
     }
 
     @Test
-    void removeConformance() {
+    void Should_RemoveClient() {
         clientRepository.add(c);
         clientRepository.remove(c);
         assertThrows(NoResultException.class, () -> clientRepository.get(c.getId()));
     }
 
     @Test
-    void findByConformance() {
+    void Should_FindClient_WhenPredicateGivenToFindByMethod() {
         clientRepository.add(c);
         clientRepository.add(c1);
-        clientRepository.add(c);
         assertEquals(c1, clientRepository.findBy(client -> client.getLastName().equals("Kowalski")).get(0));
     }
 
     @Test
-    void findAllConformance() {
+    void Should_ReturnAllClients() {
         clientRepository.add(c);
         clientRepository.add(c1);
-        clientRepository.add(c);
         assertTrue(2 <= clientRepository.findAll().size());
-
+        assertTrue(clientRepository.findAll().containsAll(List.of(c, c1)));
     }
 }
