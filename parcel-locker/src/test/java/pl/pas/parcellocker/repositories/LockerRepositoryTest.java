@@ -1,6 +1,5 @@
 package pl.pas.parcellocker.repositories;
 
-import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -18,11 +17,6 @@ class LockerRepositoryTest extends TestsConfig {
     void setup() {
         l1 = new Locker("LDZ01", 10);
         lockerRepository.add(l1);
-    }
-
-    @AfterAll
-    void finisher() {
-        lockerRepository.findAll().forEach(lockerRepository::remove);
     }
 
     @Test

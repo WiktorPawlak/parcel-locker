@@ -6,7 +6,6 @@ import jakarta.persistence.NoResultException;
 import jakarta.persistence.OptimisticLockException;
 import jakarta.persistence.Persistence;
 import jakarta.persistence.RollbackException;
-import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -30,11 +29,6 @@ class RepositoryTest extends TestsConfig {
     void setup() {
         c1 = new Client("Tadeusz", "Kaczmarski", "606123654");
         c2 = new Client("Pawel", "Tubiel", "606444654");
-    }
-
-    @AfterAll
-    void finisher() {
-        clientRepository.findAll().forEach(clientRepository::remove);
     }
 
     @Test

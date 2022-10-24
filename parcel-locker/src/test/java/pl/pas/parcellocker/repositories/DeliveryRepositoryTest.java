@@ -1,7 +1,6 @@
 package pl.pas.parcellocker.repositories;
 
 import jakarta.persistence.NoResultException;
-import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -33,13 +32,6 @@ class DeliveryRepositoryTest extends TestsConfig {
         clientRepository.add(c1);
         clientRepository.add(c2);
         lockerRepository.add(l1);
-    }
-
-    @AfterAll
-    void finisher() {
-        deliveryRepository.findAll().forEach(deliveryRepository::remove);
-        clientRepository.findAll().forEach(clientRepository::remove);
-        lockerRepository.findAll().forEach(lockerRepository::remove);
     }
 
     @Test

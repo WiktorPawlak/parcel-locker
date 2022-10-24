@@ -1,7 +1,6 @@
 package pl.pas.parcellocker.managers;
 
 import jakarta.persistence.OptimisticLockException;
-import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -37,12 +36,6 @@ class DeliveryManagerTest extends TestsConfig {
         clientRepository.add(shipper1);
         clientRepository.add(receiver1);
         lockerRepository.add(locker);
-    }
-
-    @AfterAll
-    void finisher() {
-        clientRepository.findAll().forEach(clientRepository::remove);
-        lockerRepository.findAll().forEach(lockerRepository::remove);
     }
 
     @AfterEach

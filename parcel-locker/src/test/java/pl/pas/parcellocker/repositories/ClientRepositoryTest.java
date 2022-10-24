@@ -1,6 +1,5 @@
 package pl.pas.parcellocker.repositories;
 
-import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -25,11 +24,6 @@ class ClientRepositoryTest extends TestsConfig {
         c3 = new Client("Krzysztof", "Ryk", "1234567");
         c4 = new Client("Mariusz", "Kwik", "12345678");
         c5 = new Client("Jakub", "Kowalski", "123456789");
-    }
-
-    @AfterAll
-    void finisher() {
-        clientRepository.findAll().forEach(clientRepository::remove);
     }
 
     @Test
