@@ -3,13 +3,10 @@ package pl.pas.parcellocker.model;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.hibernate.annotations.GenericGenerator;
 import pl.pas.parcellocker.exceptions.LockerException;
 
 import java.util.ArrayList;
@@ -20,15 +17,8 @@ import java.util.UUID;
 @Entity
 @NoArgsConstructor
 @EqualsAndHashCode
-public class Locker extends VersionModel implements EntityClass {
+public class Locker extends EntityModel {
 
-    @Id
-    @GeneratedValue(generator = "UUID")
-    @GenericGenerator(
-        name = "UUID",
-        strategy = "org.hibernate.id.UUIDGenerator"
-    )
-    private UUID id;
     private String name;
 
     @OneToMany(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
@@ -55,11 +45,10 @@ public class Locker extends VersionModel implements EntityClass {
             if (depositBox.isEmpty()) {
                 depositBox.putIn(delivery, telNumber, accessCode);
                 return depositBox.getId();
-            } else {
-                throw new LockerException("Not able to put package with id = " + depositBox + " into box.");
             }
         }
-        return null;
+        throw new LockerException("Not able to put package with id = " +
+            delivery.getId() + " into locker " + this.getName() + ".");
     }
 
     public UUID takeOut(String telNumber, String code) {
@@ -96,10 +85,5 @@ public class Locker extends VersionModel implements EntityClass {
 
     public String getName() {
         return name;
-    }
-
-    @Override
-    public UUID getId() {
-        return id;
     }
 }

@@ -1,6 +1,7 @@
 package pl.pas.parcellocker.managers;
 
 import jakarta.persistence.NoResultException;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import pl.pas.parcellocker.config.TestsConfig;
 import pl.pas.parcellocker.exceptions.ClientManagerException;
@@ -18,6 +19,11 @@ class ClientManagerTest extends TestsConfig {
     private final String TEST_SURNAME = "Byniowski";
     private final String TEST_TEL_NUMBER = "123456789";
     private final String TEST_WRONG_TEL_NUMBER = "987654321";
+
+    @AfterEach
+    void finisher() {
+        clientRepository.findAll().forEach(clientRepository::remove);
+    }
 
     @Test
     void Should_RegisterClient() {
@@ -47,4 +53,5 @@ class ClientManagerTest extends TestsConfig {
         assertThrows(ClientManagerException.class, () -> clientManager.getClient(""));
         assertThrows(ClientManagerException.class, () -> clientManager.unregisterClient(null));
     }
+
 }

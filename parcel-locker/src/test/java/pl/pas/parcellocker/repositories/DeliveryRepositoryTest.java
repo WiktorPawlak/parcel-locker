@@ -1,8 +1,10 @@
 package pl.pas.parcellocker.repositories;
 
 import jakarta.persistence.NoResultException;
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 import pl.pas.parcellocker.config.TestsConfig;
 import pl.pas.parcellocker.model.Client;
 import pl.pas.parcellocker.model.Delivery;
@@ -16,13 +18,14 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class DeliveryRepositoryTest extends TestsConfig {
 
     private Client c1;
     private Client c2;
     private Locker l1;
 
-    @BeforeEach
+    @BeforeAll
     void setup() {
         l1 = new Locker("LDZ01", 10);
         c1 = new Client("Maciej", "Nowak", "12345");
@@ -30,6 +33,13 @@ class DeliveryRepositoryTest extends TestsConfig {
         clientRepository.add(c1);
         clientRepository.add(c2);
         lockerRepository.add(l1);
+    }
+
+    @AfterAll
+    void finisher() {
+        deliveryRepository.findAll().forEach(deliveryRepository::remove);
+        clientRepository.findAll().forEach(clientRepository::remove);
+        lockerRepository.findAll().forEach(lockerRepository::remove);
     }
 
     @Test

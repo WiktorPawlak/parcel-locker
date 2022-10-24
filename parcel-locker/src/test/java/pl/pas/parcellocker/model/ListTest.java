@@ -2,20 +2,22 @@ package pl.pas.parcellocker.model;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class ListTest {
 
-    private static Package prio;
-    private static Package nonprio;
-    private static final BigDecimal basePrice = BigDecimal.TEN;
+    private Package prio;
+    private Package nonprio;
+    private final BigDecimal basePrice = BigDecimal.TEN;
 
     @BeforeAll
-    static void setup() {
+    void setup() {
         prio = new List(basePrice, true);
         nonprio = new List(basePrice, false);
     }

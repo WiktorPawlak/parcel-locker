@@ -5,7 +5,7 @@ import jakarta.persistence.PersistenceException;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import pl.pas.parcellocker.exceptions.RepositoryException;
-import pl.pas.parcellocker.model.EntityClass;
+import pl.pas.parcellocker.model.EntityModel;
 
 import java.util.List;
 import java.util.UUID;
@@ -16,7 +16,7 @@ import static pl.pas.parcellocker.repositories.EntityManagerUtil.getEntityManage
 
 @Slf4j
 @AllArgsConstructor
-public class Repository<T extends EntityClass> {
+public class Repository<T extends EntityModel> {
 
     private Class<T> entityClass;
 
@@ -38,6 +38,7 @@ public class Repository<T extends EntityClass> {
                 flushAndClear(entityManager);
 
                 entityManager.getTransaction().commit();
+
             } catch (PersistenceException e) {
                 throw new RepositoryException(e);
             }
@@ -49,8 +50,11 @@ public class Repository<T extends EntityClass> {
             EntityManager entityManager = getEntityManager();
 
             entityManager.getTransaction().begin();
+
             entityManager.merge(object);
+
             entityManager.getTransaction().commit();
+
         } catch (PersistenceException e) {
             throw new RepositoryException(e);
         }
@@ -69,6 +73,7 @@ public class Repository<T extends EntityClass> {
                 flushAndClear(entityManager);
 
                 entityManager.getTransaction().commit();
+
             } catch (PersistenceException e) {
                 throw new RepositoryException(e);
             }

@@ -1,32 +1,17 @@
 package pl.pas.parcellocker.model;
 
 import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.TableGenerator;
-import jakarta.persistence.Version;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.GenericGenerator;
 import pl.pas.parcellocker.exceptions.ClientException;
-
-import java.util.UUID;
 
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode
-public class Client extends VersionModel implements EntityClass{
+public class Client extends EntityModel {
 
-    @Id
-    @GeneratedValue(generator = "UUID")
-    @GenericGenerator(
-        name = "UUID",
-        strategy = "org.hibernate.id.UUIDGenerator"
-    )
-    private UUID id;
     private String firstName;
     private String lastName;
     private String telNumber;
@@ -52,11 +37,6 @@ public class Client extends VersionModel implements EntityClass{
     private void validateTelNumber(String telNumber) {
         if (telNumber.isEmpty())
             throw new ClientException("Empty lastName variable!");
-    }
-
-    @Override
-    public UUID getId() {
-        return id;
     }
 
     public String getFirstName() {

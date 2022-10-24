@@ -2,6 +2,7 @@ package pl.pas.parcellocker.model;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 
 import java.math.BigDecimal;
 
@@ -10,17 +11,18 @@ import static pl.pas.parcellocker.model.DeliveryStatus.READY_TO_PICKUP;
 import static pl.pas.parcellocker.model.DeliveryStatus.READY_TO_SHIP;
 import static pl.pas.parcellocker.model.DeliveryStatus.RECEIVED;
 
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class DeliveryTest {
 
-    private static Delivery delivery1;
-    private static Delivery delivery2;
-    private static Client shipper1;
-    private static Client receiver1;
-    private static Locker locker;
-    private static final BigDecimal basePrice = BigDecimal.TEN;
+    private Delivery delivery1;
+    private Delivery delivery2;
+    private Client shipper1;
+    private Client receiver1;
+    private Locker locker;
+    private final BigDecimal basePrice = BigDecimal.TEN;
 
     @BeforeAll
-    static void setup() {
+    void setup() {
         locker = new Locker("LDZ01", 20);
         shipper1 = new Client("Oscar", "Trel", "321312312");
         receiver1 = new Client("Bartosh", "Siekan", "123123123");

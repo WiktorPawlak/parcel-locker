@@ -2,6 +2,7 @@ package pl.pas.parcellocker.model;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 import pl.pas.parcellocker.config.TestsConfig;
 import pl.pas.parcellocker.repositories.LockerRepository;
 
@@ -10,14 +11,15 @@ import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class LockerTest extends TestsConfig {
 
-    private static final LockerRepository lockerRepository = new LockerRepository();
-    private static Delivery delivery;
-    private static Locker locker;
+    private final LockerRepository lockerRepository = new LockerRepository();
+    private Delivery delivery;
+    private Locker locker;
 
     @BeforeAll
-    static void setup() {
+    void setup() {
         Client c1 = new Client("test", "test", "1231");
         Client c2 = new Client("test", "test", "1231");
         locker = new Locker("LDZ01", 10);

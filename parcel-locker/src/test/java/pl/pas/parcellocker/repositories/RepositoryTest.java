@@ -6,8 +6,10 @@ import jakarta.persistence.NoResultException;
 import jakarta.persistence.OptimisticLockException;
 import jakarta.persistence.Persistence;
 import jakarta.persistence.RollbackException;
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 import pl.pas.parcellocker.config.TestsConfig;
 import pl.pas.parcellocker.model.Client;
 
@@ -17,44 +19,50 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class RepositoryTest extends TestsConfig {
 
     private final Repository<Client> clientRepository = new Repository<>(Client.class);
-    private Client c;
     private Client c1;
+    private Client c2;
 
     @BeforeEach
     void setup() {
-        c = new Client("Maciej", "Nowak", "606123654");
-        c1 = new Client("Maciej", "Kowalski", "606123654");
+        c1 = new Client("Tadeusz", "Kaczmarski", "606123654");
+        c2 = new Client("Pawel", "Tubiel", "606444654");
+    }
+
+    @AfterAll
+    void finisher() {
+        clientRepository.findAll().forEach(clientRepository::remove);
     }
 
     @Test
     void Should_AddAndGetClient() {
-        clientRepository.add(c);
-        assertEquals(c, clientRepository.get(c.getId()));
+        clientRepository.add(c1);
+        assertEquals(c1, clientRepository.get(c1.getId()));
     }
 
     @Test
     void Should_RemoveClient() {
-        clientRepository.add(c);
-        clientRepository.remove(c);
-        assertThrows(NoResultException.class, () -> clientRepository.get(c.getId()));
+        clientRepository.add(c1);
+        clientRepository.remove(c1);
+        assertThrows(NoResultException.class, () -> clientRepository.get(c1.getId()));
     }
 
     @Test
     void Should_FindClient_WhenPredicateGivenToFindByMethod() {
-        clientRepository.add(c);
         clientRepository.add(c1);
-        assertEquals(c1, clientRepository.findBy(client -> client.getLastName().equals("Kowalski")).get(0));
+        clientRepository.add(c2);
+        assertEquals(c2, clientRepository.findBy(client -> client.getLastName().equals("Tubiel")).get(0));
     }
 
     @Test
     void Should_ReturnAllClients() {
-        clientRepository.add(c);
         clientRepository.add(c1);
+        clientRepository.add(c2);
         assertTrue(2 <= clientRepository.findAll().size());
-        assertTrue(clientRepository.findAll().containsAll(List.of(c, c1)));
+        assertTrue(clientRepository.findAll().containsAll(List.of(c1, c2)));
     }
 
     @Test
@@ -64,10 +72,10 @@ class RepositoryTest extends TestsConfig {
 
         EntityManager em2 = emf1.createEntityManager();
 
-        clientRepository.add(c);
+        clientRepository.add(c1);
 
-        Client client1 = em1.find(Client.class, c.getId());
-        Client client2 = em2.find(Client.class, c.getId());
+        Client client1 = em1.find(Client.class, c1.getId());
+        Client client2 = em2.find(Client.class, c1.getId());
 
         em1.getTransaction().begin();
         client1.setArchive(true);

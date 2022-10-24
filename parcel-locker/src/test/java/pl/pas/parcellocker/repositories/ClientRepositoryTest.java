@@ -1,13 +1,16 @@
 package pl.pas.parcellocker.repositories;
 
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 import pl.pas.parcellocker.config.TestsConfig;
 import pl.pas.parcellocker.model.Client;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class ClientRepositoryTest extends TestsConfig {
     private Client c1;
     private Client c2;
@@ -15,18 +18,24 @@ class ClientRepositoryTest extends TestsConfig {
     private Client c4;
     private Client c5;
 
-    @BeforeEach
+    @BeforeAll
     void setup() {
         c1 = new Client("Maciej", "Nowak", "123452137");
-        c2 = new Client("Maciej", "Kowal", "123456");
-        c3 = new Client("Maciej", "Kowal", "1234567");
-        c4 = new Client("Maciej", "Kowal", "12345678");
-        c5 = new Client("Maciej", "Kowal", "123456789");
+        c2 = new Client("Tadeusz", "Byk", "123456");
+        c3 = new Client("Krzysztof", "Ryk", "1234567");
+        c4 = new Client("Mariusz", "Kwik", "12345678");
+        c5 = new Client("Jakub", "Kowalski", "123456789");
+    }
+
+    @AfterAll
+    void finisher() {
+        clientRepository.findAll().forEach(clientRepository::remove);
     }
 
     @Test
     void Should_ReturnClientWithAppropriateTelNumber_WhenFindByTelNumberCalled() {
         clientRepository.add(c1);
+
         assertNotNull(clientRepository.findByTelNumber(c1.getTelNumber()));
     }
 
