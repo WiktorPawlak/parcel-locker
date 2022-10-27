@@ -19,12 +19,13 @@ import java.util.UUID;
 @EqualsAndHashCode
 public class Locker extends EntityModel {
 
-    private String name;
+    private String identityNumber;
+    private String address;
 
     @OneToMany(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
     private List<DepositBox> depositBoxes;
 
-    public Locker(String name, int boxAmount) {
+    public Locker(String identityNumber, String address, int boxAmount) {
         try {
             if (boxAmount <= 0)
                 throw new LockerException("Locker with 0 boxes can not be created!");
@@ -32,7 +33,8 @@ public class Locker extends EntityModel {
             log.error(e.getMessage());
         }
 
-        this.name = name;
+        this.identityNumber = identityNumber;
+        this.address = address;
         depositBoxes = new ArrayList<>();
         for (int i = 0; i < boxAmount; i++) {
             depositBoxes.add(new DepositBox());
@@ -48,7 +50,7 @@ public class Locker extends EntityModel {
             }
         }
         throw new LockerException("Not able to put package with id = " +
-            delivery.getId() + " into locker " + this.getName() + ".");
+            delivery.getId() + " into locker " + this.getIdentityNumber() + ".");
     }
 
     public UUID takeOut(String telNumber, String code) {
@@ -83,7 +85,11 @@ public class Locker extends EntityModel {
         return null;
     }
 
-    public String getName() {
-        return name;
+    public String getIdentityNumber() {
+        return identityNumber;
+    }
+
+    public String getAddress() {
+        return address;
     }
 }

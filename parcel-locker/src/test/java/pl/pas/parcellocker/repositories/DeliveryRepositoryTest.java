@@ -26,7 +26,7 @@ class DeliveryRepositoryTest extends TestsConfig {
 
     @BeforeAll
     void setup() {
-        l1 = new Locker("LDZ01", 10);
+        l1 = new Locker("LDZ01", "Gawronska 12, Lodz 12-123", 10);
         c1 = new Client("Maciej", "Nowak", "12345");
         c2 = new Client("Maciej", "Kowal", "123456");
         clientRepository.add(c1);

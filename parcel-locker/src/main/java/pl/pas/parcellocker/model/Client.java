@@ -15,7 +15,7 @@ public class Client extends EntityModel {
     private String firstName;
     private String lastName;
     private String telNumber;
-    private boolean isArchive;
+    private boolean active;
 
     public Client(String firstName, String lastName, String telNumber) {
         validateName(firstName);
@@ -26,7 +26,7 @@ public class Client extends EntityModel {
         this.lastName = lastName;
         this.telNumber = telNumber;
 
-        isArchive = false;
+        active = true;
     }
 
     private void validateName(String name) {
@@ -51,16 +51,16 @@ public class Client extends EntityModel {
         return telNumber;
     }
 
-    public boolean isArchived() {
-        return isArchive;
+    public boolean isActive() {
+        return active;
     }
 
-    public void setArchive(boolean archive) {
-        this.isArchive = archive;
+    public void setActive(boolean active) {
+        this.active = active;
     }
 
     @Override
     public String toString() {
-        return firstName + " " + lastName + " phone: " + telNumber + (isArchive ? " Archived" : " Actual");
+        return firstName + " " + lastName + " phone: " + telNumber + (active ? " Archived" : " Actual");
     }
 }

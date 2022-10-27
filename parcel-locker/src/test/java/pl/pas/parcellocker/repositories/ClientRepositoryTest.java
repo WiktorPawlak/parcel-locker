@@ -6,6 +6,7 @@ import org.junit.jupiter.api.TestInstance;
 import pl.pas.parcellocker.config.TestsConfig;
 import pl.pas.parcellocker.model.Client;
 
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -38,7 +39,7 @@ class ClientRepositoryTest extends TestsConfig {
         clientRepository.add(c2);
         clientRepository.archive(c2.getId());
 
-        assertTrue(clientRepository.get(c2.getId()).isArchived());
+        assertFalse(clientRepository.get(c2.getId()).isActive());
     }
 
     @Test

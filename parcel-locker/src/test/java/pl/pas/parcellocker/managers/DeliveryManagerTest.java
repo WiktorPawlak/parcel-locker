@@ -30,7 +30,7 @@ class DeliveryManagerTest extends TestsConfig {
 
     @BeforeAll
     void setup() {
-        locker = new Locker("LDZ01", 20);
+        locker = new Locker("LDZ01", "Gawronska 12, Lodz 12-123", 20);
         shipper1 = new Client("Oscar", "Trel", "321312312");
         receiver1 = new Client("Bartosh", "Siekan", "123123123");
         clientRepository.add(shipper1);
@@ -68,7 +68,7 @@ class DeliveryManagerTest extends TestsConfig {
 
     @Test
     void Should_ThrowException_WhenLockerIsFull() {
-        Locker oneBoxLocker = new Locker("LDZ12", 1);
+        Locker oneBoxLocker = new Locker("LDZ12", "Gawronska 66, Lodz 12-123", 1);
         lockerRepository.add(oneBoxLocker);
 
         Delivery testDelivery = deliveryManager.makeParcelDelivery(

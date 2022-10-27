@@ -22,13 +22,13 @@ class LockerTest extends TestsConfig {
     void setup() {
         Client c1 = new Client("test", "test", "1231");
         Client c2 = new Client("test", "test", "1231");
-        locker = new Locker("LDZ01", 10);
+        locker = new Locker("LDZ01", "Gawronska 12, Lodz 12-123", 10);
         delivery = new Delivery(BigDecimal.TEN, true, c1, c2, locker);
     }
 
     @Test
     void Should_ReturnNumberOfEmptyDepositBoxes() {
-        Locker newLocker = new Locker("LDZ02", 10);
+        Locker newLocker = new Locker("LDZ02", "Gawronska 26, Lodz 12-123", 10);
         assertEquals(10, newLocker.countEmpty());
     }
 

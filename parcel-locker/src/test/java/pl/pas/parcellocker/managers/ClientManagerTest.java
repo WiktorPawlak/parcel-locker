@@ -34,10 +34,10 @@ class ClientManagerTest extends TestsConfig {
     @Test
     void Should_UnregisterClient() {
         clientManager.registerClient(TEST_NAME, TEST_SURNAME, TEST_TEL_NUMBER);
-        assertFalse(clientManager.getClient(TEST_TEL_NUMBER).isArchived());
+        assertTrue(clientManager.getClient(TEST_TEL_NUMBER).isActive());
 
         clientManager.unregisterClient(clientManager.getClient(TEST_TEL_NUMBER));
-        assertTrue(clientManager.getClient(TEST_TEL_NUMBER).isArchived());
+        assertFalse(clientManager.getClient(TEST_TEL_NUMBER).isActive());
     }
 
     @Test

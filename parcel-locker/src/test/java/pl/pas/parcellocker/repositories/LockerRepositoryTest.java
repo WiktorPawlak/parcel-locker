@@ -15,7 +15,7 @@ class LockerRepositoryTest extends TestsConfig {
 
     @BeforeAll
     void setup() {
-        l1 = new Locker("LDZ01", 10);
+        l1 = new Locker("LDZ01", "Gawronska 12, Lodz 12-123", 10);
         lockerRepository.add(l1);
     }
 

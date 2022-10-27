@@ -30,5 +30,5 @@ class ParcelTest {
         "1, 2, 3, 50"
     })
     void Should_ThrowException_WhenGivenValuesAreNotCorrect(double width, double length, double height, double weight) {
-        assertThrows(ParcelException.class, () -> new Parcel(BigDecimal.TEN, 0, 2, 3, 4, true));
+        assertThrows(ParcelException.class, () -> new Parcel(BigDecimal.TEN, width, length, height, weight, true));
     }}

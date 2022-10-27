@@ -72,13 +72,13 @@ class RepositoryTest extends TestsConfig {
         Client client2 = em2.find(Client.class, c1.getId());
 
         em1.getTransaction().begin();
-        client1.setArchive(true);
+        client1.setActive(false);
         em1.getTransaction().commit();
 
         RollbackException rollback = new RollbackException();
         try {
             em2.getTransaction().begin();
-            client2.setArchive(true);
+            client2.setActive(false);
             em2.getTransaction().commit();
         } catch (RollbackException e) {
             rollback = e;

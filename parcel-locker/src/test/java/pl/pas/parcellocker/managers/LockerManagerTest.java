@@ -13,13 +13,13 @@ class LockerManagerTest extends TestsConfig {
 
     @Test
     void Should_CreateLocker() {
-        lockerManager.createLocker("LDZ69", 10);
+        lockerManager.createLocker("LDZ69", "Gawronska 9, Lodz 12-123", 10);
         assertTrue(lockerManager.getLocker("LDZ69").isPresent());
     }
 
     @Test
     void Should_ThrowException_WhenGivenLockerNameIsDuplicated() {
-        lockerManager.createLocker("LDZ11", 10);
-        assertThrows(LockerManagerException.class, () -> lockerManager.createLocker("LDZ11", 10));
+        lockerManager.createLocker("LDZ11", "Gawronska 12, Lodz 12-123", 10);
+        assertThrows(LockerManagerException.class, () -> lockerManager.createLocker("LDZ11", "Gawronska 22, Lodz 12-123", 10));
     }
 }

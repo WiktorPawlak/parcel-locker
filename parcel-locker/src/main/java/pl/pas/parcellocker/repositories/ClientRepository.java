@@ -20,7 +20,7 @@ public class ClientRepository extends Repository<Client> {
             EntityManager entityManager = getEntityManager();
 
             entityManager.getTransaction().begin();
-            entityManager.find(Client.class, id).setArchive(true);
+            entityManager.find(Client.class, id).setActive(false);
             entityManager.getTransaction().commit();
 
         } catch (PersistenceException e) {
