@@ -4,6 +4,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.MappedSuperclass;
 import jakarta.persistence.Version;
+import org.bson.codecs.pojo.annotations.BsonProperty;
 import org.hibernate.annotations.GenericGenerator;
 
 import java.util.UUID;
@@ -16,6 +17,7 @@ public abstract class EntityModel {
         name = "UUID",
         strategy = "org.hibernate.id.UUIDGenerator"
     )
+    @BsonProperty("uuid")
     protected UUID id;
 
     @Version

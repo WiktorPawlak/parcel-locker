@@ -1,0 +1,36 @@
+version: '3.8'
+services:
+    mongo:
+        build: .
+        image: mongo:latest
+        container_name: mongodb
+        hostname: mongodb
+        networks:
+            - mongonet
+        ports:
+            - "27017:27017"
+        environment:
+            - MONGO_INITDB_ROOT_USERNAME=admin
+            - MONGO_INITDB_ROOT_PASSWORD=admin
+        healthcheck:
+            test: [ "CMD","mongo","--eval","db.adminCommand('ping')" ]
+            interval: 10s
+            timeout: 2s
+            retries: 5
+
+    mongoinit:
+        build: .
+        image: mongo:latest
+        hostname: mongodbinit
+        container_name: mongodbint
+        networks:
+            - mongonet
+        depends_on:
+            - mongo
+        command: >
+            mongo --host mongodb:27017 --username admin --username admin --authenticationDatabase admin -- eval
+            '
+            rs.initiate():
+            '
+networks:
+    mongonet: {}

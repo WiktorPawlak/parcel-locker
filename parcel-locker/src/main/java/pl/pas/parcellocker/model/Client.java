@@ -1,23 +1,28 @@
 package pl.pas.parcellocker.model;
 
-import jakarta.persistence.Entity;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import org.bson.codecs.pojo.annotations.BsonCreator;
+import org.bson.codecs.pojo.annotations.BsonProperty;
 import pl.pas.parcellocker.exceptions.ClientException;
 
-@Entity
 @AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode
 public class Client extends EntityModel {
 
+    @BsonProperty("firstname")
     private String firstName;
+    @BsonProperty("lastname")
     private String lastName;
+    @BsonProperty("telnumber")
     private String telNumber;
+    @BsonProperty("active")
     private boolean active;
 
-    public Client(String firstName, String lastName, String telNumber) {
+    @BsonCreator
+    public Client(@BsonProperty("firstname") String firstName, @BsonProperty("lastname") String lastName,@BsonProperty("telnumber") String telNumber) {
         validateName(firstName);
         validateName(lastName);
         validateTelNumber(telNumber);

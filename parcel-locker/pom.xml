@@ -119,6 +119,23 @@
             <artifactId>jaxb-runtime</artifactId>
             <version>${glassfish.jaxb-runtime.version}</version>
         </dependency>
+
+<!--        mongoDb-->
+        <dependency>
+            <groupId>org.mongodb</groupId>
+            <artifactId>mongodb-driver-sync</artifactId>
+            <version>4.7.2</version>
+        </dependency>
+        <dependency>
+            <groupId>org.mongodb</groupId>
+            <artifactId>mongodb-crypt</artifactId>
+            <version>1.5.2</version>
+        </dependency>
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-classic</artifactId>
+            <version>1.4.4</version>
+        </dependency>
     </dependencies>
 
     <build>
