@@ -21,7 +21,7 @@ import static pl.pas.parcellocker.configuration.ParcelConfig.SMALL_PACKAGE_MULTI
 
 @Entity
 @NoArgsConstructor
-@DiscriminatorColumn(name = "2")
+@DiscriminatorColumn(name = "PARCEL")
 public class Parcel extends Package {
     private double width;
     private double length;

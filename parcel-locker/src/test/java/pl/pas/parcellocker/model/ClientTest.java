@@ -14,7 +14,7 @@ class ClientTest {
         "a,'',123",
         "a,a,''"
     })
-    void whenIncorrectDataShouldThrowException(String firstName, String lastName, String telNumber) {
+    void Should_ThrowException_WhenIncorrectData(String firstName, String lastName, String telNumber) {
         assertThrows(ClientException.class, () -> new Client(firstName, lastName, telNumber));
     }
 

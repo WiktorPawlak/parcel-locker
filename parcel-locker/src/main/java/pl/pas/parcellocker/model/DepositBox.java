@@ -1,27 +1,15 @@
 package pl.pas.parcellocker.model;
 
 import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
-import org.hibernate.annotations.GenericGenerator;
 
 import java.util.UUID;
 
 @Entity
 @EqualsAndHashCode
-public class DepositBox extends VersionModel {
-
-    @Id
-    @GeneratedValue(generator = "UUID")
-    @GenericGenerator(
-        name = "UUID",
-        strategy = "org.hibernate.id.UUIDGenerator"
-    )
-    private UUID id;
+public class DepositBox extends EntityModel {
 
     @ManyToOne
     @JoinColumn(name = "delivery_id")
@@ -60,20 +48,12 @@ public class DepositBox extends VersionModel {
         return delivery.getId();
     }
 
-    public UUID getId() {
-        return id;
-    }
-
     public void setId(UUID id) {
         this.id = id;
     }
 
     public boolean isEmpty() {
         return isEmpty;
-    }
-
-    public void setIsEmpty(boolean empty) {
-        this.isEmpty = empty;
     }
 
     public String getAccessCode() {

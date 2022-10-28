@@ -3,15 +3,10 @@ package pl.pas.parcellocker.model;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.hibernate.annotations.GenericGenerator;
 import pl.pas.parcellocker.exceptions.LockerException;
 
 import java.util.ArrayList;
@@ -22,26 +17,24 @@ import java.util.UUID;
 @Entity
 @NoArgsConstructor
 @EqualsAndHashCode
-public class Locker extends VersionModel implements EntityClass {
+public class Locker extends EntityModel {
 
-    @Id
-    @GeneratedValue(generator = "UUID")
-    @GenericGenerator(
-        name = "UUID",
-        strategy = "org.hibernate.id.UUIDGenerator"
-    )
-    private UUID id;
+    private String identityNumber;
+    private String address;
 
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
     private List<DepositBox> depositBoxes;
 
-    public Locker(int boxAmount) {
+    public Locker(String identityNumber, String address, int boxAmount) {
         try {
             if (boxAmount <= 0)
                 throw new LockerException("Locker with 0 boxes can not be created!");
         } catch (LockerException e) {
             log.error(e.getMessage());
         }
+
+        this.identityNumber = identityNumber;
+        this.address = address;
         depositBoxes = new ArrayList<>();
         for (int i = 0; i < boxAmount; i++) {
             depositBoxes.add(new DepositBox());
@@ -54,11 +47,10 @@ public class Locker extends VersionModel implements EntityClass {
             if (depositBox.isEmpty()) {
                 depositBox.putIn(delivery, telNumber, accessCode);
                 return depositBox.getId();
-            } else {
-                throw new LockerException("Not able to put package with id = " + depositBox + " into box.");
             }
         }
-        return null;
+        throw new LockerException("Not able to put package with id = " +
+            delivery.getId() + " into locker " + this.getIdentityNumber() + ".");
     }
 
     public UUID takeOut(String telNumber, String code) {
@@ -68,15 +60,10 @@ public class Locker extends VersionModel implements EntityClass {
                 return depositBox.getDeliveryId();
             }
         }
-        try {
-            throw new LockerException("Couldn't get any package out with access code: "
-                    + code
-                    + "and phone number: "
-                    + telNumber);
-        } catch (LockerException e){
-            log.error(e.getMessage());
-        }
-        return null;
+        throw new LockerException("Couldn't get any package out with access code: "
+            + code
+            + "and phone number: "
+            + telNumber);
     }
 
     public int countEmpty() {
@@ -90,7 +77,7 @@ public class Locker extends VersionModel implements EntityClass {
     }
 
     public DepositBox getDepositBox(UUID id) {
-        for (DepositBox depositBox: depositBoxes) {
+        for (DepositBox depositBox : depositBoxes) {
             if (depositBox.getId().equals(id)) {
                 return depositBox;
             }
@@ -98,8 +85,11 @@ public class Locker extends VersionModel implements EntityClass {
         return null;
     }
 
-    @Override
-    public UUID getId() {
-        return id;
+    public String getIdentityNumber() {
+        return identityNumber;
+    }
+
+    public String getAddress() {
+        return address;
     }
 }

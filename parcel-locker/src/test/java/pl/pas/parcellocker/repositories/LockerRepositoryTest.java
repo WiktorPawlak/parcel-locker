@@ -1,43 +1,31 @@
 package pl.pas.parcellocker.repositories;
 
-import jakarta.persistence.NoResultException;
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 import pl.pas.parcellocker.config.TestsConfig;
-import pl.pas.parcellocker.model.Client;
-import pl.pas.parcellocker.model.Delivery;
-import pl.pas.parcellocker.model.DeliveryStatus;
 import pl.pas.parcellocker.model.Locker;
 
-import java.math.BigDecimal;
-import java.util.UUID;
-import java.util.concurrent.locks.Lock;
-
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class LockerRepositoryTest extends TestsConfig {
-    public LockerRepository lockerRepository;
-    public Locker l1;
+    private Locker l1;
 
-    @BeforeEach
+    @BeforeAll
     void setup() {
-        lockerRepository = new LockerRepository();
-        l1 = new Locker(10);
+        l1 = new Locker("LDZ01", "Gawronska 12, Lodz 12-123", 10);
         lockerRepository.add(l1);
     }
 
     @Test
-    void createLocker() {
+    void Should_CreateLocker() {
         assertDoesNotThrow(() -> lockerRepository.get(l1.getId()));
     }
 
     @Test
-    void removeLocker() {
+    void Should_RemoveLocker() {
         int count = lockerRepository.size();
         lockerRepository.remove(l1);
         assertTrue(count > lockerRepository.size());

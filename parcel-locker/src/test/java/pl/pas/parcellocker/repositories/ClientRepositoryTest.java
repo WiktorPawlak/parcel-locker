@@ -1,56 +1,56 @@
 package pl.pas.parcellocker.repositories;
 
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 import pl.pas.parcellocker.config.TestsConfig;
 import pl.pas.parcellocker.model.Client;
 
-import java.util.List;
-import java.util.UUID;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import static org.junit.jupiter.api.Assertions.*;
-
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class ClientRepositoryTest extends TestsConfig {
-    public ClientRepository clientRepository;
-    public Client c1;
-    public Client c2;
-    public Client c3;
-    public Client c4;
-    public Client c5;
+    private Client c1;
+    private Client c2;
+    private Client c3;
+    private Client c4;
+    private Client c5;
 
-    @BeforeEach
+    @BeforeAll
     void setup() {
-        clientRepository = new ClientRepository();
         c1 = new Client("Maciej", "Nowak", "123452137");
-        c2 = new Client("Maciej", "Kowal", "123456");
-        c3 = new Client("Maciej", "Kowal", "1234567");
-        c4 = new Client("Maciej", "Kowal", "12345678");
-        c5 = new Client("Maciej", "Kowal", "123456789");
+        c2 = new Client("Tadeusz", "Byk", "123456");
+        c3 = new Client("Krzysztof", "Ryk", "1234567");
+        c4 = new Client("Mariusz", "Kwik", "12345678");
+        c5 = new Client("Jakub", "Kowalski", "123456789");
     }
 
     @Test
-    void whenFindByTelNumberShouldReturnClientWithAppropriateTelNumber() {
+    void Should_ReturnClientWithAppropriateTelNumber_WhenFindByTelNumberCalled() {
         clientRepository.add(c1);
+
         assertNotNull(clientRepository.findByTelNumber(c1.getTelNumber()));
     }
 
     @Test
-    void shouldArchiveClient() {
+    void Should_ArchiveClient_WhenRepositoryArchiveMethodCalled() {
         clientRepository.add(c2);
         clientRepository.archive(c2.getId());
 
-        assertTrue(clientRepository.get(c2.getId()).isArchived());
+        assertFalse(clientRepository.get(c2.getId()).isActive());
     }
 
     @Test
-    void shouldAddClientIntoDB() {
+    void Should_AddClient_WhenAddMethodCalled() {
        clientRepository.add(c3);
 
        assertNotNull(clientRepository.get(c3.getId()));
     }
 
     @Test
-    void shouldReturnAllClients() {
+    void Should_ReturnAllClients_WhenFindAllCalled() {
         clientRepository.add(c4);
         clientRepository.add(c5);
 

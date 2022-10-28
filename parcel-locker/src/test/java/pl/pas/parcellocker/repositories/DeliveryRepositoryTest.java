@@ -1,8 +1,9 @@
 package pl.pas.parcellocker.repositories;
 
 import jakarta.persistence.NoResultException;
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 import pl.pas.parcellocker.config.TestsConfig;
 import pl.pas.parcellocker.model.Client;
 import pl.pas.parcellocker.model.Delivery;
@@ -10,28 +11,22 @@ import pl.pas.parcellocker.model.DeliveryStatus;
 import pl.pas.parcellocker.model.Locker;
 
 import java.math.BigDecimal;
-import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class DeliveryRepositoryTest extends TestsConfig {
-    public DeliveryRepository deliveryRepository;
-    public ClientRepository clientRepository;
-    public LockerRepository lockerRepository;
-    public Client c1;
-    public Client c2;
-    public Locker l1;
 
-    @BeforeEach
+    private Client c1;
+    private Client c2;
+    private Locker l1;
+
+    @BeforeAll
     void setup() {
-        deliveryRepository = new DeliveryRepository();
-        clientRepository = new ClientRepository();
-        lockerRepository = new LockerRepository();
-        l1 = new Locker(10);
+        l1 = new Locker("LDZ01", "Gawronska 12, Lodz 12-123", 10);
         c1 = new Client("Maciej", "Nowak", "12345");
         c2 = new Client("Maciej", "Kowal", "123456");
         clientRepository.add(c1);
@@ -40,7 +35,7 @@ class DeliveryRepositoryTest extends TestsConfig {
     }
 
     @Test
-    void createDelivery() {
+    void Should_CreateDelivery() {
         Delivery delivery = new Delivery(BigDecimal.TEN, true, c1, c2, l1);
         deliveryRepository.add(delivery);
         delivery = deliveryRepository.get(delivery.getId());
@@ -48,7 +43,7 @@ class DeliveryRepositoryTest extends TestsConfig {
     }
 
     @Test
-    void updateDelivery() {
+    void Should_UpdateDelivery() {
         Delivery delivery = new Delivery(BigDecimal.TEN, true, c1, c2, l1);
         deliveryRepository.add(delivery);
         assertEquals(deliveryRepository.get(delivery.getId()).getStatus(), DeliveryStatus.READY_TO_SHIP);
@@ -58,7 +53,7 @@ class DeliveryRepositoryTest extends TestsConfig {
     }
 
     @Test
-    void deleteDelivery() {
+    void Should_DeleteDelivery() {
         Delivery delivery = new Delivery(BigDecimal.TEN, true, c1, c2, l1);
         deliveryRepository.add(delivery);
         assertEquals(deliveryRepository.get(delivery.getId()), delivery);
@@ -67,7 +62,7 @@ class DeliveryRepositoryTest extends TestsConfig {
     }
 
     @Test
-    void archiveDelivery() {
+    void Should_ArchiveDelivery() {
         Delivery delivery = new Delivery(BigDecimal.TEN, true, c1, c2, l1);
         deliveryRepository.add(delivery);
         assertFalse(deliveryRepository.get(delivery.getId()).isArchived());
@@ -76,7 +71,7 @@ class DeliveryRepositoryTest extends TestsConfig {
     }
 
     @Test
-    void findAllDeliveries() {
+    void Should_ReturnAllDeliveries() {
         Delivery delivery = new Delivery(BigDecimal.TEN, true, c1, c2, l1);
         Delivery delivery1 = new Delivery(BigDecimal.ONE, false, c2, c1, l1);
         deliveryRepository.add(delivery);
