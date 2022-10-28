@@ -1,17 +1,24 @@
 package pl.pas.parcellocker.model;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import lombok.EqualsAndHashCode;
+
 import java.util.UUID;
 
-public class DepositBox {
+@Entity
+@EqualsAndHashCode
+public class DepositBox extends EntityModel {
 
-    private UUID deliveryId;
-    private String id;
+    @ManyToOne
+    @JoinColumn(name = "delivery_id")
+    private Delivery delivery;
     private boolean isEmpty;
     private String accessCode;
     private String telNumber;
 
-    public DepositBox(String id) {
-        this.id = id;
+    public DepositBox() {
         isEmpty = true;
         telNumber = "";
         accessCode = "";
@@ -24,11 +31,11 @@ public class DepositBox {
             && !telNumber.isEmpty();
     }
 
-    public void putIn(UUID deliveryId, String telNumber, String accessCode) {
+    public void putIn(Delivery delivery, String telNumber, String accessCode) {
         this.accessCode = accessCode;
         this.isEmpty = false;
         this.telNumber = telNumber;
-        this.deliveryId = deliveryId;
+        this.delivery = delivery;
     }
 
     public void clean() {
@@ -38,27 +45,15 @@ public class DepositBox {
     }
 
     public UUID getDeliveryId() {
-        return deliveryId;
+        return delivery.getId();
     }
 
-    public void setDeliveryId(UUID deliveryId) {
-        this.deliveryId = deliveryId;
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
+    public void setId(UUID id) {
         this.id = id;
     }
 
     public boolean isEmpty() {
         return isEmpty;
-    }
-
-    public void setIsEmpty(boolean empty) {
-        this.isEmpty = empty;
     }
 
     public String getAccessCode() {

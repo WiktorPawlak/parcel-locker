@@ -1,20 +1,18 @@
 package pl.pas.parcellocker.model;
 
-import org.apache.commons.lang3.builder.ToStringBuilder;
+import jakarta.persistence.Entity;
+import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 
-public abstract class Package {
-    public final BigDecimal basePrice;
+@Entity
+@NoArgsConstructor
+public abstract class Package extends EntityModel {
+    public BigDecimal basePrice;
 
     public Package(BigDecimal basePrice) {
         this.basePrice = basePrice;
     }
 
     public abstract BigDecimal getCost();
-
-    @Override
-    public String toString() {
-        return "basePrice: " + this.basePrice;
-    }
 }

@@ -1,48 +1,57 @@
 package pl.pas.parcellocker.managers;
 
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
+import jakarta.persistence.NoResultException;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
+import pl.pas.parcellocker.config.TestsConfig;
 import pl.pas.parcellocker.exceptions.ClientManagerException;
-import pl.pas.parcellocker.exceptions.NotFoundException;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-class ClientManagerTest {
+class ClientManagerTest extends TestsConfig {
 
-    public ClientManager clientManager;
+    private static final ClientManager clientManager = new ClientManager();
 
-    @BeforeEach
-    void setup() {
-        clientManager = new ClientManager();
+    private final String TEST_NAME = "Bartosh";
+    private final String TEST_SURNAME = "Byniowski";
+    private final String TEST_TEL_NUMBER = "123456789";
+    private final String TEST_WRONG_TEL_NUMBER = "987654321";
+
+    @AfterEach
+    void finisher() {
+        clientRepository.findAll().forEach(clientRepository::remove);
     }
 
     @Test
-    void registerClientConformance() {
-        clientManager.registerClient("Bartosh", "Byniowski", "123456789");
-        assertEquals("123456789", clientManager.getClient("123456789").getTelNumber());
+    void Should_RegisterClient() {
+        clientManager.registerClient(TEST_NAME, TEST_SURNAME, TEST_TEL_NUMBER);
+        assertEquals(TEST_TEL_NUMBER, clientManager.getClient(TEST_TEL_NUMBER).getTelNumber());
     }
 
     @Test
-    void unregisterClientConformance() {
-        clientManager.registerClient("Bartosh", "Byniowski", "123456789");
-        assertFalse(clientManager.getClient("123456789").isArchived());
+    void Should_UnregisterClient() {
+        clientManager.registerClient(TEST_NAME, TEST_SURNAME, TEST_TEL_NUMBER);
+        assertTrue(clientManager.getClient(TEST_TEL_NUMBER).isActive());
 
-        clientManager.unregisterClient(clientManager.getClient("123456789"));
-        assertTrue(clientManager.getClient("123456789").isArchived());
+        clientManager.unregisterClient(clientManager.getClient(TEST_TEL_NUMBER));
+        assertFalse(clientManager.getClient(TEST_TEL_NUMBER).isActive());
     }
 
     @Test
-    void getClientConformance() {
-        clientManager.registerClient("Bartosh", "Byniowski", "123456789");
-        assertEquals(clientManager.getClient("123456789").getFirstName(), "Bartosh");
-        assertThrows(NotFoundException.class, () -> clientManager.getClient("987654321"));
+    void Should_GetClient() {
+        clientManager.registerClient(TEST_NAME, TEST_SURNAME, TEST_TEL_NUMBER);
+        assertEquals(clientManager.getClient(TEST_TEL_NUMBER).getFirstName(), TEST_NAME);
+        assertThrows(NoResultException.class, () -> clientManager.getClient(TEST_WRONG_TEL_NUMBER));
     }
 
     @Test
-    void exceptionConformance() {
-        clientManager.registerClient("Bartosh", "Byniowski", "123456789");
+    void Should_ThrowException_WhenInvalidValuesPassed() {
+        clientManager.registerClient(TEST_NAME, TEST_SURNAME, TEST_TEL_NUMBER);
         assertThrows(ClientManagerException.class, () -> clientManager.getClient(""));
         assertThrows(ClientManagerException.class, () -> clientManager.unregisterClient(null));
     }
+
 }

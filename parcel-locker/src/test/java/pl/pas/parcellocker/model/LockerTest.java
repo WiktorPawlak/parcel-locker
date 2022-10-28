@@ -1,29 +1,46 @@
 package pl.pas.parcellocker.model;
 
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
+import pl.pas.parcellocker.config.TestsConfig;
+import pl.pas.parcellocker.repositories.LockerRepository;
 
+import java.math.BigDecimal;
 import java.util.UUID;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-class LockerTest {
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
+class LockerTest extends TestsConfig {
 
-    Locker locker = new Locker(10);
-    UUID deliveryId = new UUID(5,5);
+    private final LockerRepository lockerRepository = new LockerRepository();
+    private Delivery delivery;
+    private Locker locker;
 
-    @Test
-    void shouldReturnNumberOfEmptyDepositBoxes() {
-        assertEquals(10, locker.countEmpty());
+    @BeforeAll
+    void setup() {
+        Client c1 = new Client("test", "test", "1231");
+        Client c2 = new Client("test", "test", "1231");
+        locker = new Locker("LDZ01", "Gawronska 12, Lodz 12-123", 10);
+        delivery = new Delivery(BigDecimal.TEN, true, c1, c2, locker);
     }
 
     @Test
-    void whenPutInShouldUpdateDepositBoxFieldsAndSetIsEmptyAsFalse() {
-        String depositBoxId = locker.putIn(deliveryId,"123456789","k0z4k");
+    void Should_ReturnNumberOfEmptyDepositBoxes() {
+        Locker newLocker = new Locker("LDZ02", "Gawronska 26, Lodz 12-123", 10);
+        assertEquals(10, newLocker.countEmpty());
+    }
+
+    @Test
+    void Should_UpdateDepositBoxFieldsAndSetIsEmptyAsFalse_WhenPutIn() {
+        lockerRepository.add(locker);
+        UUID depositBoxId = locker.putIn(delivery,"123456789","k0z4k");
 
         DepositBox depositBox = locker.getDepositBox(depositBoxId);
         assertEquals("123456789", depositBox.getTelNumber());
         assertEquals("k0z4k", depositBox.getAccessCode());
-        assertEquals(deliveryId, depositBox.getDeliveryId());
+        assertEquals(delivery.getId(), depositBox.getDeliveryId());
     }
 
 }

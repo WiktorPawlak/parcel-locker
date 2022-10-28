@@ -1,6 +1,8 @@
 package pl.pas.parcellocker.model;
 
-import org.apache.commons.lang3.builder.ToStringBuilder;
+import jakarta.persistence.DiscriminatorColumn;
+import jakarta.persistence.Entity;
+import lombok.NoArgsConstructor;
 import pl.pas.parcellocker.exceptions.ParcelException;
 
 import java.math.BigDecimal;
@@ -17,12 +19,15 @@ import static pl.pas.parcellocker.configuration.ParcelConfig.MIN_PARCEL_SIZE;
 import static pl.pas.parcellocker.configuration.ParcelConfig.MIN_PARCEL_WEIGHT;
 import static pl.pas.parcellocker.configuration.ParcelConfig.SMALL_PACKAGE_MULTIPLAYER;
 
+@Entity
+@NoArgsConstructor
+@DiscriminatorColumn(name = "PARCEL")
 public class Parcel extends Package {
-    private final double width;
-    private final double length;
-    private final double height;
-    private final double weight;
-    private final boolean fragile;
+    private double width;
+    private double length;
+    private double height;
+    private double weight;
+    private boolean fragile;
 
     public Parcel(BigDecimal basePrice, double width, double length, double height, double weight, boolean fragile) {
         super(basePrice);
@@ -51,7 +56,7 @@ public class Parcel extends Package {
 
     @Override
     public BigDecimal getCost() {
-        BigDecimal cost = new BigDecimal(String.valueOf(basePrice));
+        BigDecimal cost = basePrice;
 
         ParcelType packageType = checkParcelType();
         switch (packageType) {
@@ -84,12 +89,6 @@ public class Parcel extends Package {
         }
 
         return type;
-    }
-
-    @Override
-    public String toString() {
-        return "Parcel " + width + "x" + length + "x" + height +
-            " " + weight + "kg" + " cost: " + this.getCost() + " " + super.toString();
     }
 
     private enum ParcelType {SMALL, MEDIUM, LARGE}

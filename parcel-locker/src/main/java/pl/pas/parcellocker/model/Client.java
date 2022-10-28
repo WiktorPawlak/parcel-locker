@@ -1,12 +1,21 @@
 package pl.pas.parcellocker.model;
 
+import jakarta.persistence.Entity;
+import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 import pl.pas.parcellocker.exceptions.ClientException;
 
-public class Client {
-    private final String firstName;
-    private final String lastName;
-    private final String telNumber;
-    private boolean isArchive;
+@Entity
+@AllArgsConstructor
+@NoArgsConstructor
+@EqualsAndHashCode
+public class Client extends EntityModel {
+
+    private String firstName;
+    private String lastName;
+    private String telNumber;
+    private boolean active;
 
     public Client(String firstName, String lastName, String telNumber) {
         validateName(firstName);
@@ -17,7 +26,7 @@ public class Client {
         this.lastName = lastName;
         this.telNumber = telNumber;
 
-        isArchive = false;
+        active = true;
     }
 
     private void validateName(String name) {
@@ -42,16 +51,16 @@ public class Client {
         return telNumber;
     }
 
-    public boolean isArchived() {
-        return isArchive;
+    public boolean isActive() {
+        return active;
     }
 
-    public void setArchive(boolean archive) {
-        this.isArchive = archive;
+    public void setActive(boolean active) {
+        this.active = active;
     }
 
     @Override
     public String toString() {
-        return firstName + " " + lastName + " phone: " + telNumber + (isArchive ? " Archived" : " Actual");
+        return firstName + " " + lastName + " phone: " + telNumber + (active ? " Archived" : " Actual");
     }
 }
