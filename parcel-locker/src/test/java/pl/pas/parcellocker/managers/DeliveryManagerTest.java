@@ -33,8 +33,8 @@ class DeliveryManagerTest extends TestsConfig {
         locker = new Locker("LDZ01", "Gawronska 12, Lodz 12-123", 20);
         shipper1 = new Client("Oscar", "Trel", "321312312");
         receiver1 = new Client("Bartosh", "Siekan", "123123123");
-        clientRepository.add(shipper1);
-        clientRepository.add(receiver1);
+       // clientRepository.add(shipper1);
+      //  clientRepository.add(receiver1);
         lockerRepository.add(locker);
     }
 

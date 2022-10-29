@@ -29,8 +29,8 @@ class DeliveryRepositoryTest extends TestsConfig {
         l1 = new Locker("LDZ01", "Gawronska 12, Lodz 12-123", 10);
         c1 = new Client("Maciej", "Nowak", "12345");
         c2 = new Client("Maciej", "Kowal", "123456");
-        clientRepository.add(c1);
-        clientRepository.add(c2);
+        //clientRepository.add(c1);
+        //clientRepository.add(c2);
         lockerRepository.add(l1);
     }
 
