@@ -1,16 +1,17 @@
 package pl.pas.parcellocker.model;
 
-import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
 import org.bson.codecs.pojo.annotations.BsonCreator;
 import org.bson.codecs.pojo.annotations.BsonProperty;
 import pl.pas.parcellocker.exceptions.ClientException;
 
-@AllArgsConstructor
-@NoArgsConstructor
+
 @EqualsAndHashCode
-public class Client extends EntityModel {
+@Getter
+@Setter
+public class Client extends MongoEntityModel {
 
     @BsonProperty("firstname")
     private String firstName;
@@ -22,7 +23,24 @@ public class Client extends EntityModel {
     private boolean active;
 
     @BsonCreator
-    public Client(@BsonProperty("firstname") String firstName, @BsonProperty("lastname") String lastName,@BsonProperty("telnumber") String telNumber) {
+    public Client(@BsonProperty("_id") UniqueId id,
+                  @BsonProperty("firstname") String firstName,
+                  @BsonProperty("lastname") String lastName,
+                  @BsonProperty("telnumber") String telNumber,
+                  @BsonProperty("active") boolean isActive) {
+        super(id);
+        validateName(firstName);
+        validateName(lastName);
+        validateTelNumber(telNumber);
+
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.telNumber = telNumber;
+        this.active = isActive;
+    }
+
+    public Client(String firstName, String lastName, String telNumber) {
+        super(new UniqueId());
         validateName(firstName);
         validateName(lastName);
         validateTelNumber(telNumber);
