@@ -8,36 +8,39 @@ import com.mongodb.client.MongoClients;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.Filters;
-import com.mongodb.client.model.Updates;
-import com.mongodb.client.result.UpdateResult;
 import org.bson.UuidRepresentation;
 import org.bson.codecs.configuration.CodecRegistries;
 import org.bson.codecs.configuration.CodecRegistry;
 import org.bson.codecs.pojo.Conventions;
 import org.bson.codecs.pojo.PojoCodecProvider;
 import org.bson.conversions.Bson;
-import pl.pas.parcellocker.model.Client;
 import pl.pas.parcellocker.model.UniqueIdCodecProvider;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-public class AbstractMongoRepository implements AutoCloseable {
+public abstract class AbstractMongoRepository<T> {
 
-    private ConnectionString connectionString = new ConnectionString("mongodb://localhost:27017");
-    private MongoCredential credential = MongoCredential
+    private final ConnectionString connectionString = new ConnectionString("mongodb://localhost:27017");
+    private final MongoCredential credential = MongoCredential
         .createCredential("admin", "admin", "admin".toCharArray());
 
-    private CodecRegistry pojoCodecRegistry = CodecRegistries.fromProviders(PojoCodecProvider.builder()
+    private final CodecRegistry pojoCodecRegistry = CodecRegistries.fromProviders(PojoCodecProvider.builder()
         .automatic(true)
         .conventions(List.of(Conventions.ANNOTATION_CONVENTION))
         .build());
 
     private MongoClient mongoClient;
-    private MongoDatabase parcelLocker;
+    protected MongoDatabase parcelLocker;
 
-    public AbstractMongoRepository() {
+    protected final String collectionName;
+    private final Class<T> entityClass;
+
+    public AbstractMongoRepository(String collectionName, Class<T> entityClass) {
+        this.collectionName = collectionName;
+        this.entityClass = entityClass;
+
         initDbConnection();
     }
 
@@ -57,45 +60,27 @@ public class AbstractMongoRepository implements AutoCloseable {
         parcelLocker = mongoClient.getDatabase("parcelLocker");
     }
 
-    public void add(Client client) {
-        MongoCollection<Client> clientsCollection = parcelLocker.getCollection("clients", Client.class);
-        clientsCollection.insertOne(client);
+    public void add(T client) {
+        MongoCollection<T> collection = parcelLocker.getCollection(collectionName, entityClass);
+        collection.insertOne(client);
     }
 
-    public Client findById(UUID id) {
-        MongoCollection<Client> clientsCollection = parcelLocker.getCollection("clients", Client.class);
+    public T findById(UUID id) {
+        MongoCollection<T> collection = parcelLocker.getCollection(collectionName, entityClass);
         Bson filter = Filters.eq("_id", id);
-        return clientsCollection.find().filter(filter).first();
+        return collection.find().filter(filter).first();
     }
 
-    public List<Client> findAll() {
-        MongoCollection<Client> clientsCollection = parcelLocker.getCollection("clients", Client.class);
-        return clientsCollection.find().into(new ArrayList<>());
+    public List<T> findAll() {
+        MongoCollection<T> collection = parcelLocker.getCollection(collectionName, entityClass);
+        return collection.find().into(new ArrayList<>());
     }
 
-    public void update(Client client) {
-        MongoCollection<Client> clientsCollection = parcelLocker.getCollection("clients", Client.class);
-        Bson filter = Filters.eq("_id", client.getId());
-
-        Bson setUpdate = Updates.combine(
-            Updates.set("firstname", client.getFirstName()),
-            Updates.set("lastname", client.getLastName()),
-            Updates.set("telnumber", client.getTelNumber()),
-            Updates.set("active", client.isActive())
-        );
-
-        UpdateResult updateResult = clientsCollection.updateOne(filter, setUpdate);
-
-    }
+    public void update(T object) {}
 
     public void delete(UUID id) {
-        MongoCollection<Client> clientsCollection = parcelLocker.getCollection("clients", Client.class);
+        MongoCollection<T> collection = parcelLocker.getCollection(collectionName, entityClass);
         Bson filter = Filters.eq("_id", id);
-        clientsCollection.deleteOne(filter);
-    }
-
-    @Override
-    public void close() throws Exception {
-
+        collection.deleteOne(filter);
     }
 }

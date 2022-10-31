@@ -9,8 +9,8 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-class AbstractMongoRepositoryTest {
-    AbstractMongoRepository abstractMongoRepository = new AbstractMongoRepository();
+class ClientMongoRepositoryTest {
+    ClientMongoRepository abstractMongoRepository = new ClientMongoRepository();
     Client client1;
 
     @BeforeEach
