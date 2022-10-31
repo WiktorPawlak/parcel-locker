@@ -1,53 +1,50 @@
 package pl.pas.parcellocker.model;
 
-import jakarta.persistence.Access;
-import jakarta.persistence.AccessType;
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.DiscriminatorColumn;
-import jakarta.persistence.DiscriminatorType;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Inheritance;
-import jakarta.persistence.InheritanceType;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import org.bson.codecs.pojo.annotations.BsonCreator;
+import org.bson.codecs.pojo.annotations.BsonProperty;
 
 import java.math.BigDecimal;
-import java.util.UUID;
 
-@Entity
-@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
-@DiscriminatorColumn(name = "package_type",
-    discriminatorType = DiscriminatorType.INTEGER)
-@Access(AccessType.FIELD)
-@AllArgsConstructor
-@NoArgsConstructor
 @EqualsAndHashCode
-public class Delivery extends EntityModel {
+public class Delivery extends MongoEntityModel {
 
-    @EqualsAndHashCode.Exclude
-    @ManyToOne(cascade = CascadeType.MERGE)
-    @JoinColumn(name = "shipper_id")
+    @BsonProperty("shipper")
     private Client shipper;
 
-    @EqualsAndHashCode.Exclude
-    @ManyToOne(cascade = CascadeType.MERGE)
-    @JoinColumn(name = "receiver_id")
+    @BsonProperty("receiver")
     private Client receiver;
+
+    @BsonProperty("status")
     private DeliveryStatus status;
 
-    @EqualsAndHashCode.Exclude
-    @ManyToOne(cascade = CascadeType.PERSIST)
-    @JoinColumn(name = "pack_ID")
-    private Package pack;
+//    @BsonProperty("pack")
+//    private Package pack;
 
-    @EqualsAndHashCode.Exclude
-    @ManyToOne(cascade = CascadeType.MERGE)
-    @JoinColumn(name = "locker_id")
+    @BsonProperty("locker")
     private Locker locker;
+
+    @BsonProperty("archived")
     private boolean isArchived;
+
+    @BsonCreator
+    public Delivery(@BsonProperty("_id") UniqueId id,
+                    @BsonProperty("shipper") Client shipper,
+                    @BsonProperty("receiver") Client receiver,
+                    @BsonProperty("status") DeliveryStatus status,
+                    //@BsonProperty("pack") Package pack,
+                    @BsonProperty("locker") Locker locker,
+                    @BsonProperty("archived") boolean isArchived
+    ) {
+        super(id);
+        this.shipper = shipper;
+        this.receiver = receiver;
+        this.status = status;
+        //this.pack = pack;
+        this.locker = locker;
+        this.isArchived = isArchived;
+    }
 
     public Delivery(BigDecimal basePrice,
                     double width,
@@ -60,23 +57,25 @@ public class Delivery extends EntityModel {
                     Locker locker) {
         this(shipper, receiver, locker);
 
-        this.pack = new Parcel(basePrice, width, length, height, weight, isFragile);
+        //this.pack = new Parcel(basePrice, width, length, height, weight, isFragile);
     }
 
     public Delivery(BigDecimal basePrice,
                     boolean isPriority,
                     Client shipper,
                     Client receiver,
-                    Locker locker) {
+                    Locker locker
+    ) {
         this(shipper, receiver, locker);
 
-        this.pack = new List(basePrice, isPriority);
+        //this.pack = new List(basePrice, isPriority);
     }
 
     private Delivery(Client shipper,
                      Client receiver,
-                     Locker locker) {
-        this.id = UUID.randomUUID();
+                     Locker locker
+    ) {
+        super(new UniqueId());
         this.shipper = shipper;
         this.receiver = receiver;
         this.locker = locker;
@@ -84,7 +83,7 @@ public class Delivery extends EntityModel {
     }
 
     public BigDecimal getCost() {
-        return pack.getCost();
+        return BigDecimal.TEN;
     }
 
     public Client getShipper() {
@@ -99,9 +98,9 @@ public class Delivery extends EntityModel {
         return status;
     }
 
-    public Package getPack() {
-        return pack;
-    }
+//    public Package getPack() {
+//        return pack;
+//    }
 
     public Locker getLocker() {
         return locker;

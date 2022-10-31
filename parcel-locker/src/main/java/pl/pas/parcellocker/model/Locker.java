@@ -7,6 +7,7 @@ import jakarta.persistence.OneToMany;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.bson.codecs.pojo.annotations.BsonProperty;
 import pl.pas.parcellocker.exceptions.LockerException;
 
 import java.util.ArrayList;
@@ -14,18 +15,22 @@ import java.util.List;
 import java.util.UUID;
 
 @Slf4j
-@Entity
 @NoArgsConstructor
 @EqualsAndHashCode
 public class Locker extends EntityModel {
 
+    @BsonProperty("identityNumber")
     private String identityNumber;
+
+    @BsonProperty("address")
     private String address;
 
-    @OneToMany(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
     private List<DepositBox> depositBoxes;
 
-    public Locker(String identityNumber, String address, int boxAmount) {
+    public Locker(@BsonProperty("identityNumber") String identityNumber,
+                  @BsonProperty("address") String address,
+                  int boxAmount
+    ) {
         try {
             if (boxAmount <= 0)
                 throw new LockerException("Locker with 0 boxes can not be created!");
