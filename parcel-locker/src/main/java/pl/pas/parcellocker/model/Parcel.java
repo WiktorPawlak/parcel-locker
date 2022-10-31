@@ -1,35 +1,42 @@
 package pl.pas.parcellocker.model;
 
-import jakarta.persistence.DiscriminatorColumn;
-import jakarta.persistence.Entity;
-import lombok.NoArgsConstructor;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
+import org.bson.codecs.pojo.annotations.BsonCreator;
+import org.bson.codecs.pojo.annotations.BsonDiscriminator;
+import org.bson.codecs.pojo.annotations.BsonProperty;
 import pl.pas.parcellocker.exceptions.ParcelException;
 
 import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.List;
 
-import static pl.pas.parcellocker.configuration.ParcelConfig.LARGE_PACKAGE_MULTIPLAYER;
-import static pl.pas.parcellocker.configuration.ParcelConfig.LARGE_SIZE;
-import static pl.pas.parcellocker.configuration.ParcelConfig.MAX_PARCEL_SIZE;
-import static pl.pas.parcellocker.configuration.ParcelConfig.MAX_PARCEL_WEIGHT;
-import static pl.pas.parcellocker.configuration.ParcelConfig.MEDIUM_PACKAGE_MULTIPLAYER;
-import static pl.pas.parcellocker.configuration.ParcelConfig.MEDIUM_SIZE;
-import static pl.pas.parcellocker.configuration.ParcelConfig.MIN_PARCEL_SIZE;
-import static pl.pas.parcellocker.configuration.ParcelConfig.MIN_PARCEL_WEIGHT;
-import static pl.pas.parcellocker.configuration.ParcelConfig.SMALL_PACKAGE_MULTIPLAYER;
+import static pl.pas.parcellocker.configuration.ParcelConfig.*;
 
-@Entity
-@NoArgsConstructor
-@DiscriminatorColumn(name = "PARCEL")
+@BsonDiscriminator(key = "_clazz", value = "parcel")
+@Getter
+@Setter
 public class Parcel extends Package {
+
+    @BsonProperty("width")
     private double width;
+    @BsonProperty("length")
     private double length;
+    @BsonProperty("height")
     private double height;
+    @BsonProperty("weight")
     private double weight;
+    @BsonProperty("fragile")
     private boolean fragile;
 
-    public Parcel(BigDecimal basePrice, double width, double length, double height, double weight, boolean fragile) {
+    @BsonCreator
+    public Parcel(@BsonProperty("basePrice")BigDecimal basePrice,
+                  @BsonProperty("width") double width,
+                  @BsonProperty("length") double length,
+                  @BsonProperty("height") double height,
+                  @BsonProperty("weight") double weight,
+                  @BsonProperty("fragile") boolean fragile) {
         super(basePrice);
 
         validateSize(width);
