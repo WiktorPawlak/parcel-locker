@@ -18,21 +18,6 @@ services:
             timeout: 2s
             retries: 5
 
-#    mongoinit:
-#        build: .
-#        image: mongo:latest
-#        hostname: mongodbinit
-#        container_name: mongodbint
-#        networks:
-#            - mongonet
-#        depends_on:
-#            - mongo
-#        command: >
-#            mongosh --host mongodb:27017 --username admin --username admin --authenticationDatabase admin -- eval
-#            '
-#            rs.initiate():
-#            '
-
     mongo-express:
         image: mongo-express:latest
         container_name: mongo-express

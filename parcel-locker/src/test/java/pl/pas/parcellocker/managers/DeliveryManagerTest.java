@@ -113,16 +113,4 @@ class DeliveryManagerTest extends TestsConfig {
     void Should_ThrowException_WhenInvalidValuesPassed() {
         assertThrows(DeliveryManagerException.class, () -> deliveryManager.checkClientShipmentBalance(null));
     }
-
-    @Test
-    void Should_ThrowOptimisticLockException_WhenSameDeliveryPutInLockerAtOnes() {
-        Delivery delivery = deliveryManager.makeParcelDelivery(
-            basePrice, 10, 20, 30, 10, false, shipper1, receiver1, locker
-        );
-        deliveryManager.putInLocker(delivery ,"1122");
-        assertThrows(OptimisticLockException.class, () -> {
-            try { deliveryManager.putInLocker(delivery ,"2211"); }
-            catch (RepositoryException e) { throw e.getCause(); }
-        });
-    }
 }
