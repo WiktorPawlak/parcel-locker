@@ -1,24 +1,42 @@
 package pl.pas.parcellocker.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
+import org.bson.codecs.pojo.annotations.BsonCreator;
+import org.bson.codecs.pojo.annotations.BsonProperty;
 
 import java.util.UUID;
 
-@Entity
+@Getter
+@Setter
 @EqualsAndHashCode
-public class DepositBox extends EntityModel {
+public class DepositBox extends MongoEntityModel {
 
-    @ManyToOne
-    @JoinColumn(name = "delivery_id")
+    @BsonProperty("delivery")
     private Delivery delivery;
+    @BsonProperty("isEmpty")
     private boolean isEmpty;
+    @BsonProperty("accessCode")
     private String accessCode;
+    @BsonProperty("telNumber")
     private String telNumber;
 
+    @BsonCreator
+    public DepositBox(@BsonProperty("_id") UniqueId id,
+                      @BsonProperty("delivery") Delivery delivery,
+                      @BsonProperty("isEmpty") boolean isEmpty,
+                      @BsonProperty("accessCode") String accessCode,
+                      @BsonProperty("telNumber") String telNumber) {
+        super(id);
+        this.isEmpty = isEmpty;
+        this.telNumber = telNumber;
+        this.accessCode = accessCode;
+        this.delivery = delivery;
+    }
+
     public DepositBox() {
+        super(new UniqueId());
         isEmpty = true;
         telNumber = "";
         accessCode = "";
@@ -42,33 +60,5 @@ public class DepositBox extends EntityModel {
         isEmpty = true;
         this.accessCode = "";
         this.telNumber = "";
-    }
-
-    public UUID getDeliveryId() {
-        return delivery.getId();
-    }
-
-    public void setId(UUID id) {
-        this.id = id;
-    }
-
-    public boolean isEmpty() {
-        return isEmpty;
-    }
-
-    public String getAccessCode() {
-        return accessCode;
-    }
-
-    public void setAccessCode(String accessCode) {
-        this.accessCode = accessCode;
-    }
-
-    public String getTelNumber() {
-        return telNumber;
-    }
-
-    public void setTelNumber(String telNumber) {
-        this.telNumber = telNumber;
     }
 }

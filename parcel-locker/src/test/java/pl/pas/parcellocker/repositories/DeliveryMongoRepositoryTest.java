@@ -29,8 +29,8 @@ class DeliveryMongoRepositoryTest {
        abstractMongoRepository.add(delivery1);
        log.info(delivery1.getShipper().getTelNumber());
 
-       log.info(getDeliveryFromRepo(delivery1).getLocker().getId().toString());
-        assertEquals(getDeliveryFromRepo(delivery1), delivery1);
+       log.info(getDeliveryFromRepo(delivery1).getLocker().getDepositBoxes().toString());
+        assertEquals(getDeliveryFromRepo(delivery1).getLocker().getId(), delivery1.getLocker().getId());
     }
 
 //    @Test

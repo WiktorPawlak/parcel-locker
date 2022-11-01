@@ -1,12 +1,10 @@
 package pl.pas.parcellocker.model;
 
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.OneToMany;
 import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
+import org.bson.codecs.pojo.annotations.BsonCreator;
 import org.bson.codecs.pojo.annotations.BsonProperty;
 import pl.pas.parcellocker.exceptions.LockerException;
 
@@ -15,9 +13,10 @@ import java.util.List;
 import java.util.UUID;
 
 @Slf4j
-@NoArgsConstructor
+@Getter
+@Setter
 @EqualsAndHashCode
-public class Locker extends EntityModel {
+public class Locker extends MongoEntityModel {
 
     @BsonProperty("identityNumber")
     private String identityNumber;
@@ -25,19 +24,33 @@ public class Locker extends EntityModel {
     @BsonProperty("address")
     private String address;
 
+    @BsonProperty("depositBoxes")
     private List<DepositBox> depositBoxes;
+
+    @BsonCreator
+    public Locker(@BsonProperty("_id") UniqueId id,
+                  @BsonProperty("identityNumber") String identityNumber,
+                  @BsonProperty("address") String address,
+                  @BsonProperty("depositBoxes") List<DepositBox> depositBoxes
+    ) {
+        super(id);
+
+        this.identityNumber = identityNumber;
+        this.address = address;
+        this.depositBoxes = depositBoxes;
+    }
 
     public Locker(@BsonProperty("identityNumber") String identityNumber,
                   @BsonProperty("address") String address,
                   int boxAmount
     ) {
+        super(new UniqueId());
         try {
             if (boxAmount <= 0)
                 throw new LockerException("Locker with 0 boxes can not be created!");
         } catch (LockerException e) {
             log.error(e.getMessage());
         }
-
         this.identityNumber = identityNumber;
         this.address = address;
         depositBoxes = new ArrayList<>();
@@ -62,7 +75,7 @@ public class Locker extends EntityModel {
         for (DepositBox depositBox : depositBoxes) {
             if (depositBox.canAccess(code, telNumber)) {
                 depositBox.clean();
-                return depositBox.getDeliveryId();
+                return depositBox.getDelivery().getId();
             }
         }
         throw new LockerException("Couldn't get any package out with access code: "
