@@ -5,8 +5,11 @@ import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.Updates;
 import org.bson.conversions.Bson;
 import pl.pas.parcellocker.model.Client;
+import pl.pas.parcellocker.model.Delivery;
 import pl.pas.parcellocker.model.Locker;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.locks.Lock;
 
 public class LockerMongoRepository extends AbstractMongoRepository<Locker> {
@@ -25,5 +28,11 @@ public class LockerMongoRepository extends AbstractMongoRepository<Locker> {
             );
 
         lockerCollection.updateOne(filter, setUpdate);
+    }
+
+    public List<Locker> findByIdentityNumber(String identityNumber) {
+        MongoCollection<Locker> collection = parcelLocker.getCollection(collectionName, Locker.class);
+        Bson filter = Filters.eq("identityNumber", identityNumber);
+        return collection.find().filter(filter).into(new ArrayList<>());
     }
 }
