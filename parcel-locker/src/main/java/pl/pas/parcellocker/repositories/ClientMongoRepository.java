@@ -6,6 +6,8 @@ import com.mongodb.client.model.Updates;
 import org.bson.conversions.Bson;
 import pl.pas.parcellocker.model.Client;
 
+import java.util.UUID;
+
 public class ClientMongoRepository extends AbstractMongoRepository<Client> {
     public ClientMongoRepository() {
         super("clients", Client.class);
@@ -23,5 +25,11 @@ public class ClientMongoRepository extends AbstractMongoRepository<Client> {
         );
 
         clientsCollection.updateOne(filter, setUpdate);
+    }
+
+    public Client findByTelNumber(String telNumber) {
+        MongoCollection<Client> collection = parcelLocker.getCollection(collectionName, Client.class);
+        Bson filter = Filters.eq("telnumber", telNumber);
+        return collection.find().filter(filter).first();
     }
 }

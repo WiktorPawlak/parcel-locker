@@ -1,6 +1,5 @@
 package pl.pas.parcellocker.repositories;
 
-import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import pl.pas.parcellocker.model.Client;
@@ -9,12 +8,15 @@ import pl.pas.parcellocker.model.Locker;
 
 import java.math.BigDecimal;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static pl.pas.parcellocker.model.DeliveryStatus.RECEIVED;
 
-@Slf4j
 class DeliveryMongoRepositoryTest {
     DeliveryMongoRepository abstractMongoRepository = new DeliveryMongoRepository();
     Delivery delivery1;
+    Delivery delivery2;
 
     @BeforeEach
     void setup() {
@@ -22,42 +24,41 @@ class DeliveryMongoRepositoryTest {
         Client receiver = new Client("Tedi", "Tos", "2414124");
         Locker locker = new Locker("LDZ05", "test-address", 10);
         delivery1 = new Delivery(new BigDecimal("10"), true, shipper, receiver, locker);
+        delivery2 = new Delivery(new BigDecimal("10"), true, shipper, receiver, locker);
     }
 
     @Test
-    void shouldAddClient() {
+    void Should_AddDelivery() {
        abstractMongoRepository.add(delivery1);
-       log.info(delivery1.getShipper().getTelNumber());
 
-       log.info(getDeliveryFromRepo(delivery1).getLocker().getDepositBoxes().toString());
-        assertEquals(getDeliveryFromRepo(delivery1).getLocker().getId(), delivery1.getLocker().getId());
+       assertEquals(getDeliveryFromRepo(delivery1).getLocker().getId(), delivery1.getLocker().getId());
     }
 
-//    @Test
-//    void shouldUpdateClient() {
-//        abstractMongoRepository.add(client1);
-//        client1.setActive(false);
-//        abstractMongoRepository.update(client1);
-//
-//        assertFalse(getDeliveryFromRepo(client1).isActive());
-//    }
-//
-//    @Test
-//    void shouldDeleteClient() {
-//        abstractMongoRepository.add(client1);
-//
-//        abstractMongoRepository.delete(client1.getId());
-//
-//        assertNull(getDeliveryFromRepo(client1));
-//    }
-//
-//    @Test
-//    void shouldReturnAllClients() {
-//        abstractMongoRepository.add(client1);
-//        abstractMongoRepository.add(new Client("test", "test", "test"));
-//
-//        assertTrue(abstractMongoRepository.findAll().size() >= 2);
-//    }
+    @Test
+    void Should_UpdateDeliveries() {
+        abstractMongoRepository.add(delivery1);
+        delivery1.setStatus(RECEIVED);
+        abstractMongoRepository.update(delivery1);
+
+        assertEquals(getDeliveryFromRepo(delivery1).getStatus(), RECEIVED);
+    }
+
+    @Test
+    void Should_DeleteDelivery() {
+        abstractMongoRepository.add(delivery1);
+
+        abstractMongoRepository.delete(delivery1.getEntityId().getUUID());
+
+        assertNull(getDeliveryFromRepo(delivery1));
+    }
+
+    @Test
+    void Should_ReturnAllDeliveries() {
+        abstractMongoRepository.add(delivery1);
+        abstractMongoRepository.add(delivery2);
+
+        assertTrue(abstractMongoRepository.findAll().size() >= 2);
+    }
 
     private Delivery getDeliveryFromRepo(Delivery delivery) {
         return abstractMongoRepository.findById(delivery.getId());

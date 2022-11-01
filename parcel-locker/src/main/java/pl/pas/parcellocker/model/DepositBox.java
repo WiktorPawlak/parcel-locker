@@ -6,8 +6,6 @@ import lombok.Setter;
 import org.bson.codecs.pojo.annotations.BsonCreator;
 import org.bson.codecs.pojo.annotations.BsonProperty;
 
-import java.util.UUID;
-
 @Getter
 @Setter
 @EqualsAndHashCode
@@ -16,7 +14,7 @@ public class DepositBox extends MongoEntityModel {
     @BsonProperty("delivery")
     private Delivery delivery;
     @BsonProperty("isEmpty")
-    private boolean isEmpty;
+    private Boolean isEmpty;
     @BsonProperty("accessCode")
     private String accessCode;
     @BsonProperty("telNumber")
@@ -25,7 +23,7 @@ public class DepositBox extends MongoEntityModel {
     @BsonCreator
     public DepositBox(@BsonProperty("_id") UniqueId id,
                       @BsonProperty("delivery") Delivery delivery,
-                      @BsonProperty("isEmpty") boolean isEmpty,
+                      @BsonProperty("isEmpty") Boolean isEmpty,
                       @BsonProperty("accessCode") String accessCode,
                       @BsonProperty("telNumber") String telNumber) {
         super(id);
@@ -60,5 +58,9 @@ public class DepositBox extends MongoEntityModel {
         isEmpty = true;
         this.accessCode = "";
         this.telNumber = "";
+    }
+
+    public Boolean isEmpty() {
+        return isEmpty;
     }
 }

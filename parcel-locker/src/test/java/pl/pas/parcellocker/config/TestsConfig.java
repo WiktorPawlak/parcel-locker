@@ -1,29 +1,29 @@
-//package pl.pas.parcellocker.config;
-//
-//import org.junit.jupiter.api.AfterAll;
-//import org.junit.jupiter.api.BeforeAll;
-//import org.junit.jupiter.api.TestInstance;
-////import pl.pas.parcellocker.repositories.ClientRepository;
-////import pl.pas.parcellocker.repositories.DeliveryRepository;
-//import pl.pas.parcellocker.repositories.LockerRepository;
-//
-//@TestInstance(TestInstance.Lifecycle.PER_CLASS)
-//public class TestsConfig {
-//
-//   // protected final ClientRepository clientRepository = new ClientRepository();
-//   // protected final DeliveryRepository deliveryRepository = new DeliveryRepository();
-//    protected final LockerRepository lockerRepository = new LockerRepository();
-//
+package pl.pas.parcellocker.config;
+
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.TestInstance;
+import pl.pas.parcellocker.repositories.ClientMongoRepository;
+import pl.pas.parcellocker.repositories.DeliveryMongoRepository;
+import pl.pas.parcellocker.repositories.LockerMongoRepository;
+
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
+public class TestsConfig {
+
+    protected final ClientMongoRepository clientRepository = new ClientMongoRepository();
+    protected final DeliveryMongoRepository deliveryRepository = new DeliveryMongoRepository();
+    protected final LockerMongoRepository lockerRepository = new LockerMongoRepository();
+
 //    @BeforeAll
 //    static void beforeAll() {
 //        PostgresContainerInitializer.start();
 //    }
-//
-//    @AfterAll
-//    void finisher() {
-//        //deliveryRepository.findAll().forEach(deliveryRepository::remove);
-//        //clientRepository.findAll().forEach(clientRepository::remove);
-//        lockerRepository.findAll().forEach(lockerRepository::remove);
-//    }
-//
-//}
+
+    @AfterAll
+    void finisher() {
+        deliveryRepository.findAll().forEach(delivery -> deliveryRepository.delete(delivery.getId()));
+        clientRepository.findAll().forEach(client -> clientRepository.delete(client.getId()));
+        lockerRepository.findAll().forEach(locker -> lockerRepository.delete(locker.getId()));
+    }
+
+}

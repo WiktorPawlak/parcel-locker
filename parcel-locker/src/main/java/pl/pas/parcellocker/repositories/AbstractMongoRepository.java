@@ -20,7 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-public abstract class AbstractMongoRepository<T> {
+public abstract class AbstractMongoRepository<T> implements AutoCloseable {
 
     private final ConnectionString connectionString = new ConnectionString("mongodb://localhost:27017");
     private final MongoCredential credential = MongoCredential
@@ -60,9 +60,9 @@ public abstract class AbstractMongoRepository<T> {
         parcelLocker = mongoClient.getDatabase("parcelLocker");
     }
 
-    public void add(T client) {
+    public void add(T object) {
         MongoCollection<T> collection = parcelLocker.getCollection(collectionName, entityClass);
-        collection.insertOne(client);
+        collection.insertOne(object);
     }
 
     public T findById(UUID id) {
@@ -82,5 +82,10 @@ public abstract class AbstractMongoRepository<T> {
         MongoCollection<T> collection = parcelLocker.getCollection(collectionName, entityClass);
         Bson filter = Filters.eq("_id", id);
         collection.deleteOne(filter);
+    }
+
+    @Override
+    public void close() {
+        mongoClient.close();
     }
 }

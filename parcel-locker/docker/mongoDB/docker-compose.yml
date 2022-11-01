@@ -13,24 +13,40 @@ services:
             - MONGO_INITDB_ROOT_USERNAME=admin
             - MONGO_INITDB_ROOT_PASSWORD=admin
         healthcheck:
-            test: [ "CMD","mongo","--eval","db.adminCommand('ping')" ]
+            test: [ "CMD","mongosh","--eval","db.adminCommand('ping')" ]
             interval: 10s
             timeout: 2s
             retries: 5
 
-    mongoinit:
-        build: .
-        image: mongo:latest
-        hostname: mongodbinit
-        container_name: mongodbint
-        networks:
-            - mongonet
+#    mongoinit:
+#        build: .
+#        image: mongo:latest
+#        hostname: mongodbinit
+#        container_name: mongodbint
+#        networks:
+#            - mongonet
+#        depends_on:
+#            - mongo
+#        command: >
+#            mongosh --host mongodb:27017 --username admin --username admin --authenticationDatabase admin -- eval
+#            '
+#            rs.initiate():
+#            '
+
+    mongo-express:
+        image: mongo-express:latest
+        container_name: mongo-express
+        restart: unless-stopped
+        environment:
+            ME_CONFIG_MONGODB_ADMINUSERNAME: admin
+            ME_CONFIG_MONGODB_ADMINPASSWORD: admin
+            ME_CONFIG_MONGODB_SERVER: mongodb
+            ME_CONFIG_MONGODB_PORT: "27017"
+        ports:
+            - "8081:8081"
         depends_on:
             - mongo
-        command: >
-            mongo --host mongodb:27017 --username admin --username admin --authenticationDatabase admin -- eval
-            '
-            rs.initiate():
-            '
+
+
 networks:
     mongonet: {}
