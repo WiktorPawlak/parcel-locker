@@ -14,9 +14,10 @@ import java.util.List;
 
 import static pl.pas.parcellocker.configuration.ParcelConfig.*;
 
-@BsonDiscriminator(key = "_clazz", value = "parcel")
 @Getter
 @Setter
+@EqualsAndHashCode
+@BsonDiscriminator(key = "_clazz", value = "parcel")
 public class Parcel extends Package {
 
     @BsonProperty("width")

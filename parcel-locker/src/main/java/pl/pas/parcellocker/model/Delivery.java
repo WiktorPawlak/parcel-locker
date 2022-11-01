@@ -1,13 +1,18 @@
 package pl.pas.parcellocker.model;
 
 import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
 import org.bson.codecs.pojo.annotations.BsonCreator;
+import org.bson.codecs.pojo.annotations.BsonDiscriminator;
 import org.bson.codecs.pojo.annotations.BsonProperty;
 
 import java.math.BigDecimal;
 
+@Getter
+@Setter
 @EqualsAndHashCode
+@BsonDiscriminator
 public class Delivery extends MongoEntityModel {
 
     @BsonProperty("shipper")
@@ -19,8 +24,8 @@ public class Delivery extends MongoEntityModel {
     @BsonProperty("status")
     private DeliveryStatus status;
 
-//    @BsonProperty("pack")
-//    private Package pack;
+    @BsonProperty(value = "pack", useDiscriminator = true)
+    private Package pack;
 
     @BsonProperty("locker")
     private Locker locker;
@@ -33,7 +38,7 @@ public class Delivery extends MongoEntityModel {
                     @BsonProperty("shipper") Client shipper,
                     @BsonProperty("receiver") Client receiver,
                     @BsonProperty("status") DeliveryStatus status,
-                    //@BsonProperty("pack") Package pack,
+                    @BsonProperty("pack") Package pack,
                     @BsonProperty("locker") Locker locker,
                     @BsonProperty("archived") boolean isArchived
     ) {
@@ -41,7 +46,7 @@ public class Delivery extends MongoEntityModel {
         this.shipper = shipper;
         this.receiver = receiver;
         this.status = status;
-        //this.pack = pack;
+        this.pack = pack;
         this.locker = locker;
         this.isArchived = isArchived;
     }
@@ -57,7 +62,7 @@ public class Delivery extends MongoEntityModel {
                     Locker locker) {
         this(shipper, receiver, locker);
 
-        //this.pack = new Parcel(basePrice, width, length, height, weight, isFragile);
+        this.pack = new Parcel(basePrice, width, length, height, weight, isFragile);
     }
 
     public Delivery(BigDecimal basePrice,
@@ -68,7 +73,7 @@ public class Delivery extends MongoEntityModel {
     ) {
         this(shipper, receiver, locker);
 
-        //this.pack = new List(basePrice, isPriority);
+        this.pack = new List(basePrice, isPriority);
     }
 
     private Delivery(Client shipper,
@@ -97,10 +102,6 @@ public class Delivery extends MongoEntityModel {
     public DeliveryStatus getStatus() {
         return status;
     }
-
-//    public Package getPack() {
-//        return pack;
-//    }
 
     public Locker getLocker() {
         return locker;

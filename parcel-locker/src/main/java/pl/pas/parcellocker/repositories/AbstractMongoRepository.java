@@ -14,6 +14,8 @@ import org.bson.codecs.configuration.CodecRegistry;
 import org.bson.codecs.pojo.Conventions;
 import org.bson.codecs.pojo.PojoCodecProvider;
 import org.bson.conversions.Bson;
+import pl.pas.parcellocker.model.Package;
+import pl.pas.parcellocker.model.Parcel;
 import pl.pas.parcellocker.model.UniqueIdCodecProvider;
 
 import java.util.ArrayList;
@@ -22,20 +24,19 @@ import java.util.UUID;
 
 public abstract class AbstractMongoRepository<T> implements AutoCloseable {
 
+    protected final String collectionName;
     private final ConnectionString connectionString = new ConnectionString("mongodb://localhost:27017");
     private final MongoCredential credential = MongoCredential
         .createCredential("admin", "admin", "admin".toCharArray());
 
     private final CodecRegistry pojoCodecRegistry = CodecRegistries.fromProviders(PojoCodecProvider.builder()
         .automatic(true)
-        .conventions(List.of(Conventions.ANNOTATION_CONVENTION))
+        .register(Package.class, pl.pas.parcellocker.model.List.class, Parcel.class)
+        .conventions(Conventions.DEFAULT_CONVENTIONS)
         .build());
-
-    private MongoClient mongoClient;
-    protected MongoDatabase parcelLocker;
-
-    protected final String collectionName;
     private final Class<T> entityClass;
+    protected MongoDatabase parcelLocker;
+    private MongoClient mongoClient;
 
     public AbstractMongoRepository(String collectionName, Class<T> entityClass) {
         this.collectionName = collectionName;
@@ -44,7 +45,7 @@ public abstract class AbstractMongoRepository<T> implements AutoCloseable {
         initDbConnection();
     }
 
-    public void  initDbConnection() {
+    public void initDbConnection() {
         MongoClientSettings settings = MongoClientSettings.builder()
             .credential(credential)
             .applyConnectionString(connectionString)
@@ -76,7 +77,8 @@ public abstract class AbstractMongoRepository<T> implements AutoCloseable {
         return collection.find().into(new ArrayList<>());
     }
 
-    public void update(T object) {}
+    public void update(T object) {
+    }
 
     public void delete(UUID id) {
         MongoCollection<T> collection = parcelLocker.getCollection(collectionName, entityClass);

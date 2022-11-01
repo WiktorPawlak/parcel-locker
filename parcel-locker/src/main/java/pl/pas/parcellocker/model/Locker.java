@@ -40,8 +40,8 @@ public class Locker extends MongoEntityModel {
         this.depositBoxes = depositBoxes;
     }
 
-    public Locker(@BsonProperty("identityNumber") String identityNumber,
-                  @BsonProperty("address") String address,
+    public Locker(String identityNumber,
+                  String address,
                   int boxAmount
     ) {
         super(new UniqueId());
@@ -75,7 +75,7 @@ public class Locker extends MongoEntityModel {
         for (DepositBox depositBox : depositBoxes) {
             if (depositBox.canAccess(code, telNumber)) {
                 depositBox.clean();
-                return depositBox.getDelivery().getId();
+                return depositBox.getDeliveryId().getUUID();
             }
         }
         throw new LockerException("Couldn't get any package out with access code: "

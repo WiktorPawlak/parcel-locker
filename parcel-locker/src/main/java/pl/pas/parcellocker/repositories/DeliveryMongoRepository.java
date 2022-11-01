@@ -3,6 +3,8 @@ package pl.pas.parcellocker.repositories;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.Updates;
+import com.mongodb.client.model.ValidationOptions;
+import org.bson.Document;
 import org.bson.conversions.Bson;
 import pl.pas.parcellocker.model.Client;
 import pl.pas.parcellocker.model.Delivery;
@@ -25,7 +27,7 @@ public class DeliveryMongoRepository extends AbstractMongoRepository<Delivery> {
             Updates.set("shipper", delivery.getShipper()),
             Updates.set("lastname", delivery.getReceiver()),
             Updates.set("status", delivery.getStatus()),
-            //Updates.set("pack", delivery.getPack()),
+            Updates.set("pack", delivery.getPack()),
             Updates.set("locker", delivery.getLocker()),
             Updates.set("archived", delivery.isArchived())
         );

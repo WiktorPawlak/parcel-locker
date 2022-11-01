@@ -1,5 +1,6 @@
 package pl.pas.parcellocker.model;
 
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import org.bson.codecs.pojo.annotations.BsonCreator;
@@ -15,6 +16,7 @@ import static pl.pas.parcellocker.configuration.ListConfig.RATIO;
 @BsonDiscriminator(key = "_clazz", value = "list")
 @Getter
 @Setter
+@EqualsAndHashCode
 public class List extends Package {
 
     @BsonProperty("priority")

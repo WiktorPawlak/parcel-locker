@@ -1,12 +1,18 @@
 package pl.pas.parcellocker.model;
 
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
 import org.bson.codecs.pojo.annotations.BsonCreator;
 import org.bson.codecs.pojo.annotations.BsonDiscriminator;
 import org.bson.codecs.pojo.annotations.BsonProperty;
 
 import java.math.BigDecimal;
 
-@BsonDiscriminator(key = "_clazz", value = "package")
+@Getter
+@Setter
+@EqualsAndHashCode
+@BsonDiscriminator(key = "_clazz")
 public abstract class Package extends MongoEntityModel {
 
     public BigDecimal basePrice;
