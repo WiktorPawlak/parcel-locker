@@ -62,6 +62,9 @@ public class DeliveryManager {
         validateClient(delivery.getReceiver());
         validateClient(delivery.getShipper());
 
+        delivery = deliveries.get(delivery.getId());
+        validateDelivery(delivery);
+
         Delivery latestDeliveryState = deliveries.get(delivery.getId());
         Locker chosenLocker = latestDeliveryState.getLocker();
 
@@ -112,5 +115,10 @@ public class DeliveryManager {
     private void validateClient(Client client) {
         if (!client.isActive())
             throw new DeliveryManagerException("Client account is inactive.");
+    }
+
+    private void validateDelivery(Delivery delivery) {
+        if (delivery.getStatus() == READY_TO_PICKUP || delivery.isArchived())
+            throw new DeliveryManagerException("Delivery is already in locker or is archived.");
     }
 }

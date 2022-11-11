@@ -44,7 +44,7 @@ class DeliveryManagerTest extends TestsConfig {
     }
 
     @Test
-    void ShouldNot_MakeDelivery_WhenAtLeastOneOfTheClientsIsInactive() {
+    void Should_ThrowExceptionOnMakeDelivery_WhenAtLeastOneOfTheClientsIsInactive() {
         Client client = new Client("Mauris", "Kakel", "11111111111");
         client.setActive(false);
         clientRepository.add(client);
@@ -99,6 +99,21 @@ class DeliveryManagerTest extends TestsConfig {
         Client refreshedClient = clientRepository.get(client.getId());
         refreshedClient.setActive(active);
         clientRepository.update(refreshedClient);
+    }
+
+    @Test
+    void Should_ThrowException_WhenDeliveryPutInAgain() {
+        Delivery delivery = deliveryManager.makeParcelDelivery(
+            basePrice, 10, 20, 30, 10, false, shipper1, receiver1, locker
+        );
+
+        deliveryManager.putInLocker(delivery, "54321");
+        Delivery refreshedDelivery = deliveryRepository.get(delivery.getId());
+
+        assertThrows(DeliveryManagerException.class, () -> deliveryManager.putInLocker(refreshedDelivery, "65433"));
+
+        locker = lockerRepository.get(locker.getId());
+        deliveryManager.takeOutDelivery(locker, receiver1, "54321");
     }
 
     @Test
@@ -161,7 +176,7 @@ class DeliveryManagerTest extends TestsConfig {
         deliveryManager.putInLocker(testDelivery, "1111");
         locker = lockerRepository.get(oneBoxLocker.getId());
 
-        assertThrows(LockerException.class, () -> deliveryManager.putInLocker(testDelivery, "1111"));
+        assertThrows(DeliveryManagerException.class, () -> deliveryManager.putInLocker(testDelivery, "1111"));
 
         deliveryManager.takeOutDelivery(locker, receiver1, "1111");
         locker = lockerRepository.get(oneBoxLocker.getId());
