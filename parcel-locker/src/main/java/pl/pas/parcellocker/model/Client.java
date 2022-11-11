@@ -61,6 +61,6 @@ public class Client extends EntityModel {
 
     @Override
     public String toString() {
-        return firstName + " " + lastName + " phone: " + telNumber + (active ? " Archived" : " Actual");
+        return firstName + " " + lastName + " phone: " + telNumber + (active ? " Actual" : " Archived");
     }
 }

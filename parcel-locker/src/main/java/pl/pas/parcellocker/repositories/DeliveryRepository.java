@@ -6,6 +6,7 @@ import pl.pas.parcellocker.exceptions.RepositoryException;
 import pl.pas.parcellocker.model.Delivery;
 import pl.pas.parcellocker.model.DeliveryStatus;
 
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 import static pl.pas.parcellocker.repositories.EntityManagerUtil.getEntityManager;
@@ -23,7 +24,6 @@ public class DeliveryRepository extends Repository<Delivery> {
             entityManager.getTransaction().begin();
 
             Delivery delivery = entityManager.find(Delivery.class, id);
-            delivery.setStatus(DeliveryStatus.RECEIVED);
             delivery.setArchived(true);
 
             entityManager.getTransaction().commit();

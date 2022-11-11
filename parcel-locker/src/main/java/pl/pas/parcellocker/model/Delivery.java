@@ -15,6 +15,7 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Entity
@@ -47,6 +48,9 @@ public class Delivery extends EntityModel {
     @ManyToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name = "locker_id")
     private Locker locker;
+
+    private LocalDateTime allocationStart;
+    private LocalDateTime allocationStop;
     private boolean isArchived;
 
     public Delivery(BigDecimal basePrice,
@@ -107,12 +111,28 @@ public class Delivery extends EntityModel {
         return locker;
     }
 
-    public void setStatus(DeliveryStatus status) {
-        this.status = status;
+    public LocalDateTime getAllocationStop() {
+        return allocationStop;
+    }
+
+    public LocalDateTime getAllocationStart() {
+        return allocationStart;
     }
 
     public boolean isArchived() {
         return isArchived;
+    }
+
+    public void setStatus(DeliveryStatus status) {
+        this.status = status;
+    }
+
+    public void setAllocationStart(LocalDateTime allocationStart) {
+        this.allocationStart = allocationStart;
+    }
+
+    public void setAllocationStop(LocalDateTime allocationStop) {
+        this.allocationStop = allocationStop;
     }
 
     public void setArchived(boolean archived) {

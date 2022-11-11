@@ -24,12 +24,37 @@ public class LockerManager {
     }
 
     private void checkIfDuplicatedName(String name) {
-        List<Locker> sameNameLockers = lockerRepository.findBy(locker -> locker.getIdentityNumber().equals(name));
+        List<Locker> sameNameLockers = lockerRepository.findBy(locker ->
+            locker.getIdentityNumber().equals(name)
+        );
+
         if (sameNameLockers.size() > 0)
-            throw new LockerManagerException("Locker with given name already exists.");
+            error("Locker with given name already exists.");
     }
 
-    public Optional<Locker> getLocker(String name) {
-        return lockerRepository.findBy(locker -> locker.getIdentityNumber().equals(name)).stream().findFirst();
+    public Optional<Locker> getLocker(String identityNumber) {
+        return lockerRepository.findBy(locker ->
+            locker.getIdentityNumber().equals(identityNumber)
+        ).stream().findFirst();
+    }
+
+    public void removeLocker(String identityNumber) {
+        Locker lockerToRemove = getLocker(identityNumber)
+            .orElseThrow(() ->
+                new LockerManagerException("Locker with given name doesn't exist.")
+            );
+        try {
+            lockerRepository.remove(lockerToRemove);
+        } catch (Exception e) {
+            error("Couldn't remove locker.", e);
+        }
+    }
+
+    private void error(String msg) {
+        throw new LockerManagerException(msg);
+    }
+
+    private void error(String msg, Throwable throwable) {
+        throw new LockerManagerException(msg, throwable);
     }
 }

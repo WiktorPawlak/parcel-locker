@@ -22,7 +22,7 @@ public class Locker extends EntityModel {
     private String identityNumber;
     private String address;
 
-    @OneToMany(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
+    @OneToMany(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.REMOVE, CascadeType.MERGE})
     private List<DepositBox> depositBoxes;
 
     public Locker(String identityNumber, String address, int boxAmount) {
@@ -53,11 +53,12 @@ public class Locker extends EntityModel {
             delivery.getId() + " into locker " + this.getIdentityNumber() + ".");
     }
 
-    public UUID takeOut(String telNumber, String code) {
+    public Delivery takeOut(String telNumber, String code) {
         for (DepositBox depositBox : depositBoxes) {
             if (depositBox.canAccess(code, telNumber)) {
+                Delivery takenOutDelivery = depositBox.getDelivery();
                 depositBox.clean();
-                return depositBox.getDeliveryId();
+                return takenOutDelivery;
             }
         }
         throw new LockerException("Couldn't get any package out with access code: "

@@ -1,5 +1,6 @@
 package pl.pas.parcellocker.model;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
@@ -42,14 +43,11 @@ public class DepositBox extends EntityModel {
         isEmpty = true;
         this.accessCode = "";
         this.telNumber = "";
+        this.delivery = null;
     }
 
-    public UUID getDeliveryId() {
-        return delivery.getId();
-    }
-
-    public void setId(UUID id) {
-        this.id = id;
+    public Delivery getDelivery() {
+        return delivery;
     }
 
     public boolean isEmpty() {
@@ -60,12 +58,16 @@ public class DepositBox extends EntityModel {
         return accessCode;
     }
 
+    public String getTelNumber() {
+        return telNumber;
+    }
+
     public void setAccessCode(String accessCode) {
         this.accessCode = accessCode;
     }
 
-    public String getTelNumber() {
-        return telNumber;
+    public void setId(UUID id) {
+        this.id = id;
     }
 
     public void setTelNumber(String telNumber) {
