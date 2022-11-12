@@ -1,14 +1,15 @@
 package pl.pas.parcellocker.repositories;
 
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestInstance;
-import pl.pas.parcellocker.config.TestsConfig;
-import pl.pas.parcellocker.model.Client;
-
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
+
+import pl.pas.parcellocker.config.TestsConfig;
+import pl.pas.parcellocker.model.Client;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class ClientRepositoryTest extends TestsConfig {
@@ -44,9 +45,9 @@ class ClientRepositoryTest extends TestsConfig {
 
     @Test
     void Should_AddClient_WhenAddMethodCalled() {
-       clientRepository.add(c3);
+        clientRepository.add(c3);
 
-       assertNotNull(clientRepository.get(c3.getId()));
+        assertNotNull(clientRepository.get(c3.getId()));
     }
 
     @Test

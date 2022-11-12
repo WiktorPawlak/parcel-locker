@@ -1,32 +1,33 @@
 package pl.pas.parcellocker.managers;
 
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestInstance;
-import pl.pas.parcellocker.config.TestsConfig;
-import pl.pas.parcellocker.exceptions.DeliveryManagerException;
-import pl.pas.parcellocker.exceptions.LockerException;
-import pl.pas.parcellocker.model.Client;
-import pl.pas.parcellocker.model.Delivery;
-import pl.pas.parcellocker.model.Locker;
-
-import java.math.BigDecimal;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.math.BigDecimal;
+import java.util.UUID;
+
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
+
+import pl.pas.parcellocker.config.TestsConfig;
+import pl.pas.parcellocker.exceptions.DeliveryManagerException;
+import pl.pas.parcellocker.model.Client;
+import pl.pas.parcellocker.model.Delivery;
+import pl.pas.parcellocker.model.Locker;
+
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class DeliveryManagerTest extends TestsConfig {
 
     private final DeliveryManager deliveryManager = new DeliveryManager();
+    private final BigDecimal basePrice = BigDecimal.TEN;
     private Client shipper1;
     private Client receiver1;
     private Locker locker;
-    private final BigDecimal basePrice = BigDecimal.TEN;
 
     @BeforeAll
     void setup() {
@@ -41,11 +42,12 @@ class DeliveryManagerTest extends TestsConfig {
     @AfterEach
     void eachFinisher() {
         deliveryRepository.findAll().forEach(deliveryRepository::remove);
+
     }
 
     @Test
     void Should_ThrowExceptionOnMakeDelivery_WhenAtLeastOneOfTheClientsIsInactive() {
-        Client client = new Client("Mauris", "Kakel", "11111111111");
+        Client client = new Client("Mauris", "Kakel", UUID.randomUUID().toString().substring(0, 9));
         client.setActive(false);
         clientRepository.add(client);
 
@@ -60,7 +62,7 @@ class DeliveryManagerTest extends TestsConfig {
 
     @Test
     void Should_ThrowExceptionOnPutIn_WhenClientIsInactive() {
-        Client client = new Client("Mauris", "Kakel", "11111111111");
+        Client client = new Client("Mauris", "Kakel", UUID.randomUUID().toString().substring(0, 9));
         clientRepository.add(client);
 
         Delivery delivery = deliveryManager.makeParcelDelivery(
@@ -75,7 +77,7 @@ class DeliveryManagerTest extends TestsConfig {
 
     @Test
     void Should_ThrowExceptionOnTakeOut_WhenClientIsInactive() {
-        Client client = new Client("Mauris", "Kakel", "11111111111");
+        Client client = new Client("Mauris", "Kakel", UUID.randomUUID().toString().substring(0, 9));
         clientRepository.add(client);
 
         Delivery delivery = deliveryManager.makeParcelDelivery(
@@ -200,9 +202,9 @@ class DeliveryManagerTest extends TestsConfig {
         Delivery delivery1 = deliveryManager.makeParcelDelivery(
             basePrice, 10, 20, 30, 10, false, shipper1, receiver1, locker
         );
-        deliveryManager.putInLocker(delivery1,"2222");
+        deliveryManager.putInLocker(delivery1, "2222");
         locker = lockerRepository.get(locker.getId());
-        deliveryManager.takeOutDelivery(locker, receiver1,"2222");
+        deliveryManager.takeOutDelivery(locker, receiver1, "2222");
         locker = lockerRepository.get(locker.getId());
 
         assertTrue(0 < deliveryManager.getAllReceivedClientDeliveries(receiver1).size());
@@ -213,7 +215,7 @@ class DeliveryManagerTest extends TestsConfig {
         Delivery delivery = deliveryManager.makeParcelDelivery(
             basePrice, 10, 20, 30, 10, false, shipper1, receiver1, locker
         );
-        deliveryManager.putInLocker(delivery,"5555");
+        deliveryManager.putInLocker(delivery, "5555");
         locker = lockerRepository.get(locker.getId());
 
         assertEquals(new BigDecimal("15.000"), deliveryManager.checkClientShipmentBalance(shipper1));

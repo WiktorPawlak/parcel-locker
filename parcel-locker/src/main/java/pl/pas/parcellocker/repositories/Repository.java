@@ -1,18 +1,18 @@
 package pl.pas.parcellocker.repositories;
 
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.PersistenceException;
-import lombok.AllArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import pl.pas.parcellocker.exceptions.RepositoryException;
-import pl.pas.parcellocker.model.EntityModel;
+import static pl.pas.parcellocker.repositories.EntityManagerUtil.getEntityManager;
 
 import java.util.List;
 import java.util.UUID;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
-import static pl.pas.parcellocker.repositories.EntityManagerUtil.getEntityManager;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceException;
+import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import pl.pas.parcellocker.exceptions.RepositoryException;
+import pl.pas.parcellocker.model.EntityModel;
 
 @Slf4j
 @AllArgsConstructor
@@ -27,7 +27,7 @@ public class Repository<T extends EntityModel> {
             .getSingleResult();
     }
 
-    public void add(T object) {
+    public synchronized void add(T object) {
         if (object != null) {
             try {
                 EntityManager entityManager = getEntityManager();
@@ -45,7 +45,7 @@ public class Repository<T extends EntityModel> {
         }
     }
 
-    public void update(T object) {
+    public synchronized void update(T object) {
         try {
             EntityManager entityManager = getEntityManager();
 

@@ -1,5 +1,11 @@
 package pl.pas.parcellocker.managers;
 
+import static pl.pas.parcellocker.model.DeliveryStatus.READY_TO_PICKUP;
+
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
+import java.util.List;
+
 import pl.pas.parcellocker.exceptions.DeliveryManagerException;
 import pl.pas.parcellocker.model.Client;
 import pl.pas.parcellocker.model.Delivery;
@@ -7,12 +13,6 @@ import pl.pas.parcellocker.model.DeliveryStatus;
 import pl.pas.parcellocker.model.Locker;
 import pl.pas.parcellocker.repositories.DeliveryRepository;
 import pl.pas.parcellocker.repositories.LockerRepository;
-
-import java.math.BigDecimal;
-import java.time.LocalDateTime;
-import java.util.List;
-
-import static pl.pas.parcellocker.model.DeliveryStatus.READY_TO_PICKUP;
 
 public class DeliveryManager {
 
@@ -59,13 +59,12 @@ public class DeliveryManager {
     }
 
     public void putInLocker(Delivery delivery, String accessCode) {
-        validateClient(delivery.getReceiver());
-        validateClient(delivery.getShipper());
-
-        delivery = deliveries.get(delivery.getId());
-        validateDelivery(delivery);
-
         Delivery latestDeliveryState = deliveries.get(delivery.getId());
+
+        validateClient(latestDeliveryState.getReceiver());
+        validateClient(latestDeliveryState.getShipper());
+        validateDelivery(latestDeliveryState);
+
         Locker chosenLocker = latestDeliveryState.getLocker();
 
         chosenLocker.putIn(latestDeliveryState, latestDeliveryState.getReceiver().getTelNumber(), accessCode);

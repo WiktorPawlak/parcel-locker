@@ -1,5 +1,6 @@
 package pl.pas.parcellocker.model;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
@@ -14,6 +15,8 @@ public class Client extends EntityModel {
 
     private String firstName;
     private String lastName;
+
+    @Column(unique = true)
     private String telNumber;
     private boolean active;
 

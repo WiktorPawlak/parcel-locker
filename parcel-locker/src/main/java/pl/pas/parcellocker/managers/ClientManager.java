@@ -1,10 +1,10 @@
 package pl.pas.parcellocker.managers;
 
+import java.util.Arrays;
+
 import pl.pas.parcellocker.exceptions.ClientManagerException;
 import pl.pas.parcellocker.model.Client;
 import pl.pas.parcellocker.repositories.ClientRepository;
-
-import java.util.Arrays;
 
 public class ClientManager {
 
@@ -20,7 +20,7 @@ public class ClientManager {
         return clientRepository.findByTelNumber(telNumber);
     }
 
-    public Client registerClient(String firstName, String lastName, String telNumber) {
+    public synchronized Client registerClient(String firstName, String lastName, String telNumber) {
         validateIfEmpty(firstName, lastName, telNumber);
 
         for (Client client : clientRepository.findAll()) {
