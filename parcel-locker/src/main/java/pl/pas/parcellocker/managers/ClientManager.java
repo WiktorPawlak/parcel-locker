@@ -1,11 +1,11 @@
 package pl.pas.parcellocker.managers;
 
 import java.util.Arrays;
+import java.util.List;
 
 import pl.pas.parcellocker.exceptions.ClientManagerException;
 import pl.pas.parcellocker.model.client.Client;
 import pl.pas.parcellocker.model.client.ClientRepository;
-import pl.pas.parcellocker.repositories.hibernate.ClientRepositoryHibernate;
 
 public class ClientManager {
 
@@ -19,6 +19,12 @@ public class ClientManager {
         validateIfEmpty(telNumber);
 
         return clientRepository.findByTelNumber(telNumber);
+    }
+
+    public List<Client> getClientsByPartialTelNumber(String telNumberPart) {
+        validateIfEmpty(telNumberPart);
+
+        return clientRepository.findByTelNumberPart(telNumberPart);
     }
 
     public synchronized Client registerClient(String firstName, String lastName, String telNumber) {

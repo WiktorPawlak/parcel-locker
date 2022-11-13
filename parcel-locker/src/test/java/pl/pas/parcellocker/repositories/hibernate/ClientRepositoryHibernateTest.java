@@ -1,5 +1,6 @@
 package pl.pas.parcellocker.repositories.hibernate;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -33,6 +34,17 @@ class ClientRepositoryHibernateTest extends TestsConfig {
         clientRepository.add(c1);
 
         assertNotNull(clientRepository.findByTelNumber(c1.getTelNumber()));
+    }
+
+    @Test
+    void Should_ReturnClientsMatchingTelNumber_WhenFindByTelNumberCalled() {
+        clientRepository.add(c2);
+        clientRepository.add(c3);
+        clientRepository.add(c4);
+
+
+        assertNotNull(clientRepository.findByTelNumberPart(c2.getTelNumber()));
+        assertEquals(3, clientRepository.findByTelNumberPart(c2.getTelNumber()).size());
     }
 
     @Test

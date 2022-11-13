@@ -5,7 +5,12 @@ import java.util.UUID;
 
 public interface ClientRepository {
     void add(Client client);
+
     void archive(UUID clientId);
+
     List<Client> findAll();
+
     Client findByTelNumber(String telNumber);
+
+    List<Client> findByTelNumberPart(String telNumberPart);
 }
