@@ -1,16 +1,20 @@
 package pl.pas.parcellocker.managers;
 
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
+import lombok.NoArgsConstructor;
 import pl.pas.parcellocker.exceptions.LockerManagerException;
 import pl.pas.parcellocker.model.locker.Locker;
 import pl.pas.parcellocker.model.locker.LockerRepository;
-import pl.pas.parcellocker.repositories.hibernate.LockerRepositoryHibernate;
 
-import java.util.List;
 import java.util.Optional;
 
+@ApplicationScoped
+@NoArgsConstructor
 public class LockerManager {
 
-    private final LockerRepository lockerRepository;
+    @Inject
+    private LockerRepository lockerRepository;
 
     public LockerManager(LockerRepository lockerRepository) {
         this.lockerRepository = lockerRepository;
@@ -29,15 +33,16 @@ public class LockerManager {
             error("Locker with given name already exists.");
     }
 
-    public Optional<Locker> getLocker(String identityNumber) {
-        return lockerRepository.findByIdentityNumber(identityNumber);
-    }
-
-    public void removeLocker(String identityNumber) {
-        Locker lockerToRemove = getLocker(identityNumber)
+    public Locker getLocker(String identityNumber) {
+        return lockerRepository.findByIdentityNumber(identityNumber)
             .orElseThrow(() ->
                 new LockerManagerException("Locker with given name doesn't exist.")
             );
+    }
+
+    public void removeLocker(String identityNumber) {
+        Locker lockerToRemove = getLocker(identityNumber);
+
         try {
             lockerRepository.remove(lockerToRemove);
         } catch (Exception e) {

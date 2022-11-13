@@ -9,9 +9,8 @@ import pl.pas.parcellocker.model.locker.Locker;
 
 import java.math.BigDecimal;
 
-import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class LockerManagerTest extends TestsConfig {
 
@@ -19,15 +18,15 @@ class LockerManagerTest extends TestsConfig {
 
     @Test
     void Should_CreateLocker() {
-        lockerManager.createLocker("LDZ69", "Gawronska 9, Lodz 12-123", 10);
-        assertTrue(lockerManager.getLocker("LDZ69").isPresent());
+        Locker locker = lockerManager.createLocker("LDZ69", "Gawronska 9, Lodz 12-123", 10);
+        assertEquals(lockerManager.getLocker("LDZ69").getIdentityNumber(), locker.getIdentityNumber());
     }
 
     @Test
     void Should_RemoveLocker() {
-        lockerManager.createLocker("LDZ12", "Gawronska 9, Lodz 12-123", 10);
+        Locker locker = lockerManager.createLocker("LDZ12", "Gawronska 9, Lodz 12-123", 10);
         lockerManager.removeLocker("LDZ12");
-        assertFalse(lockerManager.getLocker("LDZ12").isPresent());
+        assertThrows(LockerManagerException.class, () -> lockerManager.getLocker("LDZ12"));
     }
 
     @Test
