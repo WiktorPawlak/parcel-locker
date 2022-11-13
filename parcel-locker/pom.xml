@@ -8,7 +8,7 @@
     <artifactId>parcel-locker</artifactId>
     <version>1.0-SNAPSHOT</version>
     <name>parcel-locker</name>
-    <packaging>jar</packaging>
+    <packaging>war</packaging>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
