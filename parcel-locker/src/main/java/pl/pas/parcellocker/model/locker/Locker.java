@@ -1,4 +1,4 @@
-package pl.pas.parcellocker.model;
+package pl.pas.parcellocker.model.locker;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
@@ -8,6 +8,8 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import pl.pas.parcellocker.exceptions.LockerException;
+import pl.pas.parcellocker.model.EntityModel;
+import pl.pas.parcellocker.model.delivery.Delivery;
 
 import java.util.ArrayList;
 import java.util.List;

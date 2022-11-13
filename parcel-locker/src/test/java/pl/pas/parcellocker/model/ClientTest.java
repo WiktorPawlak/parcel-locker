@@ -3,6 +3,7 @@ package pl.pas.parcellocker.model;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import pl.pas.parcellocker.exceptions.ClientException;
+import pl.pas.parcellocker.model.client.Client;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 

@@ -1,27 +1,32 @@
 package pl.pas.parcellocker.managers;
 
-import static pl.pas.parcellocker.model.DeliveryStatus.READY_TO_PICKUP;
+import static pl.pas.parcellocker.model.delivery.DeliveryStatus.READY_TO_PICKUP;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
 import pl.pas.parcellocker.exceptions.DeliveryManagerException;
-import pl.pas.parcellocker.model.Client;
-import pl.pas.parcellocker.model.Delivery;
-import pl.pas.parcellocker.model.DeliveryStatus;
-import pl.pas.parcellocker.model.Locker;
-import pl.pas.parcellocker.repositories.DeliveryRepository;
-import pl.pas.parcellocker.repositories.LockerRepository;
+import pl.pas.parcellocker.model.client.Client;
+import pl.pas.parcellocker.model.delivery.Delivery;
+import pl.pas.parcellocker.model.delivery.DeliveryRepository;
+import pl.pas.parcellocker.model.delivery.DeliveryStatus;
+import pl.pas.parcellocker.model.locker.Locker;
+import pl.pas.parcellocker.model.locker.LockerRepository;
+import pl.pas.parcellocker.repositories.hibernate.DeliveryRepositoryHibernate;
+import pl.pas.parcellocker.repositories.hibernate.LockerRepositoryHibernate;
 
 public class DeliveryManager {
 
-    private final DeliveryRepository deliveries;
-    private final LockerRepository lockers;
+    private final DeliveryRepository deliveryRepository;
+    private final LockerRepository lockerRepository;
 
-    public DeliveryManager() {
-        deliveries = new DeliveryRepository();
-        lockers = new LockerRepository();
+    public DeliveryManager(
+        DeliveryRepository deliveryRepository,
+        LockerRepository lockerRepository
+    ) {
+        this.deliveryRepository = deliveryRepository;
+        this.lockerRepository = lockerRepository;
     }
 
     public Delivery makeParcelDelivery(
@@ -39,7 +44,7 @@ public class DeliveryManager {
         validateClient(receiver);
 
         Delivery delivery = new Delivery(basePrice, width, height, length, weight, isFragile, shipper, receiver, locker);
-        deliveries.add(delivery);
+        deliveryRepository.add(delivery);
         return delivery;
     }
 
@@ -54,12 +59,12 @@ public class DeliveryManager {
         validateClient(receiver);
 
         Delivery delivery = new Delivery(basePrice, isPriority, shipper, receiver, locker);
-        deliveries.add(delivery);
+        deliveryRepository.add(delivery);
         return delivery;
     }
 
     public void putInLocker(Delivery delivery, String accessCode) {
-        Delivery latestDeliveryState = deliveries.get(delivery.getId());
+        Delivery latestDeliveryState = deliveryRepository.get(delivery.getId());
 
         validateClient(latestDeliveryState.getReceiver());
         validateClient(latestDeliveryState.getShipper());
@@ -72,13 +77,13 @@ public class DeliveryManager {
         latestDeliveryState.setAllocationStart(LocalDateTime.now());
         latestDeliveryState.setStatus(READY_TO_PICKUP);
 
-        deliveries.update(latestDeliveryState);
+        deliveryRepository.update(latestDeliveryState);
     }
 
     public void takeOutDelivery(Locker locker, Client receiver, String accessCode) {
         validateClient(receiver);
 
-        Locker locker1 = lockers.get(locker.getId());
+        Locker locker1 = lockerRepository.get(locker.getId());
         Delivery delivery = locker1.takeOut(receiver.getTelNumber(), accessCode);
 
         if (delivery != null) {
@@ -86,7 +91,7 @@ public class DeliveryManager {
             delivery.setStatus(DeliveryStatus.RECEIVED);
             delivery.setArchived(true);
 
-            deliveries.update(delivery);
+            deliveryRepository.update(delivery);
 
         }
     }
@@ -95,7 +100,7 @@ public class DeliveryManager {
         BigDecimal balance = BigDecimal.ZERO;
         if (client == null)
             throw new DeliveryManagerException("client is a nullptr!");
-        for (Delivery delivery : deliveries.findAll()) {
+        for (Delivery delivery : deliveryRepository.findAll()) {
             if (delivery.getShipper().equals(client))
                 balance = balance.add(delivery.getCost());
         }
@@ -104,11 +109,11 @@ public class DeliveryManager {
     }
 
     public List<Delivery> getAllClientDeliveries(Client client) {
-        return deliveries.findBy(delivery -> delivery.getReceiver().equals(client));
+        return deliveryRepository.findByClient(client);
     }
 
     public List<Delivery> getAllReceivedClientDeliveries(Client client) {
-        return deliveries.findBy(delivery -> delivery.getReceiver().equals(client) && delivery.isArchived());
+        return deliveryRepository.findReceivedByClient(client);
     }
 
     private void validateClient(Client client) {

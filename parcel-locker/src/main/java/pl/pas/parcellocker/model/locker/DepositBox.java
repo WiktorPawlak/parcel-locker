@@ -1,10 +1,11 @@
-package pl.pas.parcellocker.model;
+package pl.pas.parcellocker.model.locker;
 
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import lombok.EqualsAndHashCode;
+import pl.pas.parcellocker.model.EntityModel;
+import pl.pas.parcellocker.model.delivery.Delivery;
 
 import java.util.UUID;
 

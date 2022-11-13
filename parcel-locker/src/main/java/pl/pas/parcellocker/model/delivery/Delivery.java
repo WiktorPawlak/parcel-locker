@@ -1,4 +1,4 @@
-package pl.pas.parcellocker.model;
+package pl.pas.parcellocker.model.delivery;
 
 import jakarta.persistence.Access;
 import jakarta.persistence.AccessType;
@@ -13,6 +13,9 @@ import jakarta.persistence.ManyToOne;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import pl.pas.parcellocker.model.EntityModel;
+import pl.pas.parcellocker.model.locker.Locker;
+import pl.pas.parcellocker.model.client.Client;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;

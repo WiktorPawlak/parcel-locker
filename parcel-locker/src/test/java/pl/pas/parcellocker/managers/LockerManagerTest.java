@@ -3,9 +3,9 @@ package pl.pas.parcellocker.managers;
 import org.junit.jupiter.api.Test;
 import pl.pas.parcellocker.config.TestsConfig;
 import pl.pas.parcellocker.exceptions.LockerManagerException;
-import pl.pas.parcellocker.model.Client;
-import pl.pas.parcellocker.model.Delivery;
-import pl.pas.parcellocker.model.Locker;
+import pl.pas.parcellocker.model.client.Client;
+import pl.pas.parcellocker.model.delivery.Delivery;
+import pl.pas.parcellocker.model.locker.Locker;
 
 import java.math.BigDecimal;
 
@@ -15,7 +15,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class LockerManagerTest extends TestsConfig {
 
-    private static final LockerManager lockerManager = new LockerManager();
+    private final LockerManager lockerManager = new LockerManager(lockerRepository);
 
     @Test
     void Should_CreateLocker() {
@@ -34,7 +34,7 @@ class LockerManagerTest extends TestsConfig {
     void Should_ThrowException_WhenThereIsAllocationOnLocker() {
         Locker locker = lockerManager.createLocker("LDZ12", "Gawronska 9, Lodz 12-123", 10);
 
-        DeliveryManager deliveryManager = new DeliveryManager();
+        DeliveryManager deliveryManager = new DeliveryManager(deliveryRepository, lockerRepository);
         Client shipper1 = new Client("Oscar", "Trel", "321312312");
         Client receiver1 = new Client("Bartosh", "Siekan", "123123123");
         clientRepository.add(shipper1);

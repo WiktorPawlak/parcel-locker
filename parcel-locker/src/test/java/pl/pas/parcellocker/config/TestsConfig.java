@@ -3,16 +3,16 @@ package pl.pas.parcellocker.config;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.TestInstance;
-import pl.pas.parcellocker.repositories.ClientRepository;
-import pl.pas.parcellocker.repositories.DeliveryRepository;
-import pl.pas.parcellocker.repositories.LockerRepository;
+import pl.pas.parcellocker.repositories.hibernate.ClientRepositoryHibernate;
+import pl.pas.parcellocker.repositories.hibernate.DeliveryRepositoryHibernate;
+import pl.pas.parcellocker.repositories.hibernate.LockerRepositoryHibernate;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class TestsConfig {
 
-    protected final ClientRepository clientRepository = new ClientRepository();
-    protected final DeliveryRepository deliveryRepository = new DeliveryRepository();
-    protected final LockerRepository lockerRepository = new LockerRepository();
+    protected final ClientRepositoryHibernate clientRepository = new ClientRepositoryHibernate();
+    protected final DeliveryRepositoryHibernate deliveryRepository = new DeliveryRepositoryHibernate();
+    protected final LockerRepositoryHibernate lockerRepository = new LockerRepositoryHibernate();
 
     @BeforeAll
     static void beforeAll() {

@@ -1,14 +1,14 @@
-package pl.pas.parcellocker.repositories;
+package pl.pas.parcellocker.repositories.hibernate;
 
 import jakarta.persistence.NoResultException;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import pl.pas.parcellocker.config.TestsConfig;
-import pl.pas.parcellocker.model.Client;
-import pl.pas.parcellocker.model.Delivery;
-import pl.pas.parcellocker.model.DeliveryStatus;
-import pl.pas.parcellocker.model.Locker;
+import pl.pas.parcellocker.model.client.Client;
+import pl.pas.parcellocker.model.delivery.Delivery;
+import pl.pas.parcellocker.model.delivery.DeliveryStatus;
+import pl.pas.parcellocker.model.locker.Locker;
 
 import java.math.BigDecimal;
 
@@ -18,7 +18,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-class DeliveryRepositoryTest extends TestsConfig {
+class DeliveryRepositoryHibernateTest extends TestsConfig {
 
     private Client c1;
     private Client c2;

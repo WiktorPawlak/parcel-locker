@@ -3,13 +3,16 @@ package pl.pas.parcellocker.model;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
+import pl.pas.parcellocker.model.client.Client;
+import pl.pas.parcellocker.model.delivery.Delivery;
+import pl.pas.parcellocker.model.locker.Locker;
 
 import java.math.BigDecimal;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static pl.pas.parcellocker.model.DeliveryStatus.READY_TO_PICKUP;
-import static pl.pas.parcellocker.model.DeliveryStatus.READY_TO_SHIP;
-import static pl.pas.parcellocker.model.DeliveryStatus.RECEIVED;
+import static pl.pas.parcellocker.model.delivery.DeliveryStatus.READY_TO_PICKUP;
+import static pl.pas.parcellocker.model.delivery.DeliveryStatus.READY_TO_SHIP;
+import static pl.pas.parcellocker.model.delivery.DeliveryStatus.RECEIVED;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class DeliveryTest {

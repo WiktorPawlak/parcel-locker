@@ -1,4 +1,4 @@
-package pl.pas.parcellocker.repositories;
+package pl.pas.parcellocker.repositories.hibernate;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -18,12 +18,13 @@ import jakarta.persistence.OptimisticLockException;
 import jakarta.persistence.Persistence;
 import jakarta.persistence.RollbackException;
 import pl.pas.parcellocker.config.TestsConfig;
-import pl.pas.parcellocker.model.Client;
+import pl.pas.parcellocker.model.client.Client;
+import pl.pas.parcellocker.repositories.hibernate.HibernateRepository;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class RepositoryTest extends TestsConfig {
 
-    private final Repository<Client> clientRepository = new Repository<>(Client.class);
+    private final HibernateRepository<Client> clientRepository = new HibernateRepository<>(Client.class);
     private Client c1;
     private Client c2;
 

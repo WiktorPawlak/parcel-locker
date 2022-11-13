@@ -13,7 +13,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class ClientManagerTest extends TestsConfig {
 
-    private static final ClientManager clientManager = new ClientManager();
+    private final ClientManager clientManager = new ClientManager(clientRepository);
 
     private final String TEST_NAME = "Bartosh";
     private final String TEST_SURNAME = "Byniowski";

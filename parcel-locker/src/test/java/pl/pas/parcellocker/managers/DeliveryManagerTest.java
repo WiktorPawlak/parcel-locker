@@ -16,14 +16,14 @@ import org.junit.jupiter.api.TestInstance;
 
 import pl.pas.parcellocker.config.TestsConfig;
 import pl.pas.parcellocker.exceptions.DeliveryManagerException;
-import pl.pas.parcellocker.model.Client;
-import pl.pas.parcellocker.model.Delivery;
-import pl.pas.parcellocker.model.Locker;
+import pl.pas.parcellocker.model.client.Client;
+import pl.pas.parcellocker.model.delivery.Delivery;
+import pl.pas.parcellocker.model.locker.Locker;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class DeliveryManagerTest extends TestsConfig {
 
-    private final DeliveryManager deliveryManager = new DeliveryManager();
+    private final DeliveryManager deliveryManager = new DeliveryManager(deliveryRepository, lockerRepository);
     private final BigDecimal basePrice = BigDecimal.TEN;
     private Client shipper1;
     private Client receiver1;

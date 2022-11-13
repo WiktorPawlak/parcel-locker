@@ -1,6 +1,6 @@
-package pl.pas.parcellocker.repositories;
+package pl.pas.parcellocker.repositories.hibernate;
 
-import static pl.pas.parcellocker.repositories.EntityManagerUtil.getEntityManager;
+import static pl.pas.parcellocker.repositories.hibernate.EntityManagerUtil.getEntityManager;
 
 import java.util.List;
 import java.util.UUID;
@@ -16,7 +16,7 @@ import pl.pas.parcellocker.model.EntityModel;
 
 @Slf4j
 @AllArgsConstructor
-public class Repository<T extends EntityModel> {
+public class HibernateRepository<T extends EntityModel> {
 
     private Class<T> entityClass;
 

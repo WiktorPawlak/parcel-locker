@@ -1,8 +1,9 @@
 package pl.pas.parcellocker.managers;
 
 import pl.pas.parcellocker.exceptions.LockerManagerException;
-import pl.pas.parcellocker.model.Locker;
-import pl.pas.parcellocker.repositories.LockerRepository;
+import pl.pas.parcellocker.model.locker.Locker;
+import pl.pas.parcellocker.model.locker.LockerRepository;
+import pl.pas.parcellocker.repositories.hibernate.LockerRepositoryHibernate;
 
 import java.util.List;
 import java.util.Optional;
@@ -11,8 +12,8 @@ public class LockerManager {
 
     private final LockerRepository lockerRepository;
 
-    public LockerManager() {
-        lockerRepository = new LockerRepository();
+    public LockerManager(LockerRepository lockerRepository) {
+        this.lockerRepository = lockerRepository;
     }
 
     public Locker createLocker(String identityNumber, String address, int depositBoxCount) {
@@ -24,18 +25,12 @@ public class LockerManager {
     }
 
     private void checkIfDuplicatedName(String name) {
-        List<Locker> sameNameLockers = lockerRepository.findBy(locker ->
-            locker.getIdentityNumber().equals(name)
-        );
-
-        if (sameNameLockers.size() > 0)
+        if (lockerRepository.findByIdentityNumber(name).isPresent())
             error("Locker with given name already exists.");
     }
 
     public Optional<Locker> getLocker(String identityNumber) {
-        return lockerRepository.findBy(locker ->
-            locker.getIdentityNumber().equals(identityNumber)
-        ).stream().findFirst();
+        return lockerRepository.findByIdentityNumber(identityNumber);
     }
 
     public void removeLocker(String identityNumber) {

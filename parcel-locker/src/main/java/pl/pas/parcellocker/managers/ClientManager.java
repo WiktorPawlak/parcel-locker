@@ -3,15 +3,16 @@ package pl.pas.parcellocker.managers;
 import java.util.Arrays;
 
 import pl.pas.parcellocker.exceptions.ClientManagerException;
-import pl.pas.parcellocker.model.Client;
-import pl.pas.parcellocker.repositories.ClientRepository;
+import pl.pas.parcellocker.model.client.Client;
+import pl.pas.parcellocker.model.client.ClientRepository;
+import pl.pas.parcellocker.repositories.hibernate.ClientRepositoryHibernate;
 
 public class ClientManager {
 
     private final ClientRepository clientRepository;
 
-    public ClientManager() {
-        clientRepository = new ClientRepository();
+    public ClientManager(ClientRepository clientRepository) {
+        this.clientRepository = clientRepository;
     }
 
     public Client getClient(String telNumber) {

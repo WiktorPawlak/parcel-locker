@@ -1,4 +1,4 @@
-package pl.pas.parcellocker.model;
+package pl.pas.parcellocker.model.delivery;
 
 public enum DeliveryStatus {
     READY_TO_SHIP,

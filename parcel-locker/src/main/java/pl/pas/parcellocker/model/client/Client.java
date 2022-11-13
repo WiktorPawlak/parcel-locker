@@ -1,4 +1,4 @@
-package pl.pas.parcellocker.model;
+package pl.pas.parcellocker.model.client;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import pl.pas.parcellocker.exceptions.ClientException;
+import pl.pas.parcellocker.model.EntityModel;
 
 @Entity
 @AllArgsConstructor

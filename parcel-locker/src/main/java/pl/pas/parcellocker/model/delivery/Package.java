@@ -1,7 +1,8 @@
-package pl.pas.parcellocker.model;
+package pl.pas.parcellocker.model.delivery;
 
 import jakarta.persistence.Entity;
 import lombok.NoArgsConstructor;
+import pl.pas.parcellocker.model.EntityModel;
 
 import java.math.BigDecimal;
 

@@ -1,4 +1,4 @@
-package pl.pas.parcellocker.repositories;
+package pl.pas.parcellocker.repositories.hibernate;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;

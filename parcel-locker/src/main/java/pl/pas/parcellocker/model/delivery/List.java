@@ -1,4 +1,4 @@
-package pl.pas.parcellocker.model;
+package pl.pas.parcellocker.model.delivery;
 
 import jakarta.persistence.DiscriminatorColumn;
 import jakarta.persistence.Entity;

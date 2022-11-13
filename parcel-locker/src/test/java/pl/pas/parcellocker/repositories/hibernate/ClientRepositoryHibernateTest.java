@@ -1,4 +1,4 @@
-package pl.pas.parcellocker.repositories;
+package pl.pas.parcellocker.repositories.hibernate;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -9,10 +9,10 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 
 import pl.pas.parcellocker.config.TestsConfig;
-import pl.pas.parcellocker.model.Client;
+import pl.pas.parcellocker.model.client.Client;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-class ClientRepositoryTest extends TestsConfig {
+class ClientRepositoryHibernateTest extends TestsConfig {
     private Client c1;
     private Client c2;
     private Client c3;
