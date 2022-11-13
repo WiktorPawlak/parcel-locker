@@ -1,8 +1,7 @@
 version: '3.8'
 services:
     mongo:
-        build: .
-        image: mongo:latest
+        image: mongo:6.0.2
         container_name: mongodb
         hostname: mongodb
         networks:
@@ -19,9 +18,11 @@ services:
             retries: 5
 
     mongo-express:
-        image: mongo-express:latest
+        image: mongo-express:6.0.2
         container_name: mongo-express
         restart: unless-stopped
+        networks:
+            - mongonet
         environment:
             ME_CONFIG_MONGODB_ADMINUSERNAME: admin
             ME_CONFIG_MONGODB_ADMINPASSWORD: admin
