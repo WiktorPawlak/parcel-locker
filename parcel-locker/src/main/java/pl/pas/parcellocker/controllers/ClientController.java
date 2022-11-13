@@ -14,6 +14,7 @@ import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import pl.pas.parcellocker.controllers.dto.ClientDto;
+import pl.pas.parcellocker.exceptions.ClientManagerException;
 import pl.pas.parcellocker.managers.ClientManager;
 import pl.pas.parcellocker.model.client.Client;
 
@@ -43,6 +44,8 @@ public class ClientController {
             return Response.status(Response.Status.CREATED).entity(newClient).build();
         } catch (ValidationException | NullPointerException e) {
             return Response.status(Response.Status.NOT_ACCEPTABLE).build();
+        } catch (ClientManagerException e) {
+            return Response.status(Response.Status.CONFLICT).entity(e.getMessage()).build();
         }
     }
 

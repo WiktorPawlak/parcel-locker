@@ -17,7 +17,7 @@ public class ClientManager {
 
     @Inject
     private ClientRepository clientRepository;
-    
+
     public ClientManager(ClientRepository clientRepository) {
         this.clientRepository = clientRepository;
     }
@@ -39,7 +39,7 @@ public class ClientManager {
 
         for (Client client : clientRepository.findAll()) {
             if (client.getTelNumber().equals(telNumber))
-                return client;
+                throw new ClientManagerException("Client with given telephone number already exits");
         }
 
         Client newClient = new Client(firstName, lastName, telNumber);
