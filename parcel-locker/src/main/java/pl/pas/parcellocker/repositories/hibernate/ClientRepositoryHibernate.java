@@ -5,12 +5,15 @@ import static pl.pas.parcellocker.repositories.hibernate.EntityManagerUtil.getEn
 import java.util.List;
 import java.util.UUID;
 
+import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceException;
 import pl.pas.parcellocker.exceptions.RepositoryException;
 import pl.pas.parcellocker.model.client.Client;
 import pl.pas.parcellocker.model.client.ClientRepository;
 
+
+@ApplicationScoped
 public class ClientRepositoryHibernate extends HibernateRepository<Client> implements ClientRepository {
 
     public ClientRepositoryHibernate() {

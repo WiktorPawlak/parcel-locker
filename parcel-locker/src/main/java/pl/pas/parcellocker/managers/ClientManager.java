@@ -3,14 +3,21 @@ package pl.pas.parcellocker.managers;
 import java.util.Arrays;
 import java.util.List;
 
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
+import lombok.NoArgsConstructor;
 import pl.pas.parcellocker.exceptions.ClientManagerException;
 import pl.pas.parcellocker.model.client.Client;
 import pl.pas.parcellocker.model.client.ClientRepository;
 
+
+@ApplicationScoped
+@NoArgsConstructor
 public class ClientManager {
 
-    private final ClientRepository clientRepository;
-
+    @Inject
+    private ClientRepository clientRepository;
+    
     public ClientManager(ClientRepository clientRepository) {
         this.clientRepository = clientRepository;
     }

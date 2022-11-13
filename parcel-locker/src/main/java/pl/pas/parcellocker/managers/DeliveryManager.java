@@ -13,8 +13,6 @@ import pl.pas.parcellocker.model.delivery.DeliveryRepository;
 import pl.pas.parcellocker.model.delivery.DeliveryStatus;
 import pl.pas.parcellocker.model.locker.Locker;
 import pl.pas.parcellocker.model.locker.LockerRepository;
-import pl.pas.parcellocker.repositories.hibernate.DeliveryRepositoryHibernate;
-import pl.pas.parcellocker.repositories.hibernate.LockerRepositoryHibernate;
 
 public class DeliveryManager {
 
