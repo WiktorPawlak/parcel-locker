@@ -2,7 +2,7 @@ package pl.pas.parcellocker.controllers;
 
 
 import static org.hamcrest.CoreMatchers.equalTo;
-import static io.restassured.RestAssured.when;
+import static io.restassured.RestAssured.with;
 
 import org.junit.jupiter.api.Test;
 
@@ -10,7 +10,7 @@ import pl.pas.parcellocker.controllers.dto.ClientDto;
 
 class ClientControllerTest {
 
-    private static final String basePath = "http://localhost:8080/parcel-locker-1.0-SNAPSHOT";
+    private static final String basePath = "http://localhost:8080/parcel-locker-1.0-SNAPSHOT/api/clients";
 
     @Test
     void Should_CreateClient() {
@@ -20,9 +20,9 @@ class ClientControllerTest {
             .telNumber("666666666")
             .build();
 
-        when()
-            .post("/clients", client).
-            then().statusCode(201)
+        with().body(client)
+            .when().post(basePath)
+            .then().statusCode(201)
             .body("clientDto.firstName", equalTo("Jan"));
     }
 }
