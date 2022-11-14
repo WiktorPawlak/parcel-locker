@@ -8,9 +8,11 @@ import jakarta.validation.ValidationException;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.POST;
+import jakarta.ws.rs.PUT;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.Produces;
+import jakarta.ws.rs.QueryParam;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import pl.pas.parcellocker.controllers.dto.ClientDto;
@@ -35,10 +37,20 @@ public class ClientController {
         }
     }
 
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getClientsByPhoneNumberPattern(@QueryParam("telNumber") String telNumber) {
+        try {
+            return Response.ok().entity(clientManager.getClientsByPartialTelNumber(telNumber)).build();
+        } catch (NoResultException e) {
+            return Response.status(Response.Status.NOT_FOUND).build();
+        }
+    }
+
     @POST
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response addUser(@Valid ClientDto clientDTO) {
+    public Response registerClient(@Valid ClientDto clientDTO) {
         try {
             Client newClient = clientManager.registerClient(clientDTO.firstName, clientDTO.lastName, clientDTO.telNumber);
             return Response.status(Response.Status.CREATED).entity(newClient).build();
@@ -49,12 +61,17 @@ public class ClientController {
         }
     }
 
-    //Client getClient(String telNumber)
-
-
-//    List<Client> getClientsByPartialTelNumber(String telNumberPart)
-//    synchronized Client registerClient(String firstName, String lastName, String telNumber)
-//
-//    Client unregisterClient(Client client)
+    @PUT
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response unregisterClient(String telNumber) {
+        try {
+            Client newClient = clientManager.unregisterClient(clientManager.getClient(telNumber));
+            return Response.ok().entity(newClient).build();
+        } catch (ValidationException | NullPointerException e) {
+            return Response.status(Response.Status.NOT_ACCEPTABLE).build();
+        } catch (ClientManagerException e) {
+            return Response.status(Response.Status.CONFLICT).entity(e.getMessage()).build();
+        }
+    }
 
 }
