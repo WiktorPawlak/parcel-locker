@@ -9,11 +9,11 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 
-import pl.pas.parcellocker.config.TestsConfig;
+import pl.pas.parcellocker.config.UnitTestsConfig;
 import pl.pas.parcellocker.model.client.Client;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-class ClientRepositoryHibernateTest extends TestsConfig {
+class ClientRepositoryHibernateTest extends UnitTestsConfig {
     private Client c1;
     private Client c2;
     private Client c3;

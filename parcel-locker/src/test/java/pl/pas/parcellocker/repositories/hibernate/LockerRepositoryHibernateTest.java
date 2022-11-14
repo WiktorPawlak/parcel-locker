@@ -3,14 +3,14 @@ package pl.pas.parcellocker.repositories.hibernate;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
-import pl.pas.parcellocker.config.TestsConfig;
+import pl.pas.parcellocker.config.UnitTestsConfig;
 import pl.pas.parcellocker.model.locker.Locker;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-class LockerRepositoryHibernateTest extends TestsConfig {
+class LockerRepositoryHibernateTest extends UnitTestsConfig {
     private Locker l1;
 
     @BeforeAll

@@ -25,11 +25,12 @@
         <hibernate-core-jakarta.version>5.6.12.Final</hibernate-core-jakarta.version>
         <hibernate-jpamodelgen-jakarta.version>5.6.12.Final</hibernate-jpamodelgen-jakarta.version>
         <testcontainers.version>1.17.5</testcontainers.version>
+        <testcontainers.jupiter.version>1.17.4</testcontainers.jupiter.version>
 
         <lombok.version>1.18.24</lombok.version>
         <apache-commons.version>3.12.0</apache-commons.version>
-        <eclipse.version>3.0.0</eclipse.version>
-        <logback.version>1.4.3</logback.version>
+        <eclipse.version>1.0.6</eclipse.version>
+        <logback.version>1.4.4</logback.version>
         <glassfish.jaxb-runtime.version>4.0.0</glassfish.jaxb-runtime.version>
         <rest-assured.version>5.2.0</rest-assured.version>
     </properties>
@@ -92,6 +93,12 @@
             <version>${testcontainers.version}</version>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>org.testcontainers</groupId>
+            <artifactId>junit-jupiter</artifactId>
+            <version>${testcontainers.jupiter.version}</version>
+            <scope>test</scope>
+        </dependency>
 
         <dependency>
             <groupId>org.projectlombok</groupId>
@@ -120,6 +127,7 @@
             <artifactId>jaxb-runtime</artifactId>
             <version>${glassfish.jaxb-runtime.version}</version>
         </dependency>
+
         <dependency>
             <groupId>io.rest-assured</groupId>
             <artifactId>rest-assured</artifactId>

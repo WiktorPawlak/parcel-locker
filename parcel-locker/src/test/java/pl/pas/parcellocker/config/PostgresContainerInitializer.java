@@ -2,6 +2,7 @@ package pl.pas.parcellocker.config;
 
 import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.containers.wait.strategy.HostPortWaitStrategy;
+import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.utility.DockerImageName;
 
 public class PostgresContainerInitializer {
@@ -13,7 +14,8 @@ public class PostgresContainerInitializer {
         .parse("postgres")
         .withTag("15.0-alpine");
 
-    private static final PostgreSQLContainer postgresContainer =
+    @Container
+    static final PostgreSQLContainer postgresContainer =
         new PostgreSQLContainer(DEFAULT_IMAGE_NAME)
             .withDatabaseName(DB_NAME)
             .withUsername(DB_USERNAME)

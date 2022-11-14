@@ -8,7 +8,7 @@ import pl.pas.parcellocker.repositories.hibernate.DeliveryRepositoryHibernate;
 import pl.pas.parcellocker.repositories.hibernate.LockerRepositoryHibernate;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-public class TestsConfig {
+public class UnitTestsConfig {
 
     protected final ClientRepositoryHibernate clientRepository = new ClientRepositoryHibernate();
     protected final DeliveryRepositoryHibernate deliveryRepository = new DeliveryRepositoryHibernate();

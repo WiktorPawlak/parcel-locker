@@ -3,7 +3,7 @@ package pl.pas.parcellocker.managers;
 import jakarta.persistence.NoResultException;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
-import pl.pas.parcellocker.config.TestsConfig;
+import pl.pas.parcellocker.config.UnitTestsConfig;
 import pl.pas.parcellocker.exceptions.ClientManagerException;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -11,7 +11,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-class ClientManagerTest extends TestsConfig {
+class ClientManagerTest extends UnitTestsConfig {
 
     private final ClientManager clientManager = new ClientManager(clientRepository);
 
