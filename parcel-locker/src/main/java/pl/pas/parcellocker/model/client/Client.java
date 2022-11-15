@@ -3,6 +3,7 @@ package pl.pas.parcellocker.model.client;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import pl.pas.parcellocker.exceptions.ClientException;
@@ -21,6 +22,7 @@ public class Client extends EntityModel {
     private String telNumber;
     private boolean active;
 
+    @Builder
     public Client(String firstName, String lastName, String telNumber) {
         validateName(firstName);
         validateName(lastName);
