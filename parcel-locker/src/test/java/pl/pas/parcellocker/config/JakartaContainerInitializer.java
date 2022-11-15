@@ -16,6 +16,7 @@ import org.testcontainers.utility.MountableFile;
 public class JakartaContainerInitializer {
 
     static final String PACKAGE_NAME = "parcel-locker-1.0-SNAPSHOT.war";
+    static final String CONTAINER_DEPLOYMENT_PATH = "/opt/payara/deployments/";
     static final int PORT = 8080;
 
     static Network network = Network.newNetwork();
@@ -37,11 +38,12 @@ public class JakartaContainerInitializer {
             .withNetworkAliases("postgres");
 
     @Container
-    static final GenericContainer<?> jakartaApp = new GenericContainer<>("payara/micro:5.2022.3")
+    static final GenericContainer<?> jakartaApp = new GenericContainer<>(DockerImageName.parse("payara/micro:5.2022.3-jdk11"))
         .withExposedPorts(PORT)
         .withCopyFileToContainer(
             MountableFile.forHostPath("target/" + PACKAGE_NAME),
-            "/opt/payara/deployments/" + PACKAGE_NAME)
+            CONTAINER_DEPLOYMENT_PATH + PACKAGE_NAME)
+        .withCommand("--deploy " + CONTAINER_DEPLOYMENT_PATH + PACKAGE_NAME + " --contextRoot /")
         .waitingFor(Wait.forLogMessage(".* Payara Micro .* ready in .*\\s", 1))
         .withNetwork(network)
         .dependsOn(postgres);
@@ -52,8 +54,7 @@ public class JakartaContainerInitializer {
     static void setup() {
         String baseUri = "http://" +
             jakartaApp.getHost() + ":" +
-            jakartaApp.getMappedPort(PORT) +
-            "/" + PACKAGE_NAME.substring(PACKAGE_NAME.length() - 3);
+            jakartaApp.getMappedPort(PORT) + "/";
 
         requestSpecification = new RequestSpecBuilder()
             .setBaseUri(baseUri)

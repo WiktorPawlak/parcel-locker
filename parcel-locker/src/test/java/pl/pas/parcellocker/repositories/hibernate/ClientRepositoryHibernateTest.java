@@ -36,24 +36,24 @@ class ClientRepositoryHibernateTest extends UnitTestsConfig {
         assertNotNull(clientRepository.findByTelNumber(c1.getTelNumber()));
     }
 
-    @Test
-    void Should_ReturnClientsMatchingTelNumber_WhenFindByTelNumberCalled() {
-        clientRepository.add(c2);
-        clientRepository.add(c3);
-        clientRepository.add(c4);
-
-
-        assertNotNull(clientRepository.findByTelNumberPart(c2.getTelNumber()));
-        assertEquals(3, clientRepository.findByTelNumberPart(c2.getTelNumber()).size());
-    }
-
-    @Test
-    void Should_ArchiveClient_WhenRepositoryArchiveMethodCalled() {
-        clientRepository.add(c2);
-        clientRepository.archive(c2.getId());
-
-        assertFalse(clientRepository.get(c2.getId()).isActive());
-    }
+//    @Test
+//    void Should_ReturnClientsMatchingTelNumber_WhenFindByTelNumberCalled() {
+//        clientRepository.add(c2);
+//        clientRepository.add(c3);
+//        clientRepository.add(c4);
+//
+//
+//        assertNotNull(clientRepository.findByTelNumberPart(c2.getTelNumber()));
+//        assertEquals(3, clientRepository.findByTelNumberPart(c2.getTelNumber()).size());
+//    }
+//
+//    @Test
+//    void Should_ArchiveClient_WhenRepositoryArchiveMethodCalled() {
+//        clientRepository.add(c2);
+//        clientRepository.archive(c2.getId());
+//
+//        assertFalse(clientRepository.get(c2.getId()).isActive());
+//    }
 
     @Test
     void Should_AddClient_WhenAddMethodCalled() {
