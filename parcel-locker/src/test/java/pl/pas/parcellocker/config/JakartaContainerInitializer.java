@@ -15,30 +15,23 @@ import org.testcontainers.utility.MountableFile;
 @Testcontainers
 public class JakartaContainerInitializer {
 
-    static final String PACKAGE_NAME = "parcel-locker-1.0-SNAPSHOT.war";
-    static final String CONTAINER_DEPLOYMENT_PATH = "/opt/payara/deployments/";
-    static final int PORT = 8080;
+    private static final int PORT = 8080;
+    private static final String PACKAGE_NAME = "parcel-locker-1.0-SNAPSHOT.war";
+    private static final String CONTAINER_DEPLOYMENT_PATH = "/opt/payara/deployments/";
+    private static final DockerImageName PAYARA_IMAGE = DockerImageName
+        .parse("payara/micro")
+        .withTag("5.2022.3-jdk11");
 
-    static Network network = Network.newNetwork();
-
-    private static final String DB_NAME = "database";
-    private static final String DB_USERNAME = "admin";
-    private static final String DB_PASSWORD = "admin";
-    private static final DockerImageName DEFAULT_IMAGE_NAME = DockerImageName
-        .parse("postgres")
-        .withTag("15.0-alpine");
+    private static final Network network = Network.newNetwork();
 
     @Container
     static final PostgreSQLContainer<?> postgres =
-        new PostgreSQLContainer<>(DEFAULT_IMAGE_NAME)
-            .withDatabaseName(DB_NAME)
-            .withUsername(DB_USERNAME)
-            .withPassword(DB_PASSWORD)
+        PostgresContainerInitializer.postgresContainer
             .withNetwork(network)
             .withNetworkAliases("postgres");
 
     @Container
-    static final GenericContainer<?> jakartaApp = new GenericContainer<>(DockerImageName.parse("payara/micro:5.2022.3-jdk11"))
+    static final GenericContainer<?> jakartaApp = new GenericContainer<>(PAYARA_IMAGE)
         .withExposedPorts(PORT)
         .withCopyFileToContainer(
             MountableFile.forHostPath("target/" + PACKAGE_NAME),
