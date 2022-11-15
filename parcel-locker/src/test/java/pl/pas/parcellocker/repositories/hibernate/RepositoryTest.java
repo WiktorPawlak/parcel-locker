@@ -17,11 +17,11 @@ import jakarta.persistence.NoResultException;
 import jakarta.persistence.OptimisticLockException;
 import jakarta.persistence.Persistence;
 import jakarta.persistence.RollbackException;
-import pl.pas.parcellocker.config.UnitTestsConfig;
+import pl.pas.parcellocker.config.TestsConfig;
 import pl.pas.parcellocker.model.client.Client;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-class RepositoryTest extends UnitTestsConfig {
+class RepositoryTest extends TestsConfig {
 
     private final HibernateRepository<Client> clientRepository = new HibernateRepository<>(Client.class);
     private Client c1;

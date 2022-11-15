@@ -1,7 +1,7 @@
 package pl.pas.parcellocker.managers;
 
 import org.junit.jupiter.api.Test;
-import pl.pas.parcellocker.config.UnitTestsConfig;
+import pl.pas.parcellocker.config.TestsConfig;
 import pl.pas.parcellocker.exceptions.LockerManagerException;
 import pl.pas.parcellocker.model.client.Client;
 import pl.pas.parcellocker.model.delivery.Delivery;
@@ -12,7 +12,7 @@ import java.math.BigDecimal;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-class LockerManagerTest extends UnitTestsConfig {
+class LockerManagerTest extends TestsConfig {
 
     private final LockerManager lockerManager = new LockerManager(lockerRepository);
 

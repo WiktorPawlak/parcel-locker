@@ -4,7 +4,7 @@ import jakarta.persistence.NoResultException;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
-import pl.pas.parcellocker.config.UnitTestsConfig;
+import pl.pas.parcellocker.config.TestsConfig;
 import pl.pas.parcellocker.model.client.Client;
 import pl.pas.parcellocker.model.delivery.Delivery;
 import pl.pas.parcellocker.model.delivery.DeliveryStatus;
@@ -18,7 +18,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-class DeliveryRepositoryHibernateTest extends UnitTestsConfig {
+class DeliveryRepositoryHibernateTest extends TestsConfig {
 
     private Client c1;
     private Client c2;
