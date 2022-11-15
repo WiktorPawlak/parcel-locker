@@ -82,4 +82,24 @@ class ClientControllerTest {
                 "[1].telNumber", equalTo("123123999")
             );
     }
+
+    @Test
+    void Should_UnregisterClient() {
+        ClientDto client = ClientDto.builder()
+            .firstName("Jan")
+            .lastName("Mostowiak")
+            .telNumber("123123")
+            .build();
+        with()
+            .contentType(ContentType.JSON)
+            .body(client)
+            .when()
+            .post(basePath);
+
+        RestAssured.given()
+            .with().contentType(ContentType.TEXT).body(client.telNumber)
+            .when().put(basePath)
+            .then().statusCode(200)
+            .body("firstName", equalTo("Jan"));
+    }
 }

@@ -63,10 +63,12 @@ public class ClientController {
 
     @PUT
     @Produces(MediaType.APPLICATION_JSON)
+    @Consumes({MediaType.TEXT_PLAIN})
     public Response unregisterClient(String telNumber) {
         try {
-            Client newClient = clientManager.unregisterClient(clientManager.getClient(telNumber));
-            return Response.ok().entity(newClient).build();
+            Client client = clientManager.getClient(telNumber);
+            Client unregisteredClient = clientManager.unregisterClient(client);
+            return Response.ok().entity(unregisteredClient).build();
         } catch (ValidationException | NullPointerException e) {
             return Response.status(Response.Status.NOT_ACCEPTABLE).build();
         } catch (ClientManagerException e) {
