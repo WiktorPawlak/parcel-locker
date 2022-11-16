@@ -3,13 +3,15 @@ package pl.pas.parcellocker.controllers;
 import io.restassured.http.ContentType;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import pl.pas.parcellocker.config.RepositoryConfig;
+import org.junit.jupiter.api.TestInstance;
+import pl.pas.parcellocker.config.JakartaContainerInitializer;
+import pl.pas.parcellocker.controllers.dto.ClientDto;
 import pl.pas.parcellocker.controllers.dto.DeliveryListDto;
 import pl.pas.parcellocker.controllers.dto.DeliveryParcelDto;
 import pl.pas.parcellocker.controllers.dto.ListDto;
+import pl.pas.parcellocker.controllers.dto.LockerDto;
 import pl.pas.parcellocker.controllers.dto.ParcelDto;
 import pl.pas.parcellocker.model.client.Client;
-import pl.pas.parcellocker.model.delivery.Delivery;
 import pl.pas.parcellocker.model.locker.Locker;
 
 import java.math.BigDecimal;
@@ -20,23 +22,16 @@ import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static pl.pas.parcellocker.model.delivery.DeliveryStatus.READY_TO_SHIP;
 
-class DeliveryControllerTest extends RepositoryConfig {
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
+class DeliveryControllerTest extends JakartaContainerInitializer {
 
-  private static final String DELIVERIES_PATH = "/api/deliveries";
   Client receiver = new Client("Tony", "Stark", "1234567890");
   Client shipper = new Client("Steven", "Rogers", "9987654321");
   Locker locker = new Locker("PLO1", "Piotrkow", 5);
-  Delivery delivery = new Delivery(BigDecimal.TEN, true, shipper, receiver, locker);
 
-  String baseUri = "http://localhost:8080/parcel-locker-1.0-SNAPSHOT/api/deliveries";
+  String deliveryId;
 
-  @BeforeAll
-  void init() {
-    clientRepository.add(receiver);
-    clientRepository.add(shipper);
-    lockerRepository.add(locker);
-    deliveryRepository.add(delivery);
-  }
+  String baseUri = "/api/deliveries";
 
   @Test
   void Should_CreateListDelivery() {
@@ -49,7 +44,7 @@ class DeliveryControllerTest extends RepositoryConfig {
             .build();
 
     String addedEdDeliveryId =
-        given()
+        given(requestSpecification)
             .contentType(ContentType.JSON)
             .body(deliveryListDto)
             .when()
@@ -63,7 +58,7 @@ class DeliveryControllerTest extends RepositoryConfig {
             .path("id");
 
     String expectedDeliveryId =
-        given()
+        given(requestSpecification)
             .contentType(ContentType.JSON)
             .when()
             .get(baseUri + "/" + addedEdDeliveryId)
@@ -79,13 +74,13 @@ class DeliveryControllerTest extends RepositoryConfig {
   void Should_CreateParcelDelivery() {
     String accessCode = "12345";
 
-        given()
+        given(requestSpecification)
             .contentType(ContentType.JSON)
             .when()
             .put(
                 baseUri
                     + "/"
-                    + delivery.getId()
+                    + deliveryId
                     + "/put-in?lockerId="
                     + locker.getIdentityNumber()
                     + "&accessCode="
@@ -93,13 +88,13 @@ class DeliveryControllerTest extends RepositoryConfig {
             .then()
             .statusCode(200);
 
-      given()
+      given(requestSpecification)
           .contentType(ContentType.JSON)
           .when()
           .put(
               baseUri
                   + "/"
-                  + delivery.getId()
+                  + deliveryId
                   + "/take-out?telNumber="
                   + receiver.getTelNumber()
                   + "&accessCode="
@@ -139,7 +134,7 @@ class DeliveryControllerTest extends RepositoryConfig {
             .build();
 
     String addedEdDeliveryId =
-        given()
+        given(requestSpecification)
             .contentType(ContentType.JSON)
             .body(deliveryParcelDto)
             .when()
@@ -153,7 +148,7 @@ class DeliveryControllerTest extends RepositoryConfig {
             .path("id");
 
     String expectedDeliveryId =
-        given()
+        given(requestSpecification)
             .contentType(ContentType.JSON)
             .when()
             .get(baseUri + "/" + addedEdDeliveryId)
@@ -164,4 +159,56 @@ class DeliveryControllerTest extends RepositoryConfig {
 
     assertEquals(expectedDeliveryId, addedEdDeliveryId);
   }
+
+    @Override
+    @BeforeAll
+    protected void setup() {
+        super.setup();
+        given(requestSpecification)
+            .contentType(ContentType.JSON)
+            .body(LockerDto.builder()
+                .identityNumber(locker.getIdentityNumber())
+                .address(locker.getAddress())
+                .numberOfBoxes(locker.countEmpty())
+                .build())
+            .when()
+            .post("/api/lockers");
+
+        given(requestSpecification)
+            .contentType(ContentType.JSON)
+            .body(ClientDto.builder()
+                .firstName(shipper.getFirstName())
+                .lastName(shipper.getLastName())
+                .telNumber(shipper.getTelNumber())
+                .build())
+            .when()
+            .post("/api/clients");
+
+        given(requestSpecification)
+            .contentType(ContentType.JSON)
+            .body(ClientDto.builder()
+                .firstName(receiver.getFirstName())
+                .lastName(receiver.getLastName())
+                .telNumber(receiver.getTelNumber())
+                .build())
+            .when()
+            .post("/api/clients");
+
+        DeliveryListDto deliveryListDto =
+            DeliveryListDto.builder()
+                .lockerId(locker.getIdentityNumber())
+                .pack(ListDto.builder().basePrice(BigDecimal.TEN).isPriority(false).build())
+                .receiverTel(receiver.getTelNumber())
+                .shipperTel(shipper.getTelNumber())
+                .build();
+
+        deliveryId = given(requestSpecification)
+            .contentType(ContentType.JSON)
+            .body(deliveryListDto)
+            .when()
+            .post(baseUri + "/list")
+            .then()
+            .extract()
+            .path("id");
+    }
 }

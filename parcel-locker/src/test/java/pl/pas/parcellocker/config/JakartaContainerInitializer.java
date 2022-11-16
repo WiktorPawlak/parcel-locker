@@ -22,6 +22,7 @@ import static pl.pas.parcellocker.config.PostgresContainerInitializer.DB_USERNAM
 import static pl.pas.parcellocker.config.PostgresContainerInitializer.POSTGRES_IMAGE;
 
 @Testcontainers
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class JakartaContainerInitializer {
 
     private static final int PORT = 8080;
@@ -33,7 +34,6 @@ public class JakartaContainerInitializer {
 
     private static final Network network = Network.newNetwork();
 
-    @Container
     static final PostgreSQLContainer<?> postgres =
         new PostgreSQLContainer<>(POSTGRES_IMAGE)
             .withDatabaseName(DB_NAME)
@@ -42,7 +42,6 @@ public class JakartaContainerInitializer {
             .withNetwork(network)
             .withNetworkAliases("postgres");
 
-    @Container
     protected static GenericContainer<?> jakartaApp = new GenericContainer<>(PAYARA_IMAGE)
         .withExposedPorts(PORT)
         .withEnv("DB_HOST_PORT", "postgres:5432")
@@ -57,7 +56,12 @@ public class JakartaContainerInitializer {
     protected static RequestSpecification requestSpecification;
 
     @BeforeAll
-    static void setup() {
+    protected void setup() {
+        if (!postgres.isRunning())
+            postgres.start();
+        if (!jakartaApp.isRunning())
+            jakartaApp.start();
+
         String baseUri = "http://" +
             jakartaApp.getHost() + ":" +
             jakartaApp.getMappedPort(PORT);
