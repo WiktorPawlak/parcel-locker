@@ -1,6 +1,8 @@
 package pl.pas.parcellocker.controllers;
 
 
+import java.util.UUID;
+
 import jakarta.inject.Inject;
 import jakarta.persistence.NoResultException;
 import jakarta.validation.Valid;
@@ -17,21 +19,21 @@ import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import pl.pas.parcellocker.controllers.dto.ClientDto;
 import pl.pas.parcellocker.exceptions.ClientManagerException;
-import pl.pas.parcellocker.managers.ClientManager;
-import pl.pas.parcellocker.model.client.Client;
+import pl.pas.parcellocker.managers.UserManager;
+import pl.pas.parcellocker.model.user.User;
 
 @Path(value = "/clients")
 public class ClientController {
 
     @Inject
-    private ClientManager clientManager;
+    private UserManager userManager;
 
     @GET
     @Path("/{telNumber}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getClient(@PathParam("telNumber") String telNumber) {
         try {
-            return Response.ok().entity(clientManager.getClient(telNumber)).build();
+            return Response.ok().entity(userManager.getUser(telNumber)).build();
         } catch (NoResultException e) {
             return Response.status(Response.Status.NOT_FOUND).build();
         }
@@ -41,7 +43,7 @@ public class ClientController {
     @Produces(MediaType.APPLICATION_JSON)
     public Response getClientsByPhoneNumberPattern(@QueryParam("telNumber") String telNumber) {
         try {
-            return Response.ok().entity(clientManager.getClientsByPartialTelNumber(telNumber)).build();
+            return Response.ok().entity(userManager.getUsersByPartialTelNumber(telNumber)).build();
         } catch (NoResultException e) {
             return Response.status(Response.Status.NOT_FOUND).build();
         }
@@ -50,10 +52,10 @@ public class ClientController {
     @POST
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response registerClient(@Valid ClientDto clientDTO) {
+    public Response registerClient(@QueryParam("operatorId") UUID operatorID, @Valid ClientDto clientDTO) {
         try {
-            Client newClient = clientManager.registerClient(clientDTO.firstName, clientDTO.lastName, clientDTO.telNumber);
-            return Response.status(Response.Status.CREATED).entity(newClient).build();
+            User newUser = userManager.registerClient(operatorID, clientDTO.firstName, clientDTO.lastName, clientDTO.telNumber);
+            return Response.status(Response.Status.CREATED).entity(newUser).build();
         } catch (ValidationException | NullPointerException e) {
             return Response.status(Response.Status.NOT_ACCEPTABLE).build();
         } catch (ClientManagerException e) {
@@ -64,16 +66,15 @@ public class ClientController {
     @PUT
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes({MediaType.TEXT_PLAIN})
-    public Response unregisterClient(String telNumber) {
+    public Response unregisterClient(@QueryParam("operatorId") UUID operatorId, String telNumber) {
         try {
-            Client client = clientManager.getClient(telNumber);
-            Client unregisteredClient = clientManager.unregisterClient(client);
-            return Response.ok().entity(unregisteredClient).build();
+            User user = userManager.getUser(telNumber);
+            User unregisteredUser = userManager.unregisterClient(operatorId, user);
+            return Response.ok().entity(unregisteredUser).build();
         } catch (ValidationException | NullPointerException e) {
             return Response.status(Response.Status.NOT_ACCEPTABLE).build();
         } catch (ClientManagerException e) {
             return Response.status(Response.Status.CONFLICT).entity(e.getMessage()).build();
         }
     }
-
 }

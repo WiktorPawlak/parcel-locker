@@ -1,19 +1,20 @@
 package pl.pas.parcellocker.model;
 
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestInstance;
-import pl.pas.parcellocker.config.TestsConfig;
-import pl.pas.parcellocker.model.client.Client;
-import pl.pas.parcellocker.model.delivery.Delivery;
-import pl.pas.parcellocker.model.locker.DepositBox;
-import pl.pas.parcellocker.model.locker.Locker;
-import pl.pas.parcellocker.repositories.hibernate.LockerRepositoryHibernate;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.math.BigDecimal;
 import java.util.UUID;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
+
+import pl.pas.parcellocker.config.TestsConfig;
+import pl.pas.parcellocker.model.delivery.Delivery;
+import pl.pas.parcellocker.model.locker.DepositBox;
+import pl.pas.parcellocker.model.locker.Locker;
+import pl.pas.parcellocker.model.user.Client;
+import pl.pas.parcellocker.repositories.hibernate.LockerRepositoryHibernate;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class LockerTest extends TestsConfig {
@@ -39,7 +40,7 @@ class LockerTest extends TestsConfig {
     @Test
     void Should_UpdateDepositBoxFieldsAndSetIsEmptyAsFalse_WhenPutIn() {
         lockerRepository.add(locker);
-        UUID depositBoxId = locker.putIn(delivery,"123456789","k0z4k");
+        UUID depositBoxId = locker.putIn(delivery, "123456789", "k0z4k");
 
         DepositBox depositBox = locker.getDepositBox(depositBoxId);
         assertEquals("123456789", depositBox.getTelNumber());

@@ -10,9 +10,10 @@ import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import pl.pas.parcellocker.config.RepositoryConfig;
 import pl.pas.parcellocker.controllers.dto.ClientDto;
-import pl.pas.parcellocker.model.client.Client;
+import pl.pas.parcellocker.model.user.Client;
+import pl.pas.parcellocker.model.user.User;
 
-class ClientControllerTest extends RepositoryConfig {
+class UserControllerTest extends RepositoryConfig {
 
     private static final String basePath = "http://localhost:8080/parcel-locker-1.0-SNAPSHOT/api/clients/";
 
@@ -41,32 +42,32 @@ class ClientControllerTest extends RepositoryConfig {
 
     @Test
     void Should_GetClientByPhoneNumber() {
-        Client client = Client.builder()
+        User user = Client.builder()
             .firstName("Jan")
             .lastName("Mostowiak")
             .telNumber("123123")
             .build();
-        clientRepository.add(client);
+        clientRepository.add(user);
 
         RestAssured
-            .when().get(basePath + client.getTelNumber())
+            .when().get(basePath + user.getTelNumber())
             .then().statusCode(200).body("firstName", equalTo("Jan"));
     }
 
     @Test
     void Should_GetClientsByPhoneNumberPattern() {
-        Client client1 = Client.builder()
+        User user1 = Client.builder()
             .firstName("Jan")
             .lastName("Mostowiak")
             .telNumber("123123")
             .build();
-        Client client2 = Client.builder()
+        User user2 = Client.builder()
             .firstName("Jan")
             .lastName("Mostowiak")
             .telNumber("123123666")
             .build();
-        clientRepository.add(client1);
-        clientRepository.add(client2);
+        clientRepository.add(user1);
+        clientRepository.add(user2);
 
         RestAssured.given().queryParam("telNumber", "123")
             .when().get(basePath)
@@ -78,15 +79,15 @@ class ClientControllerTest extends RepositoryConfig {
 
     @Test
     void Should_UnregisterClient() {
-        Client client = Client.builder()
+        User user = Client.builder()
             .firstName("Jan")
             .lastName("Mostowiak")
             .telNumber("123123")
             .build();
-        clientRepository.add(client);
+        clientRepository.add(user);
 
         RestAssured.given()
-            .with().contentType(ContentType.TEXT).body(client.getTelNumber())
+            .with().contentType(ContentType.TEXT).body(user.getTelNumber())
             .when().put(basePath)
             .then().statusCode(200)
             .body("firstName", equalTo("Jan"));

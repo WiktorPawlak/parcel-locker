@@ -1,20 +1,14 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<persistence xmlns="http://xmlns.jcp.org/xml/ns/persistence"
-             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<persistence xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xmlns="http://xmlns.jcp.org/xml/ns/persistence"
              xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence
                                  http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd"
              version="2.1">
     <persistence-unit name="parcel-locker-unit" transaction-type="RESOURCE_LOCAL">
         <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
 
-        <class>pl.pas.parcellocker.model.client.Client</class>
-        <class>pl.pas.parcellocker.model.delivery.Package</class>
-        <class>pl.pas.parcellocker.model.delivery.Parcel</class>
-        <class>pl.pas.parcellocker.model.delivery.List</class>
-        <class>pl.pas.parcellocker.model.locker.Locker</class>
-        <class>pl.pas.parcellocker.model.locker.DepositBox</class>
-        <class>pl.pas.parcellocker.model.delivery.Delivery</class>
-        <exclude-unlisted-classes>true</exclude-unlisted-classes>
+
+        <exclude-unlisted-classes>false</exclude-unlisted-classes>
 
         <properties>
             <property name="jakarta.persistence.jdbc.driver" value="org.postgresql.Driver"/>
@@ -22,13 +16,13 @@
             <!--            <property name="jakarta.persistence.jdbc.url" value="jdbc:postgresql://localhost:${db.port}/database"/>-->
             <property name="jakarta.persistence.jdbc.user" value="admin"/>
             <property name="jakarta.persistence.jdbc.password" value="admin"/>
-<!--            <property name="javax.persistence.schema-generation.database.action" value="update"/>-->
-<!--            <property name="javax.persistence.sql-load-script-source" value="META-INF/data.sql"/>-->
+            <property name="jakarta.persistence.schema-generation.database.action" value="create"/>
+            <property name="jakarta.persistence.sql-load-script-source" value="META-INF/data.sql"/>
 
             <property name="hibernate.connection.isolation" value="2"/>
             <property name="hibernate.format_sql" value="true"/>
             <property name="hibernate.show_sql" value="true"/>
-            <property name="hibernate.hbm2ddl.auto" value="create-drop"/>
+            <!--            <property name="hibernate.hbm2ddl.auto" value="create-drop"/>-->
             <property name="hibernate.dialect" value="org.hibernate.dialect.PostgreSQLDialect"/>
             <property name="hibernate.generate_statistics" value="true"/>
         </properties>

@@ -10,15 +10,16 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 
 import pl.pas.parcellocker.config.TestsConfig;
-import pl.pas.parcellocker.model.client.Client;
+import pl.pas.parcellocker.model.user.Client;
+import pl.pas.parcellocker.model.user.User;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-class ClientRepositoryHibernateTest extends TestsConfig {
-    private Client c1;
-    private Client c2;
-    private Client c3;
-    private Client c4;
-    private Client c5;
+class UserRepositoryHibernateTest extends TestsConfig {
+    private User c1;
+    private User c2;
+    private User c3;
+    private User c4;
+    private User c5;
 
     @BeforeAll
     void setup() {
@@ -36,24 +37,24 @@ class ClientRepositoryHibernateTest extends TestsConfig {
         assertNotNull(clientRepository.findByTelNumber(c1.getTelNumber()));
     }
 
-//    @Test
-//    void Should_ReturnClientsMatchingTelNumber_WhenFindByTelNumberCalled() {
-//        clientRepository.add(c2);
-//        clientRepository.add(c3);
-//        clientRepository.add(c4);
-//
-//
-//        assertNotNull(clientRepository.findByTelNumberPart(c2.getTelNumber()));
-//        assertEquals(3, clientRepository.findByTelNumberPart(c2.getTelNumber()).size());
-//    }
-//
-//    @Test
-//    void Should_ArchiveClient_WhenRepositoryArchiveMethodCalled() {
-//        clientRepository.add(c2);
-//        clientRepository.archive(c2.getId());
-//
-//        assertFalse(clientRepository.get(c2.getId()).isActive());
-//    }
+    @Test
+    void Should_ReturnClientsMatchingTelNumber_WhenFindByTelNumberCalled() {
+        clientRepository.add(c2);
+        clientRepository.add(c3);
+        clientRepository.add(c4);
+
+
+        assertNotNull(clientRepository.findByTelNumberPart(c2.getTelNumber()));
+        assertEquals(3, clientRepository.findByTelNumberPart(c2.getTelNumber()).size());
+    }
+
+    @Test
+    void Should_ArchiveClient_WhenRepositoryArchiveMethodCalled() {
+        clientRepository.add(c2);
+        clientRepository.archive(c2.getId());
+
+        assertFalse(clientRepository.get(c2.getId()).isActive());
+    }
 
     @Test
     void Should_AddClient_WhenAddMethodCalled() {
