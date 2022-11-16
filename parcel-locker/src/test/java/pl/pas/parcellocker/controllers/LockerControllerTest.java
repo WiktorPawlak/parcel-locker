@@ -5,17 +5,18 @@ import io.restassured.http.ContentType;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
-import pl.pas.parcellocker.config.RepositoryConfig;
+import pl.pas.parcellocker.config.JakartaContainerInitializer;
 import pl.pas.parcellocker.controllers.dto.LockerDto;
 import pl.pas.parcellocker.model.locker.Locker;
 
+import static io.restassured.RestAssured.given;
 import static io.restassured.RestAssured.with;
 import static org.hamcrest.CoreMatchers.equalTo;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-class LockerControllerTest extends RepositoryConfig {
+class LockerControllerTest extends JakartaContainerInitializer {
 
-    private static final String basePath = "http://localhost:8080/parcel-locker-1.0-SNAPSHOT/api/lockers";
+    private static final String basePath = "api/lockers";
 
     @AfterEach
     void finisher() {
@@ -30,7 +31,7 @@ class LockerControllerTest extends RepositoryConfig {
             .numberOfBoxes(10)
             .build();
 
-        with()
+        given(requestSpecification)
             .contentType(ContentType.JSON)
             .body(lockerDto)
         .when()

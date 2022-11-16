@@ -14,7 +14,7 @@ import pl.pas.parcellocker.model.client.Client;
 
 class ClientControllerTest extends RepositoryConfig {
 
-    private static final String basePath = "http://localhost:8080/parcel-locker-1.0-SNAPSHOT/api/clients/";
+    private static final String basePath = "http://localhost:8080/api/clients/";
 
     @AfterEach
     void finisher() {

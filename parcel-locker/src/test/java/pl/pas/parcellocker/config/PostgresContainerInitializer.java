@@ -9,7 +9,7 @@ public class PostgresContainerInitializer {
     private static final String DB_NAME = "database";
     private static final String DB_USERNAME = "admin";
     private static final String DB_PASSWORD = "admin";
-    private static final DockerImageName POSTGRES_IMAGE = DockerImageName
+    public static final DockerImageName POSTGRES_IMAGE = DockerImageName
         .parse("postgres")
         .withTag("15.0-alpine");
 
