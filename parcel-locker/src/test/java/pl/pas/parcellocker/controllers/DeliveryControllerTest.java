@@ -80,7 +80,7 @@ class DeliveryControllerTest extends JakartaContainerInitializer {
             .shipperTel("0")
             .build();
 
-    given()
+    given(requestSpecification)
         .contentType(ContentType.JSON)
         .body(deliveryListDto)
         .when()
@@ -107,7 +107,7 @@ class DeliveryControllerTest extends JakartaContainerInitializer {
             .shipperTel(shipper.getTelNumber())
             .build();
 
-    given()
+    given(requestSpecification)
         .contentType(ContentType.JSON)
         .body(deliveryParcelDto)
         .when()
@@ -134,7 +134,7 @@ class DeliveryControllerTest extends JakartaContainerInitializer {
             .then()
             .statusCode(200);
 
-        given()
+        given(requestSpecification)
             .contentType(ContentType.JSON)
             .when()
             .put(
@@ -153,7 +153,7 @@ class DeliveryControllerTest extends JakartaContainerInitializer {
   void Should_ReturnNotFoundWhenPutInDeliverIntoNotExistingLocker() {
     String accessCode = "12345";
 
-    given()
+    given(requestSpecification)
         .contentType(ContentType.JSON)
         .when()
         .put(
@@ -172,13 +172,13 @@ class DeliveryControllerTest extends JakartaContainerInitializer {
     void Should_ReturnNotFoundWhenTakeOutAndAccessCodeIsWrong() {
         String accessCode = "12345";
 
-        given()
+        given(requestSpecification)
             .contentType(ContentType.JSON)
             .when()
             .put(
                 baseUri
                     + "/"
-                    + delivery.getId()
+                    + deliveryId
                     + "/take-out?telNumber="
                     + receiver.getTelNumber()
                     + "&accessCode="
