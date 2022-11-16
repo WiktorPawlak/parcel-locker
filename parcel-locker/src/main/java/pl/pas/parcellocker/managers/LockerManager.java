@@ -7,8 +7,6 @@ import pl.pas.parcellocker.exceptions.LockerManagerException;
 import pl.pas.parcellocker.model.locker.Locker;
 import pl.pas.parcellocker.model.locker.LockerRepository;
 
-import java.util.Optional;
-
 @ApplicationScoped
 @NoArgsConstructor
 public class LockerManager {
@@ -20,7 +18,7 @@ public class LockerManager {
         this.lockerRepository = lockerRepository;
     }
 
-    public Locker createLocker(String identityNumber, String address, int depositBoxCount) {
+    public synchronized Locker createLocker(String identityNumber, String address, int depositBoxCount) {
         checkIfDuplicatedName(identityNumber);
 
         Locker locker = new Locker(identityNumber, address, depositBoxCount);
@@ -40,7 +38,7 @@ public class LockerManager {
             );
     }
 
-    public void removeLocker(String identityNumber) {
+    public synchronized void removeLocker(String identityNumber) {
         Locker lockerToRemove = getLocker(identityNumber);
 
         try {
