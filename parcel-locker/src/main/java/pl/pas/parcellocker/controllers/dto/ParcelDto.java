@@ -16,5 +16,5 @@ public class ParcelDto {
   public double height;
   public double length;
   public double weight;
-  @NotEmpty public boolean isFragile;
+  public boolean isFragile;
 }

@@ -25,7 +25,7 @@ public class ClientManager {
     public Client getClient(String telNumber) {
         validateIfEmpty(telNumber);
 
-        return clientRepository.findByTelNumber(telNumber);
+        return clientRepository.findByTelNumber(telNumber).get();
     }
 
     public List<Client> getClientsByPartialTelNumber(String telNumberPart) {

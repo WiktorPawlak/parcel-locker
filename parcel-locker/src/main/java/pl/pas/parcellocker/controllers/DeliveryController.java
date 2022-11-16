@@ -3,20 +3,11 @@ package pl.pas.parcellocker.controllers;
 import jakarta.inject.Inject;
 import jakarta.persistence.NoResultException;
 import jakarta.validation.ValidationException;
-import jakarta.ws.rs.Consumes;
-import jakarta.ws.rs.GET;
-import jakarta.ws.rs.POST;
-import jakarta.ws.rs.PUT;
-import jakarta.ws.rs.Path;
-import jakarta.ws.rs.PathParam;
-import jakarta.ws.rs.Produces;
-import jakarta.ws.rs.QueryParam;
+import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import pl.pas.parcellocker.controllers.dto.DeliveryListDto;
 import pl.pas.parcellocker.controllers.dto.DeliveryParcelDto;
-import pl.pas.parcellocker.controllers.dto.ListDto;
-import pl.pas.parcellocker.controllers.dto.ParcelDto;
 import pl.pas.parcellocker.exceptions.DeliveryManagerException;
 import pl.pas.parcellocker.managers.DeliveryManager;
 import pl.pas.parcellocker.model.delivery.Delivery;
@@ -118,4 +109,5 @@ public class DeliveryController {
       return Response.status(Response.Status.CONFLICT).entity(e.getMessage()).build();
     }
   }
+
 }
