@@ -1,5 +1,6 @@
 package pl.pas.parcellocker.model.delivery;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Access;
 import jakarta.persistence.AccessType;
 import jakarta.persistence.CascadeType;

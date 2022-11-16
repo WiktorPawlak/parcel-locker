@@ -72,4 +72,42 @@ class LockerControllerTest extends JakartaContainerInitializer {
             .then()
             .statusCode(204);
     }
+
+    @Test
+    void ShouldNot_CreateLocker_WhenThereIsAlreadyLockerWithThatNumber() {
+        Locker locker = new Locker("LDZ01", "test address", 10);
+        lockerRepository.add(locker);
+
+        LockerDto lockerDto = LockerDto.builder()
+            .identityNumber(locker.getIdentityNumber())
+            .address(locker.getAddress())
+            .numberOfBoxes(locker.countEmpty())
+            .build();
+
+        with()
+            .contentType(ContentType.JSON)
+            .body(lockerDto)
+            .when()
+            .post(basePath)
+            .then()
+            .statusCode(409);
+    }
+
+    @Test
+    void ShouldNot_GetLocker_WhenThereIsNoLockerWithThatNumber() {
+        with()
+            .when()
+            .get(basePath + "/{identityNumber}", "LDZ01")
+            .then()
+            .statusCode(404);
+    }
+
+    @Test
+    void ShouldNot_RemoveLocker_WhenThereIsNoLockerWithThatNumber() {
+        with()
+            .when()
+            .delete(basePath + "/{identityNumber}", "LDZ01")
+            .then()
+            .statusCode(404);
+    }
 }

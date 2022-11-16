@@ -3,6 +3,7 @@ package pl.pas.parcellocker.repositories.hibernate;
 import static pl.pas.parcellocker.repositories.hibernate.EntityManagerUtil.getEntityManager;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 import jakarta.enterprise.context.ApplicationScoped;
@@ -33,11 +34,11 @@ public class ClientRepositoryHibernate extends HibernateRepository<Client> imple
         }
     }
 
-    public Client findByTelNumber(String telNumber) {
-        return (Client) getEntityManager()
+    public Optional<Client> findByTelNumber(String telNumber) {
+        return Optional.of((Client) getEntityManager()
             .createQuery("select c from Client c where c.telNumber = :telNumber")
             .setParameter("telNumber", telNumber)
-            .getSingleResult();
+            .getSingleResult());
     }
 
     public List<Client> findByTelNumberPart(String telNumberPart) {

@@ -27,7 +27,7 @@ public class HibernateRepository<T extends EntityModel> {
             .getSingleResult();
     }
 
-    public synchronized void add(T object) {
+    public void add(T object) {
         if (object != null) {
             try {
                 EntityManager entityManager = getEntityManager();
@@ -45,7 +45,7 @@ public class HibernateRepository<T extends EntityModel> {
         }
     }
 
-    public synchronized void update(T object) {
+    public void update(T object) {
         try {
             EntityManager entityManager = getEntityManager();
 

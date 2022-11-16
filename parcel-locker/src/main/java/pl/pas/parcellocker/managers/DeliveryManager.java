@@ -5,84 +5,121 @@ import static pl.pas.parcellocker.model.delivery.DeliveryStatus.READY_TO_PICKUP;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.UUID;
 
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 import pl.pas.parcellocker.exceptions.DeliveryManagerException;
 import pl.pas.parcellocker.model.client.Client;
+import pl.pas.parcellocker.model.client.ClientRepository;
 import pl.pas.parcellocker.model.delivery.Delivery;
 import pl.pas.parcellocker.model.delivery.DeliveryRepository;
 import pl.pas.parcellocker.model.delivery.DeliveryStatus;
 import pl.pas.parcellocker.model.locker.Locker;
 import pl.pas.parcellocker.model.locker.LockerRepository;
 
+@ApplicationScoped
+@NoArgsConstructor
+@AllArgsConstructor
 public class DeliveryManager {
 
-    private final DeliveryRepository deliveryRepository;
-    private final LockerRepository lockerRepository;
+    @Inject
+    private DeliveryRepository deliveryRepository;
+    @Inject
+    private LockerRepository lockerRepository;
+    @Inject
+    private ClientRepository clientRepository;
 
-    public DeliveryManager(
-        DeliveryRepository deliveryRepository,
-        LockerRepository lockerRepository
-    ) {
-        this.deliveryRepository = deliveryRepository;
-        this.lockerRepository = lockerRepository;
-    }
-
-    public Delivery makeParcelDelivery(
+    public synchronized Delivery makeParcelDelivery(
         BigDecimal basePrice,
         double width,
         double height,
         double length,
         double weight,
         boolean isFragile,
-        Client shipper,
-        Client receiver,
-        Locker locker
-    ) {
-        validateClient(shipper);
-        validateClient(receiver);
+        String shipperTel,
+        String receiverTel,
+        String lockerId) {
+        Client shipper =
+            clientRepository
+                .findByTelNumber(shipperTel)
+                .orElseThrow(() -> new DeliveryManagerException("Shipper not found"));
 
-        Delivery delivery = new Delivery(basePrice, width, height, length, weight, isFragile, shipper, receiver, locker);
+        Client receiver =
+            clientRepository
+                .findByTelNumber(receiverTel)
+                .orElseThrow(() -> new DeliveryManagerException("Receiver not found"));
+
+        Locker locker =
+            lockerRepository
+                .findByIdentityNumber(lockerId)
+                .orElseThrow(() -> new DeliveryManagerException("Locker not found"));
+
+        Delivery delivery =
+            new Delivery(
+                basePrice, width, height, length, weight, isFragile, shipper, receiver, locker);
         deliveryRepository.add(delivery);
         return delivery;
     }
 
-    public Delivery makeListDelivery(
+    public synchronized Delivery makeListDelivery(
         BigDecimal basePrice,
         boolean isPriority,
-        Client shipper,
-        Client receiver,
-        Locker locker
-    ) {
-        validateClient(shipper);
-        validateClient(receiver);
+        String shipperTel,
+        String receiverTel,
+        String lockerId) {
+        Client shipper =
+            clientRepository
+                .findByTelNumber(shipperTel)
+                .orElseThrow(() -> new DeliveryManagerException("Shipper not found"));
+
+        Client receiver =
+            clientRepository
+                .findByTelNumber(receiverTel)
+                .orElseThrow(() -> new DeliveryManagerException("Receiver not found"));
+
+        Locker locker =
+            lockerRepository
+                .findByIdentityNumber(lockerId)
+                .orElseThrow(() -> new DeliveryManagerException("Locker not found"));
 
         Delivery delivery = new Delivery(basePrice, isPriority, shipper, receiver, locker);
         deliveryRepository.add(delivery);
         return delivery;
     }
 
-    public void putInLocker(Delivery delivery, String accessCode) {
-        Delivery latestDeliveryState = deliveryRepository.get(delivery.getId());
+    public synchronized void putInLocker(UUID deliveryId, String lockerId, String accessCode) {
+        Delivery latestDeliveryState = deliveryRepository.get(deliveryId);
 
         validateClient(latestDeliveryState.getReceiver());
         validateClient(latestDeliveryState.getShipper());
         validateDelivery(latestDeliveryState);
 
-        Locker chosenLocker = latestDeliveryState.getLocker();
+        Locker chosenLocker =
+            lockerRepository
+                .findByIdentityNumber(lockerId)
+                .orElseThrow(() -> new DeliveryManagerException("Locker not found"));
 
-        chosenLocker.putIn(latestDeliveryState, latestDeliveryState.getReceiver().getTelNumber(), accessCode);
+        chosenLocker.putIn(
+            latestDeliveryState, latestDeliveryState.getReceiver().getTelNumber(), accessCode);
 
         latestDeliveryState.setAllocationStart(LocalDateTime.now());
         latestDeliveryState.setStatus(READY_TO_PICKUP);
-
+        lockerRepository.update(chosenLocker);
         deliveryRepository.update(latestDeliveryState);
     }
 
-    public void takeOutDelivery(Locker locker, Client receiver, String accessCode) {
-        validateClient(receiver);
+    public synchronized void takeOutDelivery(UUID deliveryId, String receiverTel, String accessCode) {
+        Delivery latestDeliveryState = deliveryRepository.get(deliveryId);
 
-        Locker locker1 = lockerRepository.get(locker.getId());
-        Delivery delivery = locker1.takeOut(receiver.getTelNumber(), accessCode);
+        Locker locker =
+            lockerRepository
+                .findByIdentityNumber(latestDeliveryState.getLocker().getIdentityNumber())
+                .orElseThrow(() -> new DeliveryManagerException("Locker not found"));
+        ;
+        Delivery delivery = locker.takeOut(receiverTel, accessCode);
 
         if (delivery != null) {
             delivery.setAllocationStop(LocalDateTime.now());
@@ -96,11 +133,9 @@ public class DeliveryManager {
 
     public BigDecimal checkClientShipmentBalance(Client client) {
         BigDecimal balance = BigDecimal.ZERO;
-        if (client == null)
-            throw new DeliveryManagerException("client is a nullptr!");
+        if (client == null) throw new DeliveryManagerException("client is a nullptr!");
         for (Delivery delivery : deliveryRepository.findAll()) {
-            if (delivery.getShipper().equals(client))
-                balance = balance.add(delivery.getCost());
+            if (delivery.getShipper().equals(client)) balance = balance.add(delivery.getCost());
         }
 
         return balance;
@@ -114,9 +149,12 @@ public class DeliveryManager {
         return deliveryRepository.findReceivedByClient(client);
     }
 
+    public Delivery getDelivery(UUID id) {
+        return deliveryRepository.get(id);
+    }
+
     private void validateClient(Client client) {
-        if (!client.isActive())
-            throw new DeliveryManagerException("Client account is inactive.");
+        if (!client.isActive()) throw new DeliveryManagerException("Client account is inactive.");
     }
 
     private void validateDelivery(Delivery delivery) {
