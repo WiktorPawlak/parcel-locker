@@ -16,8 +16,13 @@ import org.testcontainers.utility.MountableFile;
 
 import java.util.List;
 
+import static pl.pas.parcellocker.config.PostgresContainerInitializer.DB_NAME;
+import static pl.pas.parcellocker.config.PostgresContainerInitializer.DB_PASSWORD;
+import static pl.pas.parcellocker.config.PostgresContainerInitializer.DB_USERNAME;
+import static pl.pas.parcellocker.config.PostgresContainerInitializer.POSTGRES_IMAGE;
+
 @Testcontainers
-public class JakartaContainerInitializer extends RepositoryConfig {
+public class JakartaContainerInitializer {
 
     private static final int PORT = 8080;
     private static final String PACKAGE_NAME = "parcel-locker-1.0-SNAPSHOT.war";
@@ -28,52 +33,37 @@ public class JakartaContainerInitializer extends RepositoryConfig {
 
     private static final Network network = Network.newNetwork();
 
-    private static final String DB_NAME = "database";
-    private static final String DB_USERNAME = "admin";
-    private static final String DB_PASSWORD = "admin";
-
+    @Container
     static final PostgreSQLContainer<?> postgres =
-        new PostgreSQLContainer<>(PostgresContainerInitializer.POSTGRES_IMAGE)
+        new PostgreSQLContainer<>(POSTGRES_IMAGE)
             .withDatabaseName(DB_NAME)
             .withUsername(DB_USERNAME)
             .withPassword(DB_PASSWORD)
             .withNetwork(network)
             .withNetworkAliases("postgres");
 
-    protected static GenericContainer<?> jakartaApp;
+    @Container
+    protected static GenericContainer<?> jakartaApp = new GenericContainer<>(PAYARA_IMAGE)
+        .withExposedPorts(PORT)
+        .withEnv("DB_HOST_PORT", "postgres:5432")
+        .withCopyFileToContainer(
+            MountableFile.forHostPath("target/" + PACKAGE_NAME),
+            CONTAINER_DEPLOYMENT_PATH + PACKAGE_NAME)
+        .waitingFor(Wait.forLogMessage(".* Payara Micro .* ready in .*\\s", 1))
+        .withNetwork(network)
+        .dependsOn(postgres)
+        .withCommand("--deploy " + CONTAINER_DEPLOYMENT_PATH + PACKAGE_NAME + " --contextRoot /");
 
     protected static RequestSpecification requestSpecification;
 
     @BeforeAll
     static void setup() {
-        postgres.start();
-        String firstFoundPort = postgres.getFirstMappedPort().toString();
-
-        jakartaApp = new GenericContainer<>(PAYARA_IMAGE)
-            .withExposedPorts(PORT)
-            .withEnv("DB_PORT", firstFoundPort)
-            .withCopyFileToContainer(
-                MountableFile.forHostPath("target/" + PACKAGE_NAME),
-                CONTAINER_DEPLOYMENT_PATH + PACKAGE_NAME)
-            .waitingFor(Wait.forLogMessage(".* Payara Micro .* ready in .*\\s", 1))
-            .withNetwork(network)
-            .dependsOn(postgres)
-            .withCommand("--deploy " + CONTAINER_DEPLOYMENT_PATH + PACKAGE_NAME + " --contextRoot /");
-
-        jakartaApp.start();
-
         String baseUri = "http://" +
             jakartaApp.getHost() + ":" +
-            jakartaApp.getMappedPort(PORT) + "/";
+            jakartaApp.getMappedPort(PORT);
 
         requestSpecification = new RequestSpecBuilder()
             .setBaseUri(baseUri)
             .build();
-    }
-
-    @AfterAll
-    static void jakartaFinisher() {
-        jakartaApp.stop();
-        postgres.stop();
     }
 }

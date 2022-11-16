@@ -21,8 +21,10 @@ public class EntityManagerUtil {
         Map<String, String> env = System.getenv();
         Map<String, Object> configOverrides = new HashMap<>();
         for (String envName : env.keySet()) {
-            if (envName.contains("DB_PORT")) {
-                configOverrides.put("jakarta.persistence.jdbc.url", "jdbc:postgresql://localhost:" + env.get(envName) + "/database");
+            if (envName.contains("DB_HOST_PORT")) {
+                configOverrides.put(
+                    "jakarta.persistence.jdbc.url", "jdbc:postgresql://" + env.get(envName) + "/database"
+                );
             }
         }
         return configOverrides;

@@ -1,27 +1,16 @@
 package pl.pas.parcellocker.controllers;
 
-
 import io.restassured.http.ContentType;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestInstance;
 import pl.pas.parcellocker.config.JakartaContainerInitializer;
 import pl.pas.parcellocker.controllers.dto.LockerDto;
-import pl.pas.parcellocker.model.locker.Locker;
 
 import static io.restassured.RestAssured.given;
-import static io.restassured.RestAssured.with;
 import static org.hamcrest.CoreMatchers.equalTo;
 
-@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class LockerControllerTest extends JakartaContainerInitializer {
 
-    private static final String basePath = "api/lockers";
-
-    @AfterEach
-    void finisher() {
-        lockerRepository.findAll().forEach(lockerRepository::remove);
-    }
+    private static final String basePath = "/api/lockers";
 
     @Test
     void Should_CreateLocker() {
@@ -34,32 +23,50 @@ class LockerControllerTest extends JakartaContainerInitializer {
         given(requestSpecification)
             .contentType(ContentType.JSON)
             .body(lockerDto)
-        .when()
+            .when()
             .post(basePath)
-        .then()
+            .then()
             .statusCode(201)
             .body("identityNumber", equalTo("LDZ01"));
     }
 
     @Test
     void Should_GetLocker() {
-        Locker locker = new Locker("LDZ01", "test address", 10);
-        lockerRepository.add(locker);
+        LockerDto lockerDto = LockerDto.builder()
+            .identityNumber("LDZ01")
+            .address("test address")
+            .numberOfBoxes(10)
+            .build();
 
-        with().
-        when()
+        given(requestSpecification)
+            .contentType(ContentType.JSON)
+            .body(lockerDto)
+            .when()
+            .post(basePath);
+
+        given(requestSpecification)
+            .when()
             .get(basePath + "/{identityNumber}", "LDZ01")
-        .then()
+            .then()
             .statusCode(200)
             .body("identityNumber", equalTo("LDZ01"));
     }
 
     @Test
     void Should_RemoveLocker() {
-        Locker locker = new Locker("LDZ01", "test address", 10);
-        lockerRepository.add(locker);
+        LockerDto lockerDto = LockerDto.builder()
+            .identityNumber("LDZ01")
+            .address("test address")
+            .numberOfBoxes(10)
+            .build();
 
-        with().
+        given(requestSpecification)
+            .contentType(ContentType.JSON)
+            .body(lockerDto)
+            .when()
+            .post(basePath);
+
+        given(requestSpecification).
             when()
             .delete(basePath + "/{identityNumber}", "LDZ01")
             .then()
