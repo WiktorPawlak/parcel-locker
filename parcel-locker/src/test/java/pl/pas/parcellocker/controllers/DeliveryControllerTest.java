@@ -71,8 +71,54 @@ class DeliveryControllerTest extends JakartaContainerInitializer {
   }
 
   @Test
-  void Should_CreateParcelDelivery() {
-    String accessCode = "12345";
+  void Should_ReturnNotFoundWhenCreateIncorrectListDelivery() {
+    DeliveryListDto deliveryListDto =
+        DeliveryListDto.builder()
+            .lockerId(locker.getIdentityNumber())
+            .pack(ListDto.builder().basePrice(BigDecimal.TEN).isPriority(false).build())
+            .receiverTel(receiver.getTelNumber())
+            .shipperTel("0")
+            .build();
+
+    given()
+        .contentType(ContentType.JSON)
+        .body(deliveryListDto)
+        .when()
+        .post(baseUri + "/list")
+        .then()
+        .statusCode(404);
+  }
+
+  @Test
+  void Should_ReturnNotFoundWhenCreateIncorrectParcelDelivery() {
+    DeliveryParcelDto deliveryParcelDto =
+        DeliveryParcelDto.builder()
+            .lockerId("6969")
+            .pack(
+                ParcelDto.builder()
+                    .basePrice(BigDecimal.TEN)
+                    .height(1.1)
+                    .length(1.1)
+                    .weight(1.1)
+                    .width(1.1)
+                    .isFragile(true)
+                    .build())
+            .receiverTel(receiver.getTelNumber())
+            .shipperTel(shipper.getTelNumber())
+            .build();
+
+    given()
+        .contentType(ContentType.JSON)
+        .body(deliveryParcelDto)
+        .when()
+        .post(baseUri + "/parcel")
+        .then()
+        .statusCode(404);
+  }
+
+    @Test
+    void Should_putInAndTakeOutFromLocker() {
+        String accessCode = "12345";
 
         given(requestSpecification)
             .contentType(ContentType.JSON)
@@ -88,35 +134,61 @@ class DeliveryControllerTest extends JakartaContainerInitializer {
             .then()
             .statusCode(200);
 
-      given(requestSpecification)
-          .contentType(ContentType.JSON)
-          .when()
-          .put(
-              baseUri
-                  + "/"
-                  + deliveryId
-                  + "/take-out?telNumber="
-                  + receiver.getTelNumber()
-                  + "&accessCode="
-                  + accessCode)
-          .then()
-          .statusCode(200);
-
-//    String expectedDeliveryId =
-//        given()
-//            .contentType(ContentType.JSON)
-//            .when()
-//            .get(baseUri + "/" + addedEdDeliveryId)
-//            .then()
-//            .statusCode(200)
-//            .extract()
-//            .path("id");
-//
-//    assertEquals(expectedDeliveryId, addedEdDeliveryId);
-  }
+        given()
+            .contentType(ContentType.JSON)
+            .when()
+            .put(
+                baseUri
+                    + "/"
+                    + deliveryId
+                    + "/take-out?telNumber="
+                    + receiver.getTelNumber()
+                    + "&accessCode="
+                    + accessCode)
+            .then()
+            .statusCode(200);
+    }
 
   @Test
-  void Should_putInAndTakeOutFromLocker() {
+  void Should_ReturnNotFoundWhenPutInDeliverIntoNotExistingLocker() {
+    String accessCode = "12345";
+
+    given()
+        .contentType(ContentType.JSON)
+        .when()
+        .put(
+            baseUri
+                + "/"
+                + deliveryId
+                + "/put-in?lockerId="
+                + "6969"
+                + "&accessCode="
+                + accessCode)
+        .then()
+        .statusCode(404);
+  }
+
+    @Test
+    void Should_ReturnNotFoundWhenTakeOutAndAccessCodeIsWrong() {
+        String accessCode = "12345";
+
+        given()
+            .contentType(ContentType.JSON)
+            .when()
+            .put(
+                baseUri
+                    + "/"
+                    + delivery.getId()
+                    + "/take-out?telNumber="
+                    + receiver.getTelNumber()
+                    + "&accessCode="
+                    + accessCode)
+            .then()
+            .statusCode(409);
+    }
+
+  @Test
+  void Should_CreateParcelDelivery() {
     DeliveryParcelDto deliveryParcelDto =
         DeliveryParcelDto.builder()
             .lockerId(locker.getIdentityNumber())

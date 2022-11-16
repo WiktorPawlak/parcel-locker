@@ -2,6 +2,7 @@ package pl.pas.parcellocker.controllers;
 
 import jakarta.inject.Inject;
 import jakarta.persistence.NoResultException;
+import jakarta.validation.Valid;
 import jakarta.validation.ValidationException;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
@@ -9,6 +10,7 @@ import jakarta.ws.rs.core.Response;
 import pl.pas.parcellocker.controllers.dto.DeliveryListDto;
 import pl.pas.parcellocker.controllers.dto.DeliveryParcelDto;
 import pl.pas.parcellocker.exceptions.DeliveryManagerException;
+import pl.pas.parcellocker.exceptions.LockerException;
 import pl.pas.parcellocker.managers.DeliveryManager;
 import pl.pas.parcellocker.model.delivery.Delivery;
 
@@ -47,7 +49,7 @@ public class DeliveryController {
     } catch (ValidationException | NullPointerException e) {
       return Response.status(Response.Status.NOT_ACCEPTABLE).build();
     } catch (DeliveryManagerException e) {
-      return Response.status(Response.Status.CONFLICT).entity(e.getMessage()).build();
+      return Response.status(Response.Status.NOT_FOUND).entity(e.getMessage()).build();
     }
   }
 
@@ -72,7 +74,7 @@ public class DeliveryController {
     } catch (ValidationException | NullPointerException e) {
       return Response.status(Response.Status.NOT_ACCEPTABLE).build();
     } catch (DeliveryManagerException e) {
-      return Response.status(Response.Status.CONFLICT).entity(e.getMessage()).build();
+      return Response.status(Response.Status.NOT_FOUND).entity(e.getMessage()).build();
     }
   }
 
@@ -89,7 +91,7 @@ public class DeliveryController {
     } catch (ValidationException | NullPointerException e) {
       return Response.status(Response.Status.NOT_ACCEPTABLE).build();
     } catch (DeliveryManagerException e) {
-      return Response.status(Response.Status.CONFLICT).entity(e.getMessage()).build();
+      return Response.status(Response.Status.NOT_FOUND).entity(e.getMessage()).build();
     }
   }
 
@@ -106,7 +108,9 @@ public class DeliveryController {
     } catch (ValidationException | NullPointerException e) {
       return Response.status(Response.Status.NOT_ACCEPTABLE).build();
     } catch (DeliveryManagerException e) {
-      return Response.status(Response.Status.CONFLICT).entity(e.getMessage()).build();
+      return Response.status(Response.Status.NOT_FOUND).entity(e.getMessage()).build();
+    }  catch (LockerException e) {
+        return Response.status(Response.Status.CONFLICT).entity(e.getMessage()).build();
     }
   }
 
