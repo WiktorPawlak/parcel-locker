@@ -6,6 +6,8 @@ import org.junit.jupiter.api.Test;
 import pl.pas.parcellocker.config.TestsConfig;
 import pl.pas.parcellocker.exceptions.ClientManagerException;
 
+import java.util.NoSuchElementException;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -44,7 +46,7 @@ class ClientManagerTest extends TestsConfig {
     void Should_GetClient() {
         clientManager.registerClient(TEST_NAME, TEST_SURNAME, TEST_TEL_NUMBER);
         assertEquals(clientManager.getClient(TEST_TEL_NUMBER).getFirstName(), TEST_NAME);
-        assertThrows(NoResultException.class, () -> clientManager.getClient(TEST_WRONG_TEL_NUMBER));
+        assertThrows(NoSuchElementException.class, () -> clientManager.getClient(TEST_WRONG_TEL_NUMBER));
     }
 
     @Test

@@ -8,6 +8,7 @@ import java.util.UUID;
 
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.NoResultException;
 import jakarta.persistence.PersistenceException;
 import pl.pas.parcellocker.exceptions.RepositoryException;
 import pl.pas.parcellocker.model.client.Client;
@@ -35,10 +36,14 @@ public class ClientRepositoryHibernate extends HibernateRepository<Client> imple
     }
 
     public Optional<Client> findByTelNumber(String telNumber) {
-        return Optional.of((Client) getEntityManager()
-            .createQuery("select c from Client c where c.telNumber = :telNumber")
-            .setParameter("telNumber", telNumber)
-            .getSingleResult());
+        try{
+             return Optional.of((Client) getEntityManager()
+                .createQuery("select c from Client c where c.telNumber = :telNumber")
+                .setParameter("telNumber", telNumber)
+                .getSingleResult());
+        } catch (NoResultException e) {
+            return Optional.empty();
+        }
     }
 
     public List<Client> findByTelNumberPart(String telNumberPart) {
