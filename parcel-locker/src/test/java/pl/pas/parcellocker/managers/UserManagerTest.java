@@ -49,28 +49,25 @@ class UserManagerTest extends TestsConfig {
 
     @Test
     void Should_UnregisterClient() {
-        var user = clientRepository.get(UUID.fromString("00000000-0000-0000-0000-000000000003"));
-        userManager.registerClient(user.getId(), TEST_NAME, TEST_SURNAME, TEST_TEL_NUMBER);
+        userManager.registerClient(admin.getId(), TEST_NAME, TEST_SURNAME, TEST_TEL_NUMBER);
         assertTrue(userManager.getUser(TEST_TEL_NUMBER).isActive());
 
-        userManager.unregisterClient(user.getId(), userManager.getUser(TEST_TEL_NUMBER));
+        userManager.unregisterClient(admin.getId(), userManager.getUser(TEST_TEL_NUMBER));
         assertFalse(userManager.getUser(TEST_TEL_NUMBER).isActive());
     }
 
     @Test
     void Should_GetClient() {
-        var user = clientRepository.get(UUID.fromString("00000000-0000-0000-0000-000000000003"));
-        userManager.registerClient(user.getId(), TEST_NAME, TEST_SURNAME, TEST_TEL_NUMBER);
+        userManager.registerClient(admin.getId(), TEST_NAME, TEST_SURNAME, TEST_TEL_NUMBER);
         assertEquals(userManager.getUser(TEST_TEL_NUMBER).getFirstName(), TEST_NAME);
         assertThrows(NoResultException.class, () -> userManager.getUser(TEST_WRONG_TEL_NUMBER));
     }
 
     @Test
     void Should_ThrowException_WhenInvalidValuesPassed() {
-        var user = clientRepository.get(UUID.fromString("00000000-0000-0000-0000-000000000003"));
-        userManager.registerClient(user.getId(), TEST_NAME, TEST_SURNAME, TEST_TEL_NUMBER);
+        userManager.registerClient(admin.getId(), TEST_NAME, TEST_SURNAME, TEST_TEL_NUMBER);
         assertThrows(ClientManagerException.class, () -> userManager.getUser(""));
-        assertThrows(ClientManagerException.class, () -> userManager.unregisterClient(user.getId(), null));
+        assertThrows(ClientManagerException.class, () -> userManager.unregisterClient(admin.getId(), null));
     }
 
 }

@@ -11,8 +11,8 @@ import pl.pas.parcellocker.controllers.dto.DeliveryParcelDto;
 import pl.pas.parcellocker.controllers.dto.ListDto;
 import pl.pas.parcellocker.controllers.dto.LockerDto;
 import pl.pas.parcellocker.controllers.dto.ParcelDto;
-import pl.pas.parcellocker.model.client.Client;
 import pl.pas.parcellocker.model.locker.Locker;
+import pl.pas.parcellocker.model.user.Client;
 
 import java.math.BigDecimal;
 
@@ -274,13 +274,13 @@ class DeliveryControllerTest extends JakartaContainerInitializer {
                 .shipperTel(shipper.getTelNumber())
                 .build();
 
-        deliveryId = given(requestSpecification)
-            .contentType(ContentType.JSON)
-            .body(deliveryListDto)
-            .when()
-            .post(baseUri + "/list")
-            .then()
-            .extract()
-            .path("id");
+//        deliveryId = given(requestSpecification)
+//            .contentType(ContentType.JSON)
+//            .body(deliveryListDto)
+//            .when()
+//            .post(baseUri + "/list")
+//            .then()
+//            .extract()
+//            .path("id");
     }
 }
