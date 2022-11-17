@@ -1,29 +1,33 @@
-package pl.pas.parcellocker.model.client;
+package pl.pas.parcellocker.model.user;
 
 import jakarta.persistence.Column;
+import jakarta.persistence.DiscriminatorColumn;
 import jakarta.persistence.Entity;
+import jakarta.persistence.Inheritance;
+import jakarta.persistence.InheritanceType;
+import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import pl.pas.parcellocker.exceptions.ClientException;
 import pl.pas.parcellocker.model.EntityModel;
 
 @Entity
+@Inheritance(strategy = InheritanceType.JOINED)
+@DiscriminatorColumn(name = "USER_ROLE")
+@Table(name = "Users")
 @AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode
-public class Client extends EntityModel {
+public abstract class User extends EntityModel {
 
     private String firstName;
     private String lastName;
-
     @Column(unique = true)
     private String telNumber;
     private boolean active;
 
-    @Builder
-    public Client(String firstName, String lastName, String telNumber) {
+    protected User(String firstName, String lastName, String telNumber) {
         validateName(firstName);
         validateName(lastName);
         validateTelNumber(telNumber);
@@ -33,6 +37,14 @@ public class Client extends EntityModel {
         this.telNumber = telNumber;
 
         active = true;
+    }
+
+    public boolean isAdmin() {
+        return this instanceof Administrator;
+    }
+
+    public boolean isModerator() {
+        return this instanceof Moderator;
     }
 
     private void validateName(String name) {

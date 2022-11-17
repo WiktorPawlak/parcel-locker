@@ -1,6 +1,9 @@
 package pl.pas.parcellocker.model.delivery;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
+import java.util.UUID;
+
 import jakarta.persistence.Access;
 import jakarta.persistence.AccessType;
 import jakarta.persistence.CascadeType;
@@ -16,11 +19,7 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import pl.pas.parcellocker.model.EntityModel;
 import pl.pas.parcellocker.model.locker.Locker;
-import pl.pas.parcellocker.model.client.Client;
-
-import java.math.BigDecimal;
-import java.time.LocalDateTime;
-import java.util.UUID;
+import pl.pas.parcellocker.model.user.Client;
 
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
@@ -107,6 +106,10 @@ public class Delivery extends EntityModel {
         return status;
     }
 
+    public void setStatus(DeliveryStatus status) {
+        this.status = status;
+    }
+
     public Package getPack() {
         return pack;
     }
@@ -119,24 +122,20 @@ public class Delivery extends EntityModel {
         return allocationStop;
     }
 
+    public void setAllocationStop(LocalDateTime allocationStop) {
+        this.allocationStop = allocationStop;
+    }
+
     public LocalDateTime getAllocationStart() {
         return allocationStart;
-    }
-
-    public boolean isArchived() {
-        return isArchived;
-    }
-
-    public void setStatus(DeliveryStatus status) {
-        this.status = status;
     }
 
     public void setAllocationStart(LocalDateTime allocationStart) {
         this.allocationStart = allocationStart;
     }
 
-    public void setAllocationStop(LocalDateTime allocationStop) {
-        this.allocationStop = allocationStop;
+    public boolean isArchived() {
+        return isArchived;
     }
 
     public void setArchived(boolean archived) {

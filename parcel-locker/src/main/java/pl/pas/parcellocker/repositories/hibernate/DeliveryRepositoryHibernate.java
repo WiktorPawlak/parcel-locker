@@ -8,9 +8,9 @@ import java.util.UUID;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceException;
 import pl.pas.parcellocker.exceptions.RepositoryException;
-import pl.pas.parcellocker.model.client.Client;
 import pl.pas.parcellocker.model.delivery.Delivery;
 import pl.pas.parcellocker.model.delivery.DeliveryRepository;
+import pl.pas.parcellocker.model.user.User;
 
 public class DeliveryRepositoryHibernate extends HibernateRepository<Delivery> implements DeliveryRepository {
 
@@ -33,11 +33,11 @@ public class DeliveryRepositoryHibernate extends HibernateRepository<Delivery> i
         }
     }
 
-    public List<Delivery> findByClient(Client client) {
-        return findBy(delivery -> delivery.getReceiver().equals(client));
+    public List<Delivery> findByUser(User user) {
+        return findBy(delivery -> delivery.getReceiver().equals(user));
     }
 
-    public List<Delivery> findReceivedByClient(Client client) {
-        return findBy(delivery -> delivery.getReceiver().equals(client) && delivery.isArchived());
+    public List<Delivery> findReceivedByUser(User user) {
+        return findBy(delivery -> delivery.getReceiver().equals(user) && delivery.isArchived());
     }
 }
