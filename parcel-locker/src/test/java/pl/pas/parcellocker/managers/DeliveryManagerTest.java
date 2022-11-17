@@ -9,6 +9,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.math.BigDecimal;
 import java.util.UUID;
 
+import jakarta.persistence.NoResultException;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -44,6 +45,23 @@ class DeliveryManagerTest extends TestsConfig {
     @AfterEach
     void eachFinisher() {
         deliveryRepository.findAll().forEach(deliveryRepository::remove);
+    }
+
+    @Test
+    void Should_ThrowExceptionOnMakeDelivery_WhenGivenClientNotInDB() {
+        assertThrows(
+            NoResultException.class,
+            () ->
+                deliveryManager.makeParcelDelivery(
+                    basePrice,
+                    10,
+                    20,
+                    30,
+                    10,
+                    false,
+                    "0",
+                    receiver1.getTelNumber(),
+                    locker.getIdentityNumber()));
     }
 
     @Test
