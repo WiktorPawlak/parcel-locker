@@ -81,19 +81,6 @@ class DeliveryManagerTest extends TestsConfig {
         clientRepository.update(refreshedUser);
     }
 
-    @Test
-    void Should_ThrowException_WhenDeliveryPutInAgain() {
-        Delivery delivery =
-            deliveryManager.makeParcelDelivery(
-                basePrice,
-                10,
-                20,
-                30,
-                10,
-                false,
-                shipper1.getTelNumber(),
-                receiver1.getTelNumber(),
-                locker.getIdentityNumber());
   @Test
   void Should_ThrowException_WhenDeliveryPutInAgain() {
     Delivery delivery =
@@ -296,22 +283,6 @@ class DeliveryManagerTest extends TestsConfig {
         assertTrue(0 < deliveryManager.getAllCurrentClientDeliveries(receiver1.getTelNumber()).size());
     }
 
-  @Test
-  void Should_ReturnCorrectBalanceForClientShipments() {
-    Delivery delivery =
-        deliveryManager.makeParcelDelivery(
-            basePrice,
-            10,
-            20,
-            30,
-            10,
-            false,
-            shipper1.getTelNumber(),
-            receiver1.getTelNumber(),
-            locker.getIdentityNumber());
-    deliveryManager.putInLocker(delivery.getId(), delivery.getLocker().getIdentityNumber(), "5555");
-    locker = lockerRepository.get(locker.getId());
-    }
     @Test
     void Should_ReturnCorrectBalanceForClientShipments() {
         Delivery delivery =
@@ -334,11 +305,6 @@ class DeliveryManagerTest extends TestsConfig {
         locker = lockerRepository.get(locker.getId());
     }
 
-    @Test
-    void Should_ThrowException_WhenInvalidValuesPassed() {
-        assertThrows(
-            DeliveryManagerException.class, () -> deliveryManager.checkClientShipmentBalance(null));
-    }
   @Test
   void Should_ThrowException_WhenInvalidValuesPassed() {
     assertThrows(

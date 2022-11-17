@@ -1,13 +1,10 @@
 package pl.pas.parcellocker.controllers;
 
 import io.restassured.http.ContentType;
-import org.hamcrest.Matchers;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import pl.pas.parcellocker.config.JakartaContainerInitializer;
-import pl.pas.parcellocker.controllers.dto.*;
-import pl.pas.parcellocker.model.client.Client;
 import pl.pas.parcellocker.controllers.dto.ClientDto;
 import pl.pas.parcellocker.controllers.dto.DeliveryListDto;
 import pl.pas.parcellocker.controllers.dto.DeliveryParcelDto;

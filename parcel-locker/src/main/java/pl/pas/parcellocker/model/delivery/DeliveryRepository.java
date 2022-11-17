@@ -13,8 +13,8 @@ public interface DeliveryRepository {
     void update(Delivery delivery);
 
     List<Delivery> findAll();
-    List<Delivery> findReceivedByClient(Client client);
-    List<Delivery> findCurrentByClient(Client client);
+    List<Delivery> findReceivedByClient(User user);
+    List<Delivery> findCurrentByClient(User user);
 
     List<Delivery> findByUser(User user);
 
