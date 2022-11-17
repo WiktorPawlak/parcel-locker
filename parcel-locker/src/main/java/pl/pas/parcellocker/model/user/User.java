@@ -23,7 +23,6 @@ public abstract class User extends EntityModel {
 
     private String firstName;
     private String lastName;
-
     @Column(unique = true)
     private String telNumber;
     private boolean active;
