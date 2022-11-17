@@ -40,4 +40,9 @@ public class DeliveryRepositoryHibernate extends HibernateRepository<Delivery> i
     public List<Delivery> findReceivedByClient(Client client) {
         return findBy(delivery -> delivery.getReceiver().equals(client) && delivery.isArchived());
     }
+
+    @Override
+    public List<Delivery> findCurrentByClient(Client client) {
+        return findBy(delivery -> delivery.getReceiver().equals(client) && !delivery.isArchived());
+    }
 }

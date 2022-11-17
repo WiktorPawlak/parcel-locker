@@ -12,4 +12,5 @@ public interface DeliveryRepository {
     List<Delivery> findAll();
     List<Delivery> findByClient(Client client);
     List<Delivery> findReceivedByClient(Client client);
+    List<Delivery> findCurrentByClient(Client client);
 }

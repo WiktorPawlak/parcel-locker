@@ -70,12 +70,6 @@ class DeliveryManagerTest extends TestsConfig {
                 "123"));
   }
 
-  private void changeClientActiveStatus(Client client, boolean active) {
-    Client refreshedClient = clientRepository.get(client.getId());
-    refreshedClient.setActive(active);
-    clientRepository.update(refreshedClient);
-  }
-
   @Test
   void Should_ThrowException_WhenDeliveryPutInAgain() {
     Delivery delivery =
@@ -259,8 +253,24 @@ class DeliveryManagerTest extends TestsConfig {
     deliveryManager.takeOutDelivery(delivery1.getId(), receiver1.getTelNumber(), "2222");
     locker = lockerRepository.get(locker.getId());
 
-    assertTrue(0 < deliveryManager.getAllReceivedClientDeliveries(receiver1).size());
+    assertTrue(0 < deliveryManager.getAllReceivedClientDeliveries(receiver1.getTelNumber()).size());
   }
+
+    @Test
+    void Should_ReturnAllCurrentDeliveriesForGivenClient() {
+            deliveryManager.makeParcelDelivery(
+                basePrice,
+                10,
+                20,
+                30,
+                10,
+                false,
+                shipper1.getTelNumber(),
+                receiver1.getTelNumber(),
+                locker.getIdentityNumber());
+
+        assertTrue(0 < deliveryManager.getAllCurrentClientDeliveries(receiver1.getTelNumber()).size());
+    }
 
   @Test
   void Should_ReturnCorrectBalanceForClientShipments() {
@@ -289,4 +299,10 @@ class DeliveryManagerTest extends TestsConfig {
     assertThrows(
         DeliveryManagerException.class, () -> deliveryManager.checkClientShipmentBalance(null));
   }
+
+    private void changeClientActiveStatus(Client client, boolean active) {
+        Client refreshedClient = clientRepository.get(client.getId());
+        refreshedClient.setActive(active);
+        clientRepository.update(refreshedClient);
+    }
 }

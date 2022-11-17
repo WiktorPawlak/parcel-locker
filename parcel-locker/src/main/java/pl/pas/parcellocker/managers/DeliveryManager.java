@@ -145,8 +145,22 @@ public class DeliveryManager {
         return deliveryRepository.findByClient(client);
     }
 
-    public List<Delivery> getAllReceivedClientDeliveries(Client client) {
-        return deliveryRepository.findReceivedByClient(client);
+    public List<Delivery> getAllCurrentClientDeliveries(String telNumber) {
+        Client client =
+            clientRepository
+                .findByTelNumber(telNumber)
+                .orElseThrow(() -> new DeliveryManagerException("Client not found"));
+
+        return deliveryRepository.findCurrentByClient(client);
+    }
+
+    public List<Delivery> getAllReceivedClientDeliveries(String telNumber) {
+        Client receiver =
+            clientRepository
+                .findByTelNumber(telNumber)
+                .orElseThrow(() -> new DeliveryManagerException("Receiver not found"));
+
+        return deliveryRepository.findReceivedByClient(receiver);
     }
 
     public Delivery getDelivery(UUID id) {
