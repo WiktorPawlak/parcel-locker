@@ -34,7 +34,8 @@ class DeliveryControllerTest extends JakartaContainerInitializer {
   String deliveryId2;
   String deliveryId3;
 
-  String baseUri = "/api/deliveries";
+    String adminId;
+    String baseUri = "/api/deliveries";
 
   @Test
   void Should_CreateListDelivery() {
@@ -291,14 +292,18 @@ class DeliveryControllerTest extends JakartaContainerInitializer {
     assertEquals(expectedDeliveryId, addedEdDeliveryId);
   }
 
-  @Override
-  @BeforeAll
-  protected void setup() {
-    super.setup();
-    given(requestSpecification)
-        .contentType(ContentType.JSON)
-        .body(
-            LockerDto.builder()
+    @Override
+    @BeforeAll
+    public void setup() {
+        super.setup();
+
+        adminId = given(requestSpecification)
+            .when().get("api/clients/admin")
+            .then().extract().path("id");
+
+        given(requestSpecification)
+            .contentType(ContentType.JSON)
+            .body(LockerDto.builder()
                 .identityNumber(locker.getIdentityNumber())
                 .address(locker.getAddress())
                 .numberOfBoxes(locker.countEmpty())
@@ -306,27 +311,27 @@ class DeliveryControllerTest extends JakartaContainerInitializer {
         .when()
         .post("/api/lockers");
 
-    given(requestSpecification)
-        .contentType(ContentType.JSON)
-        .body(
-            ClientDto.builder()
+        given(requestSpecification)
+            .contentType(ContentType.JSON)
+            .body(ClientDto.builder()
                 .firstName(shipper.getFirstName())
                 .lastName(shipper.getLastName())
                 .telNumber(shipper.getTelNumber())
                 .build())
-        .when()
-        .post("/api/clients");
+            .queryParam("operatorId", adminId)
+            .when()
+            .post("/api/clients");
 
-    given(requestSpecification)
-        .contentType(ContentType.JSON)
-        .body(
-            ClientDto.builder()
+        given(requestSpecification)
+            .contentType(ContentType.JSON)
+            .body(ClientDto.builder()
                 .firstName(receiver.getFirstName())
                 .lastName(receiver.getLastName())
                 .telNumber(receiver.getTelNumber())
                 .build())
-        .when()
-        .post("/api/clients");
+            .queryParam("operatorId", adminId)
+            .when()
+            .post("/api/clients");
 
     DeliveryListDto deliveryListDto =
         DeliveryListDto.builder()

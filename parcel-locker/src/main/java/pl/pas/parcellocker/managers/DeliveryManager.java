@@ -46,12 +46,12 @@ public class DeliveryManager {
         Client shipper =
             (Client) userRepository
                 .findByTelNumber(shipperTel)
-                .orElseThrow(() -> new DeliveryManagerException("Shipper not found"));
+                .orElseThrow();
 
         Client receiver =
             (Client) userRepository
                 .findByTelNumber(receiverTel)
-                .orElseThrow(() -> new DeliveryManagerException("Receiver not found"));
+                .orElseThrow();
 
         Locker locker =
             lockerRepository
@@ -74,12 +74,12 @@ public class DeliveryManager {
         Client shipper =
             (Client) userRepository
                 .findByTelNumber(shipperTel)
-                .orElseThrow(() -> new DeliveryManagerException("Shipper not found"));
+                .orElseThrow();
 
         Client receiver =
             (Client) userRepository
                 .findByTelNumber(receiverTel)
-                .orElseThrow(() -> new DeliveryManagerException("Receiver not found"));
+                .orElseThrow();
 
         Locker locker =
             lockerRepository
