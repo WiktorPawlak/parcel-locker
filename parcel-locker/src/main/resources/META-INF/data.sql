@@ -1,9 +1,23 @@
--- Add clients
-insert into client (id, version, firstname, lastname, active, telnumber)
-values ('00000000-0000-0000-0000-000000000000', 1, 'Tony', 'Stark', false, '000000000' );
+-- Add users
+insert into users (user_role, id, version, firstname, lastname, active, telnumber)
+values ('CLIENT', '00000000-0000-0000-0000-000000000000', 0, 'Tony', 'Stark', true, '453875343');
+insert into client (id)
+values ('00000000-0000-0000-0000-000000000000');
 
-insert into client (id, version, firstname, lastname, active, telnumber)
-values ('00000000-0000-0000-0000-000000000001', 1, 'Chris', 'Evans', false, '000000001' );
+insert into users (user_role, id, version, firstname, lastname, active, telnumber)
+values ('CLIENT', '00000000-0000-0000-0000-000000000001', 0, 'Eric', 'Evans', true, '562130923');
+insert into client (id)
+values ('00000000-0000-0000-0000-000000000001');
+
+insert into users (user_role, id, version, firstname, lastname, active, telnumber)
+values ('MODERATOR', '00000000-0000-0000-0000-000000000002', 0, 'Uncle', 'Bob', true, '909787666');
+insert into moderator (id)
+values ('00000000-0000-0000-0000-000000000002');
+
+insert into users (user_role, id, version, firstname, lastname, active, telnumber)
+values ('ADMIN', '00000000-0000-0000-0000-000000000003', 0, 'Greg', 'Young', true, '856875123');
+insert into administrator (id)
+values ('00000000-0000-0000-0000-000000000003');
 
 --Add locker
 insert into locker (id, version, address, identitynumber)

@@ -8,7 +8,14 @@ import org.junit.jupiter.api.TestInstance;
 import pl.pas.parcellocker.config.JakartaContainerInitializer;
 import pl.pas.parcellocker.controllers.dto.*;
 import pl.pas.parcellocker.model.client.Client;
+import pl.pas.parcellocker.controllers.dto.ClientDto;
+import pl.pas.parcellocker.controllers.dto.DeliveryListDto;
+import pl.pas.parcellocker.controllers.dto.DeliveryParcelDto;
+import pl.pas.parcellocker.controllers.dto.ListDto;
+import pl.pas.parcellocker.controllers.dto.LockerDto;
+import pl.pas.parcellocker.controllers.dto.ParcelDto;
 import pl.pas.parcellocker.model.locker.Locker;
+import pl.pas.parcellocker.model.user.Client;
 
 import java.math.BigDecimal;
 

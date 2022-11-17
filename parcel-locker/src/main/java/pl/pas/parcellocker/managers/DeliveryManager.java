@@ -12,13 +12,14 @@ import jakarta.inject.Inject;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import pl.pas.parcellocker.exceptions.DeliveryManagerException;
-import pl.pas.parcellocker.model.client.Client;
-import pl.pas.parcellocker.model.client.ClientRepository;
 import pl.pas.parcellocker.model.delivery.Delivery;
 import pl.pas.parcellocker.model.delivery.DeliveryRepository;
 import pl.pas.parcellocker.model.delivery.DeliveryStatus;
 import pl.pas.parcellocker.model.locker.Locker;
 import pl.pas.parcellocker.model.locker.LockerRepository;
+import pl.pas.parcellocker.model.user.Client;
+import pl.pas.parcellocker.model.user.User;
+import pl.pas.parcellocker.model.user.UserRepository;
 
 @ApplicationScoped
 @NoArgsConstructor
@@ -30,7 +31,7 @@ public class DeliveryManager {
     @Inject
     private LockerRepository lockerRepository;
     @Inject
-    private ClientRepository clientRepository;
+    private UserRepository userRepository;
 
     public synchronized Delivery makeParcelDelivery(
         BigDecimal basePrice,
@@ -43,12 +44,12 @@ public class DeliveryManager {
         String receiverTel,
         String lockerId) {
         Client shipper =
-            clientRepository
+            (Client) userRepository
                 .findByTelNumber(shipperTel)
                 .orElseThrow(() -> new DeliveryManagerException("Shipper not found"));
 
         Client receiver =
-            clientRepository
+            (Client) userRepository
                 .findByTelNumber(receiverTel)
                 .orElseThrow(() -> new DeliveryManagerException("Receiver not found"));
 
@@ -71,12 +72,12 @@ public class DeliveryManager {
         String receiverTel,
         String lockerId) {
         Client shipper =
-            clientRepository
+            (Client) userRepository
                 .findByTelNumber(shipperTel)
                 .orElseThrow(() -> new DeliveryManagerException("Shipper not found"));
 
         Client receiver =
-            clientRepository
+            (Client) userRepository
                 .findByTelNumber(receiverTel)
                 .orElseThrow(() -> new DeliveryManagerException("Receiver not found"));
 
@@ -131,23 +132,23 @@ public class DeliveryManager {
         }
     }
 
-    public BigDecimal checkClientShipmentBalance(Client client) {
+    public BigDecimal checkClientShipmentBalance(User user) {
         BigDecimal balance = BigDecimal.ZERO;
-        if (client == null) throw new DeliveryManagerException("client is a nullptr!");
+        if (user == null) throw new DeliveryManagerException("User is a nullptr!");
         for (Delivery delivery : deliveryRepository.findAll()) {
-            if (delivery.getShipper().equals(client)) balance = balance.add(delivery.getCost());
+            if (delivery.getShipper().equals(user)) balance = balance.add(delivery.getCost());
         }
 
         return balance;
     }
 
-    public List<Delivery> getAllClientDeliveries(Client client) {
-        return deliveryRepository.findByClient(client);
+    public List<Delivery> getAllClientDeliveries(User user) {
+        return deliveryRepository.findByUser(user);
     }
 
     public List<Delivery> getAllCurrentClientDeliveries(String telNumber) {
         Client client =
-            clientRepository
+            (Client) userRepository
                 .findByTelNumber(telNumber)
                 .orElseThrow(() -> new DeliveryManagerException("Client not found"));
 
@@ -156,7 +157,7 @@ public class DeliveryManager {
 
     public List<Delivery> getAllReceivedClientDeliveries(String telNumber) {
         Client receiver =
-            clientRepository
+            (Client) userRepository
                 .findByTelNumber(telNumber)
                 .orElseThrow(() -> new DeliveryManagerException("Receiver not found"));
 
@@ -167,8 +168,8 @@ public class DeliveryManager {
         return deliveryRepository.get(id);
     }
 
-    private void validateClient(Client client) {
-        if (!client.isActive()) throw new DeliveryManagerException("Client account is inactive.");
+    private void validateClient(User user) {
+        if (!user.isActive()) throw new DeliveryManagerException("User account is inactive.");
     }
 
     private void validateDelivery(Delivery delivery) {

@@ -18,14 +18,15 @@ import jakarta.persistence.OptimisticLockException;
 import jakarta.persistence.Persistence;
 import jakarta.persistence.RollbackException;
 import pl.pas.parcellocker.config.TestsConfig;
-import pl.pas.parcellocker.model.client.Client;
+import pl.pas.parcellocker.model.user.Client;
+import pl.pas.parcellocker.model.user.User;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class RepositoryTest extends TestsConfig {
 
-    private final HibernateRepository<Client> clientRepository = new HibernateRepository<>(Client.class);
-    private Client c1;
-    private Client c2;
+    private final HibernateRepository<User> clientRepository = new HibernateRepository<>(User.class);
+    private User c1;
+    private User c2;
 
     @BeforeEach
     void setup() {
@@ -75,17 +76,17 @@ class RepositoryTest extends TestsConfig {
 
         clientRepository.add(c1);
 
-        Client client1 = em1.find(Client.class, c1.getId());
-        Client client2 = em2.find(Client.class, c1.getId());
+        User user1 = em1.find(User.class, c1.getId());
+        User user2 = em2.find(User.class, c1.getId());
 
         em1.getTransaction().begin();
-        client1.setActive(false);
+        user1.setActive(false);
         em1.getTransaction().commit();
 
         RollbackException rollback = new RollbackException();
         try {
             em2.getTransaction().begin();
-            client2.setActive(false);
+            user2.setActive(false);
             em2.getTransaction().commit();
         } catch (RollbackException e) {
             rollback = e;

@@ -1,11 +1,10 @@
 package pl.pas.parcellocker.model.delivery;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import java.math.BigDecimal;
+
 import jakarta.persistence.Entity;
 import lombok.NoArgsConstructor;
 import pl.pas.parcellocker.model.EntityModel;
-
-import java.math.BigDecimal;
 
 @Entity
 @NoArgsConstructor
