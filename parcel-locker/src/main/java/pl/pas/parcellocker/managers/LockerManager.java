@@ -1,7 +1,6 @@
 package pl.pas.parcellocker.managers;
 
 import jakarta.enterprise.context.ApplicationScoped;
-import jakarta.inject.Inject;
 import lombok.NoArgsConstructor;
 import pl.pas.parcellocker.exceptions.LockerManagerException;
 import pl.pas.parcellocker.model.locker.Locker;
@@ -11,7 +10,7 @@ import pl.pas.parcellocker.model.locker.LockerRepository;
 @NoArgsConstructor
 public class LockerManager {
 
-    @Inject
+    @Autowired
     private LockerRepository lockerRepository;
 
     public LockerManager(LockerRepository lockerRepository) {

@@ -8,7 +8,6 @@ import java.util.List;
 import java.util.UUID;
 
 import jakarta.enterprise.context.ApplicationScoped;
-import jakarta.inject.Inject;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import pl.pas.parcellocker.exceptions.DeliveryManagerException;
@@ -26,11 +25,11 @@ import pl.pas.parcellocker.model.user.UserRepository;
 @AllArgsConstructor
 public class DeliveryManager {
 
-    @Inject
+    @Autowired
     private DeliveryRepository deliveryRepository;
-    @Inject
+    @Autowired
     private LockerRepository lockerRepository;
-    @Inject
+    @Autowired
     private UserRepository userRepository;
 
     public synchronized Delivery makeParcelDelivery(
