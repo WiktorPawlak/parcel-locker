@@ -1,25 +1,22 @@
 package pl.pas.parcellocker.config;
 
-import io.restassured.builder.RequestSpecBuilder;
-import io.restassured.specification.RequestSpecification;
-import org.junit.jupiter.api.AfterAll;
+import static pl.pas.parcellocker.config.PostgresContainerInitializer.DB_NAME;
+import static pl.pas.parcellocker.config.PostgresContainerInitializer.DB_PASSWORD;
+import static pl.pas.parcellocker.config.PostgresContainerInitializer.DB_USERNAME;
+import static pl.pas.parcellocker.config.PostgresContainerInitializer.POSTGRES_IMAGE;
+
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.TestInstance;
 import org.testcontainers.containers.GenericContainer;
 import org.testcontainers.containers.Network;
 import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.containers.wait.strategy.Wait;
-import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 import org.testcontainers.utility.DockerImageName;
 import org.testcontainers.utility.MountableFile;
 
-import java.util.List;
-
-import static pl.pas.parcellocker.config.PostgresContainerInitializer.DB_NAME;
-import static pl.pas.parcellocker.config.PostgresContainerInitializer.DB_PASSWORD;
-import static pl.pas.parcellocker.config.PostgresContainerInitializer.DB_USERNAME;
-import static pl.pas.parcellocker.config.PostgresContainerInitializer.POSTGRES_IMAGE;
+import io.restassured.builder.RequestSpecBuilder;
+import io.restassured.specification.RequestSpecification;
 
 @Testcontainers
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)

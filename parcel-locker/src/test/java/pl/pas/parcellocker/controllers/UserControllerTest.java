@@ -1,19 +1,20 @@
 package pl.pas.parcellocker.controllers;
 
-import io.restassured.RestAssured;
-import io.restassured.http.ContentType;
+import static org.hamcrest.CoreMatchers.equalTo;
+import static io.restassured.RestAssured.given;
+
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import pl.pas.parcellocker.config.JakartaContainerInitializer;
+import org.springframework.boot.test.context.SpringBootTest;
+
+import io.restassured.RestAssured;
+import io.restassured.http.ContentType;
+import pl.pas.parcellocker.config.TestsConfig;
 import pl.pas.parcellocker.controllers.dto.ClientDto;
-import pl.pas.parcellocker.model.user.Administrator;
 import pl.pas.parcellocker.model.user.Client;
-import pl.pas.parcellocker.model.user.User;
 
-import static io.restassured.RestAssured.given;
-import static org.hamcrest.CoreMatchers.equalTo;
-
-class UserControllerTest extends JakartaContainerInitializer {
+@SpringBootTest
+class UserControllerTest extends TestsConfig {
 
     private static final String basePath = "/api/clients";
 

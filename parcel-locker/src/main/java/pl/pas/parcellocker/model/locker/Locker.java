@@ -1,21 +1,20 @@
 package pl.pas.parcellocker.model.locker;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.OneToMany;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import pl.pas.parcellocker.exceptions.LockerException;
 import pl.pas.parcellocker.model.EntityModel;
 import pl.pas.parcellocker.model.delivery.Delivery;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
 
-@Slf4j
 @Entity
 @NoArgsConstructor
 @EqualsAndHashCode
@@ -32,7 +31,7 @@ public class Locker extends EntityModel {
             if (boxAmount <= 0)
                 throw new LockerException("Locker with 0 boxes can not be created!");
         } catch (LockerException e) {
-            log.error(e.getMessage());
+            //log.error(e.getMessage());
         }
 
         this.identityNumber = identityNumber;

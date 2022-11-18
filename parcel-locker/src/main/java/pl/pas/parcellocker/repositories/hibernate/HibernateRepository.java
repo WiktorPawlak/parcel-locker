@@ -10,11 +10,10 @@ import java.util.stream.Collectors;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceException;
 import lombok.AllArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import pl.pas.parcellocker.exceptions.RepositoryException;
 import pl.pas.parcellocker.model.EntityModel;
 
-@Slf4j
+
 @AllArgsConstructor
 public class HibernateRepository<T extends EntityModel> {
 
