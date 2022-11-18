@@ -2,6 +2,7 @@ package pl.pas.parcellocker.controllers;
 
 import jakarta.inject.Inject;
 import jakarta.persistence.NoResultException;
+import jakarta.validation.Valid;
 import jakarta.validation.ValidationException;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.GET;
@@ -63,31 +64,11 @@ public class DeliveryController {
     }
   }
 
-  @POST
-  @Produces(MediaType.APPLICATION_JSON)
-  @Consumes(MediaType.APPLICATION_JSON)
-  @Path("/list")
-  public Response addListDelivery(DeliveryListDto deliveryListDto) {
-    try {
-      Delivery delivery =
-          deliveryManager.makeListDelivery(
-              deliveryListDto.pack.basePrice,
-              deliveryListDto.pack.isPriority,
-              deliveryListDto.shipperTel,
-              deliveryListDto.receiverTel,
-              deliveryListDto.lockerId);
-      return Response.status(Response.Status.CREATED).entity(delivery).build();
-    } catch (ValidationException | NullPointerException e) {
-      return Response.status(Response.Status.NOT_ACCEPTABLE).build();
-    } catch (DeliveryManagerException e) {
-      return Response.status(Response.Status.NOT_FOUND).entity(e.getMessage()).build();
-    }
-  }
     @POST
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     @Path("/list")
-    public Response addListDelivery(DeliveryListDto deliveryListDto) {
+    public Response addListDelivery(@Valid DeliveryListDto deliveryListDto) {
         try {
             Delivery delivery =
                 deliveryManager.makeListDelivery(
@@ -108,7 +89,7 @@ public class DeliveryController {
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     @Path("/parcel")
-    public Response addParcelDelivery(DeliveryParcelDto deliveryParcelDto) {
+    public Response addParcelDelivery(@Valid DeliveryParcelDto deliveryParcelDto) {
         try {
             Delivery delivery =
                 deliveryManager.makeParcelDelivery(
