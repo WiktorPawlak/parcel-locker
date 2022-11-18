@@ -7,11 +7,14 @@ import java.util.UUID;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceException;
+import org.springframework.stereotype.Repository;
+import org.springframework.web.bind.annotation.RequestParam;
 import pl.pas.parcellocker.exceptions.RepositoryException;
 import pl.pas.parcellocker.model.delivery.Delivery;
 import pl.pas.parcellocker.model.delivery.DeliveryRepository;
 import pl.pas.parcellocker.model.user.User;
 
+@Repository
 public class DeliveryRepositoryHibernate extends HibernateRepository<Delivery> implements DeliveryRepository {
 
     public DeliveryRepositoryHibernate() {

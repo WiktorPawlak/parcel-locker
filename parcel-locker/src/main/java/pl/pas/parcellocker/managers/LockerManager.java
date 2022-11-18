@@ -1,13 +1,14 @@
 package pl.pas.parcellocker.managers;
 
-import jakarta.enterprise.context.ApplicationScoped;
 import lombok.NoArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import pl.pas.parcellocker.exceptions.LockerManagerException;
 import pl.pas.parcellocker.model.locker.Locker;
 import pl.pas.parcellocker.model.locker.LockerRepository;
 
-@ApplicationScoped
 @NoArgsConstructor
+@Service
 public class LockerManager {
 
     @Autowired

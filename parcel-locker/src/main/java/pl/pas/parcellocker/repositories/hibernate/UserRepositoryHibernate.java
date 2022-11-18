@@ -8,11 +8,12 @@ import java.util.UUID;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceException;
+import org.springframework.stereotype.Repository;
 import pl.pas.parcellocker.exceptions.RepositoryException;
 import pl.pas.parcellocker.model.user.User;
 import pl.pas.parcellocker.model.user.UserRepository;
 
-
+@Repository
 public class UserRepositoryHibernate extends HibernateRepository<User> implements UserRepository {
 
     public UserRepositoryHibernate() {

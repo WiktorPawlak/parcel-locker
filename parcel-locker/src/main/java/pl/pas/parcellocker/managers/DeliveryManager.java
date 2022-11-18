@@ -1,15 +1,9 @@
 package pl.pas.parcellocker.managers;
 
-import static pl.pas.parcellocker.model.delivery.DeliveryStatus.READY_TO_PICKUP;
-
-import java.math.BigDecimal;
-import java.time.LocalDateTime;
-import java.util.List;
-import java.util.UUID;
-
-import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import pl.pas.parcellocker.exceptions.DeliveryManagerException;
 import pl.pas.parcellocker.model.delivery.Delivery;
 import pl.pas.parcellocker.model.delivery.DeliveryRepository;
@@ -20,9 +14,16 @@ import pl.pas.parcellocker.model.user.Client;
 import pl.pas.parcellocker.model.user.User;
 import pl.pas.parcellocker.model.user.UserRepository;
 
-@ApplicationScoped
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.UUID;
+
+import static pl.pas.parcellocker.model.delivery.DeliveryStatus.READY_TO_PICKUP;
+
 @NoArgsConstructor
 @AllArgsConstructor
+@Service
 public class DeliveryManager {
 
     @Autowired

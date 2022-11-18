@@ -1,14 +1,15 @@
 package pl.pas.parcellocker;
 
-import jakarta.annotation.PostConstruct;
-import jakarta.ws.rs.ApplicationPath;
-import jakarta.ws.rs.core.Application;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
 import pl.pas.parcellocker.model.user.Administrator;
 import pl.pas.parcellocker.model.user.User;
 import pl.pas.parcellocker.model.user.UserRepository;
 
-@ApplicationPath("/api")
-public class HelloApplication extends Application {
+import javax.annotation.PostConstruct;
+
+@SpringBootApplication
+public class HelloApplication {
 
     @Autowired
     private UserRepository userRepository;

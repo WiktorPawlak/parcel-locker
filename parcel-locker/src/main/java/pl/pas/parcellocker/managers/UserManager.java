@@ -1,11 +1,8 @@
 package pl.pas.parcellocker.managers;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.UUID;
-
-import jakarta.enterprise.context.ApplicationScoped;
 import lombok.NoArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import pl.pas.parcellocker.exceptions.ClientManagerException;
 import pl.pas.parcellocker.exceptions.PermissionValidationException;
 import pl.pas.parcellocker.model.user.Administrator;
@@ -15,9 +12,13 @@ import pl.pas.parcellocker.model.user.User;
 import pl.pas.parcellocker.model.user.UserRepository;
 import pl.pas.parcellocker.security.PermissionValidator;
 
+import java.util.Arrays;
+import java.util.List;
+import java.util.UUID;
 
-@ApplicationScoped
+
 @NoArgsConstructor
+@Service
 public class UserManager {
 
     @Autowired
