@@ -1,5 +1,6 @@
 package pl.pas.parcellocker.controllers.dto;
 
+import jakarta.validation.constraints.NotEmpty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
@@ -8,7 +9,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 public class ClientDto {
-    public String firstName;
-    public String lastName;
-    public String telNumber;
+  @NotEmpty public String firstName;
+  @NotEmpty public String lastName;
+  @NotEmpty public String telNumber;
 }

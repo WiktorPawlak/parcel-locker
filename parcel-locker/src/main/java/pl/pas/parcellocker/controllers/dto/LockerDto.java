@@ -1,5 +1,6 @@
 package pl.pas.parcellocker.controllers.dto;
 
+import jakarta.validation.constraints.NotEmpty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
@@ -8,7 +9,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 public class LockerDto {
-    public String identityNumber;
-    public String address;
-    public int numberOfBoxes;
+  @NotEmpty public String identityNumber;
+  @NotEmpty public String address;
+  public int numberOfBoxes;
 }

@@ -99,19 +99,19 @@ class DeliveryManagerTest extends TestsConfig {
         clientRepository.update(refreshedUser);
     }
 
-    @Test
-    void Should_ThrowException_WhenDeliveryPutInAgain() {
-        Delivery delivery =
-            deliveryManager.makeParcelDelivery(
-                basePrice,
-                10,
-                20,
-                30,
-                10,
-                false,
-                shipper1.getTelNumber(),
-                receiver1.getTelNumber(),
-                locker.getIdentityNumber());
+  @Test
+  void Should_ThrowException_WhenDeliveryPutInAgain() {
+    Delivery delivery =
+        deliveryManager.makeParcelDelivery(
+            basePrice,
+            10,
+            20,
+            30,
+            10,
+            false,
+            shipper1.getTelNumber(),
+            receiver1.getTelNumber(),
+            locker.getIdentityNumber());
 
         deliveryManager.putInLocker(
             delivery.getId(), delivery.getLocker().getIdentityNumber(), "54321");
@@ -282,7 +282,23 @@ class DeliveryManagerTest extends TestsConfig {
         deliveryManager.takeOutDelivery(delivery1.getId(), receiver1.getTelNumber(), "2222");
         locker = lockerRepository.get(locker.getId());
 
-        assertTrue(0 < deliveryManager.getAllReceivedClientDeliveries(receiver1).size());
+        assertTrue(0 < deliveryManager.getAllReceivedClientDeliveries(receiver1.getTelNumber()).size());
+    }
+
+    @Test
+    void Should_ReturnAllCurrentDeliveriesForGivenClient() {
+            deliveryManager.makeParcelDelivery(
+                basePrice,
+                10,
+                20,
+                30,
+                10,
+                false,
+                shipper1.getTelNumber(),
+                receiver1.getTelNumber(),
+                locker.getIdentityNumber());
+
+        assertTrue(0 < deliveryManager.getAllCurrentClientDeliveries(receiver1.getTelNumber()).size());
     }
 
     @Test
@@ -307,9 +323,10 @@ class DeliveryManagerTest extends TestsConfig {
         locker = lockerRepository.get(locker.getId());
     }
 
-    @Test
-    void Should_ThrowException_WhenInvalidValuesPassed() {
-        assertThrows(
-            DeliveryManagerException.class, () -> deliveryManager.checkClientShipmentBalance(null));
-    }
+  @Test
+  void Should_ThrowException_WhenInvalidValuesPassed() {
+    assertThrows(
+        DeliveryManagerException.class, () -> deliveryManager.checkClientShipmentBalance(null));
+  }
+
 }

@@ -13,8 +13,9 @@ public interface DeliveryRepository {
     void update(Delivery delivery);
 
     List<Delivery> findAll();
+    List<Delivery> findReceivedByClient(User user);
+    List<Delivery> findCurrentByClient(User user);
 
     List<Delivery> findByUser(User user);
 
-    List<Delivery> findReceivedByUser(User user);
 }
