@@ -1,21 +1,24 @@
 package pl.pas.parcellocker.managers;
 
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
+import lombok.NoArgsConstructor;
 import pl.pas.parcellocker.exceptions.LockerManagerException;
-import pl.pas.parcellocker.model.Locker;
-import pl.pas.parcellocker.repositories.LockerRepository;
+import pl.pas.parcellocker.model.locker.Locker;
+import pl.pas.parcellocker.model.locker.LockerRepository;
 
-import java.util.List;
-import java.util.Optional;
-
+@ApplicationScoped
+@NoArgsConstructor
 public class LockerManager {
 
-    private final LockerRepository lockerRepository;
+    @Inject
+    private LockerRepository lockerRepository;
 
-    public LockerManager() {
-        lockerRepository = new LockerRepository();
+    public LockerManager(LockerRepository lockerRepository) {
+        this.lockerRepository = lockerRepository;
     }
 
-    public Locker createLocker(String identityNumber, String address, int depositBoxCount) {
+    public synchronized Locker createLocker(String identityNumber, String address, int depositBoxCount) {
         checkIfDuplicatedName(identityNumber);
 
         Locker locker = new Locker(identityNumber, address, depositBoxCount);
@@ -24,25 +27,20 @@ public class LockerManager {
     }
 
     private void checkIfDuplicatedName(String name) {
-        List<Locker> sameNameLockers = lockerRepository.findBy(locker ->
-            locker.getIdentityNumber().equals(name)
-        );
-
-        if (sameNameLockers.size() > 0)
+        if (lockerRepository.findByIdentityNumber(name).isPresent())
             error("Locker with given name already exists.");
     }
 
-    public Optional<Locker> getLocker(String identityNumber) {
-        return lockerRepository.findBy(locker ->
-            locker.getIdentityNumber().equals(identityNumber)
-        ).stream().findFirst();
-    }
-
-    public void removeLocker(String identityNumber) {
-        Locker lockerToRemove = getLocker(identityNumber)
+    public Locker getLocker(String identityNumber) {
+        return lockerRepository.findByIdentityNumber(identityNumber)
             .orElseThrow(() ->
                 new LockerManagerException("Locker with given name doesn't exist.")
             );
+    }
+
+    public synchronized void removeLocker(String identityNumber) {
+        Locker lockerToRemove = getLocker(identityNumber);
+
         try {
             lockerRepository.remove(lockerToRemove);
         } catch (Exception e) {

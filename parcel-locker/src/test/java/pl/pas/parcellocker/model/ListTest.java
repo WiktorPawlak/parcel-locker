@@ -3,6 +3,8 @@ package pl.pas.parcellocker.model;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
+import pl.pas.parcellocker.model.delivery.List;
+import pl.pas.parcellocker.model.delivery.Package;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;

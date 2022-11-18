@@ -1,15 +1,19 @@
 package pl.pas.parcellocker.model;
 
+import java.io.Serializable;
+import java.util.UUID;
+
+import org.hibernate.annotations.GenericGenerator;
+
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.MappedSuperclass;
 import jakarta.persistence.Version;
-import org.hibernate.annotations.GenericGenerator;
-
-import java.util.UUID;
+import lombok.NoArgsConstructor;
 
 @MappedSuperclass
-public abstract class EntityModel {
+@NoArgsConstructor
+public abstract class EntityModel implements Serializable {
     @Id
     @GeneratedValue(generator = "UUID")
     @GenericGenerator(

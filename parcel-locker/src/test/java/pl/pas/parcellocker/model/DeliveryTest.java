@@ -1,25 +1,29 @@
 package pl.pas.parcellocker.model;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static pl.pas.parcellocker.model.delivery.DeliveryStatus.READY_TO_PICKUP;
+import static pl.pas.parcellocker.model.delivery.DeliveryStatus.READY_TO_SHIP;
+import static pl.pas.parcellocker.model.delivery.DeliveryStatus.RECEIVED;
+
+import java.math.BigDecimal;
+
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 
-import java.math.BigDecimal;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static pl.pas.parcellocker.model.DeliveryStatus.READY_TO_PICKUP;
-import static pl.pas.parcellocker.model.DeliveryStatus.READY_TO_SHIP;
-import static pl.pas.parcellocker.model.DeliveryStatus.RECEIVED;
+import pl.pas.parcellocker.model.delivery.Delivery;
+import pl.pas.parcellocker.model.locker.Locker;
+import pl.pas.parcellocker.model.user.Client;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class DeliveryTest {
 
+    private final BigDecimal basePrice = BigDecimal.TEN;
     private Delivery delivery1;
     private Delivery delivery2;
     private Client shipper1;
     private Client receiver1;
     private Locker locker;
-    private final BigDecimal basePrice = BigDecimal.TEN;
 
     @BeforeAll
     void setup() {
