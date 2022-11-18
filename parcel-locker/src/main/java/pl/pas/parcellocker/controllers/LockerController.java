@@ -1,42 +1,42 @@
 package pl.pas.parcellocker.controllers;
 
-import jakarta.inject.Inject;
+import static org.springframework.http.HttpStatus.CONFLICT;
+import static org.springframework.http.HttpStatus.CREATED;
+import static org.springframework.http.HttpStatus.NOT_ACCEPTABLE;
+import static org.springframework.http.HttpStatus.NOT_FOUND;
+import static org.springframework.http.HttpStatus.NO_CONTENT;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+
 import jakarta.validation.Valid;
 import jakarta.validation.ValidationException;
-import jakarta.ws.rs.Consumes;
-import jakarta.ws.rs.DELETE;
-import jakarta.ws.rs.GET;
-import jakarta.ws.rs.POST;
-import jakarta.ws.rs.Path;
-import jakarta.ws.rs.PathParam;
-import jakarta.ws.rs.Produces;
-import jakarta.ws.rs.core.MediaType;
-import jakarta.ws.rs.core.ResponseEntity;
 import pl.pas.parcellocker.controllers.dto.LockerDto;
 import pl.pas.parcellocker.exceptions.LockerManagerException;
 import pl.pas.parcellocker.managers.LockerManager;
 import pl.pas.parcellocker.model.locker.Locker;
 
-@Path(value = "/lockers")
+@RequestMapping(value = "/lockers")
 public class LockerController {
 
-    @Inject
+    @Autowired
     private LockerManager lockerManager;
 
-    @GetMapping
-    @Path("/{identityNumber}")
-    @Produces(MediaType.APPLICATION_JSON)
-    public ResponseEntityEntity getLocker(@PathParam("identityNumber") String identityNumber) {
+    @GetMapping("/{identityNumber}")
+    public ResponseEntity getLocker(@PathVariable("identityNumber") String identityNumber) {
         try {
-            return ResponseEntity.ok().entity(lockerManager.getLocker(identityNumber)).build();
+            return ResponseEntity.ok().body(lockerManager.getLocker(identityNumber));
         } catch (LockerManagerException e) {
-            return ResponseEntity.status(ResponseEntity.Status.NOT_FOUND).build();
+            return ResponseEntity.status(NOT_FOUND).build();
         }
     }
 
     @PostMapping
-    @Produces(MediaType.APPLICATION_JSON)
-    @Consumes(MediaType.APPLICATION_JSON)
     public ResponseEntity addLocker(@Valid LockerDto lockerDto) {
         try {
             Locker newLocker = lockerManager.createLocker(
@@ -44,25 +44,23 @@ public class LockerController {
                 lockerDto.address,
                 lockerDto.numberOfBoxes
             );
-            return ResponseEntity.status(ResponseEntity.Status.CREATED).entity(newLocker).build();
+            return ResponseEntity.status(CREATED).body(newLocker);
         } catch (ValidationException | NullPointerException e) {
-            return ResponseEntity.status(ResponseEntity.Status.NOT_ACCEPTABLE).build();
+            return ResponseEntity.status(NOT_ACCEPTABLE).build();
         } catch (LockerManagerException e) {
-            return ResponseEntity.status(ResponseEntity.Status.CONFLICT).entity(e.getMessage()).build();
+            return ResponseEntity.status(CONFLICT).body(e.getMessage());
         }
     }
 
-    @DELETE
-    @Path("/{identityNumber}")
-    @Produces(MediaType.APPLICATION_JSON)
-    public ResponseEntity removeLocker(@PathParam("identityNumber") String identityNumber) {
+    @DeleteMapping("/{identityNumber}")
+    public ResponseEntity removeLocker(@PathVariable("identityNumber") String identityNumber) {
         try {
             lockerManager.removeLocker(identityNumber);
-            return ResponseEntity.status(ResponseEntity.Status.NO_CONTENT).build();
+            return ResponseEntity.status(NO_CONTENT).build();
         } catch (ValidationException | NullPointerException e) {
-            return ResponseEntity.status(ResponseEntity.Status.NOT_ACCEPTABLE).build();
+            return ResponseEntity.status(NOT_ACCEPTABLE).build();
         } catch (LockerManagerException e) {
-            return ResponseEntity.status(ResponseEntity.Status.NOT_FOUND).entity(e.getMessage()).build();
+            return ResponseEntity.status(NOT_FOUND).body(e.getMessage());
         }
     }
 }
