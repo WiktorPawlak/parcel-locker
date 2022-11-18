@@ -11,7 +11,7 @@ import jakarta.ws.rs.Path;
 import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
-import jakarta.ws.rs.core.Response;
+import jakarta.ws.rs.core.ResponseEntity;
 import pl.pas.parcellocker.controllers.dto.LockerDto;
 import pl.pas.parcellocker.exceptions.LockerManagerException;
 import pl.pas.parcellocker.managers.LockerManager;
@@ -23,46 +23,46 @@ public class LockerController {
     @Inject
     private LockerManager lockerManager;
 
-    @GET
+    @GetMapping
     @Path("/{identityNumber}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getLocker(@PathParam("identityNumber") String identityNumber) {
+    public ResponseEntityEntity getLocker(@PathParam("identityNumber") String identityNumber) {
         try {
-            return Response.ok().entity(lockerManager.getLocker(identityNumber)).build();
+            return ResponseEntity.ok().entity(lockerManager.getLocker(identityNumber)).build();
         } catch (LockerManagerException e) {
-            return Response.status(Response.Status.NOT_FOUND).build();
+            return ResponseEntity.status(ResponseEntity.Status.NOT_FOUND).build();
         }
     }
 
-    @POST
+    @PostMapping
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response addLocker(@Valid LockerDto lockerDto) {
+    public ResponseEntity addLocker(@Valid LockerDto lockerDto) {
         try {
             Locker newLocker = lockerManager.createLocker(
                 lockerDto.identityNumber,
                 lockerDto.address,
                 lockerDto.numberOfBoxes
             );
-            return Response.status(Response.Status.CREATED).entity(newLocker).build();
+            return ResponseEntity.status(ResponseEntity.Status.CREATED).entity(newLocker).build();
         } catch (ValidationException | NullPointerException e) {
-            return Response.status(Response.Status.NOT_ACCEPTABLE).build();
+            return ResponseEntity.status(ResponseEntity.Status.NOT_ACCEPTABLE).build();
         } catch (LockerManagerException e) {
-            return Response.status(Response.Status.CONFLICT).entity(e.getMessage()).build();
+            return ResponseEntity.status(ResponseEntity.Status.CONFLICT).entity(e.getMessage()).build();
         }
     }
 
     @DELETE
     @Path("/{identityNumber}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response removeLocker(@PathParam("identityNumber") String identityNumber) {
+    public ResponseEntity removeLocker(@PathParam("identityNumber") String identityNumber) {
         try {
             lockerManager.removeLocker(identityNumber);
-            return Response.status(Response.Status.NO_CONTENT).build();
+            return ResponseEntity.status(ResponseEntity.Status.NO_CONTENT).build();
         } catch (ValidationException | NullPointerException e) {
-            return Response.status(Response.Status.NOT_ACCEPTABLE).build();
+            return ResponseEntity.status(ResponseEntity.Status.NOT_ACCEPTABLE).build();
         } catch (LockerManagerException e) {
-            return Response.status(Response.Status.NOT_FOUND).entity(e.getMessage()).build();
+            return ResponseEntity.status(ResponseEntity.Status.NOT_FOUND).entity(e.getMessage()).build();
         }
     }
 }

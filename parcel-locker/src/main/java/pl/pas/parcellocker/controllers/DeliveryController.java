@@ -11,9 +11,12 @@ import jakarta.ws.rs.PUT;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.Produces;
-import jakarta.ws.rs.QueryParam;
+import jakarta.ws.rs.RequestParam;
 import jakarta.ws.rs.core.MediaType;
-import jakarta.ws.rs.core.Response;
+import jakarta.ws.rs.core.ResponseEntity;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import pl.pas.parcellocker.controllers.dto.DeliveryListDto;
 import pl.pas.parcellocker.controllers.dto.DeliveryParcelDto;
 import pl.pas.parcellocker.exceptions.DeliveryManagerException;
@@ -23,52 +26,50 @@ import pl.pas.parcellocker.model.delivery.Delivery;
 
 import java.util.UUID;
 
-@Path(value = "/deliveries")
+@RequestMapping(value = "/deliveries")
 public class DeliveryController {
 
-    @Inject
+    @Autowired
     private DeliveryManager deliveryManager;
 
-    @GET
-    @Path("/{id}")
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response getDelivery(@PathParam("id") UUID id) {
+    @GetMapping("/{id}")
+    public ResponseEntity getDelivery(@PathParam("id") UUID id) {
         try {
-            return Response.ok().entity(deliveryManager.getDelivery(id)).build();
+            return ResponseEntity.ok().entity(deliveryManager.getDelivery(id)).build();
         } catch (NoResultException e) {
-            return Response.status(Response.Status.NOT_FOUND).build();
+            return ResponseEntity.status(ResponseEntity.Status.NOT_FOUND).build();
         }
     }
 
-  @GET
+  @GetMapping
   @Path("/current")
   @Produces(MediaType.APPLICATION_JSON)
-  public Response getCurrentDeliveries(@QueryParam("telNumber") String telNumber) {
+  public ResponseEntity getCurrentDeliveries(@RequestParam("telNumber") String telNumber) {
     try {
-      return Response.ok().entity(deliveryManager.getAllCurrentClientDeliveries(telNumber)).build();
+      return ResponseEntity.ok().entity(deliveryManager.getAllCurrentClientDeliveries(telNumber)).build();
     } catch (NoResultException e) {
-      return Response.status(Response.Status.NOT_FOUND).entity(e.getMessage()).build();
+      return ResponseEntity.status(ResponseEntity.Status.NOT_FOUND).entity(e.getMessage()).build();
     }
   }
 
-  @GET
+  @GetMapping
   @Path("/received")
   @Produces(MediaType.APPLICATION_JSON)
-  public Response getReceivedDelivery(@QueryParam("telNumber") String telNumber) {
+  public ResponseEntity getReceivedDelivery(@RequestParam("telNumber") String telNumber) {
     try {
-      return Response.ok()
+      return ResponseEntity.ok()
           .entity(deliveryManager.getAllReceivedClientDeliveries(telNumber))
           .build();
     } catch (NoResultException | DeliveryManagerException e) {
-      return Response.status(Response.Status.NOT_FOUND).entity(e.getMessage()).build();
+      return ResponseEntity.status(ResponseEntity.Status.NOT_FOUND).entity(e.getMessage()).build();
     }
   }
 
-    @POST
+    @PostMapping
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     @Path("/list")
-    public Response addListDelivery(@Valid DeliveryListDto deliveryListDto) {
+    public ResponseEntity addListDelivery(@Valid DeliveryListDto deliveryListDto) {
         try {
             Delivery delivery =
                 deliveryManager.makeListDelivery(
@@ -77,19 +78,19 @@ public class DeliveryController {
                     deliveryListDto.shipperTel,
                     deliveryListDto.receiverTel,
                     deliveryListDto.lockerId);
-            return Response.status(Response.Status.CREATED).entity(delivery).build();
+            return ResponseEntity.status(ResponseEntity.Status.CREATED).entity(delivery).build();
         } catch (ValidationException | NullPointerException e) {
-            return Response.status(Response.Status.NOT_ACCEPTABLE).build();
+            return ResponseEntity.status(ResponseEntity.Status.NOT_ACCEPTABLE).build();
         } catch (DeliveryManagerException | NoResultException e) {
-            return Response.status(Response.Status.NOT_FOUND).entity(e.getMessage()).build();
+            return ResponseEntity.status(ResponseEntity.Status.NOT_FOUND).entity(e.getMessage()).build();
         }
     }
 
-    @POST
+    @PostMapping
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     @Path("/parcel")
-    public Response addParcelDelivery(@Valid DeliveryParcelDto deliveryParcelDto) {
+    public ResponseEntity addParcelDelivery(@Valid DeliveryParcelDto deliveryParcelDto) {
         try {
             Delivery delivery =
                 deliveryManager.makeParcelDelivery(
@@ -102,49 +103,49 @@ public class DeliveryController {
                     deliveryParcelDto.shipperTel,
                     deliveryParcelDto.receiverTel,
                     deliveryParcelDto.lockerId);
-            return Response.status(Response.Status.CREATED).entity(delivery).build();
+            return ResponseEntity.status(ResponseEntity.Status.CREATED).entity(delivery).build();
         } catch (ValidationException | NullPointerException e) {
-            return Response.status(Response.Status.NOT_ACCEPTABLE).build();
+            return ResponseEntity.status(ResponseEntity.Status.NOT_ACCEPTABLE).build();
         } catch (DeliveryManagerException | NoResultException e) {
-            return Response.status(Response.Status.NOT_FOUND).entity(e.getMessage()).build();
+            return ResponseEntity.status(ResponseEntity.Status.NOT_FOUND).entity(e.getMessage()).build();
         }
     }
 
-  @PUT
+  @PutMapping
   @Produces(MediaType.APPLICATION_JSON)
   @Path("/{id}/put-in")
-  public Response putInLocker(
+  public ResponseEntity putInLocker(
       @PathParam("id") UUID deliveryId,
-      @QueryParam("lockerId") String lockerId,
-      @QueryParam("accessCode") String accessCode) {
+      @RequestParam("lockerId") String lockerId,
+      @RequestParam("accessCode") String accessCode) {
     try {
       deliveryManager.putInLocker(deliveryId, lockerId, accessCode);
-      return Response.ok().build();
+      return ResponseEntity.ok().build();
     } catch (ValidationException | NullPointerException e) {
-      return Response.status(Response.Status.NOT_ACCEPTABLE).build();
+      return ResponseEntity.status(ResponseEntity.Status.NOT_ACCEPTABLE).build();
     } catch (DeliveryManagerException e) {
-      return Response.status(Response.Status.NOT_FOUND).entity(e.getMessage()).build();
+      return ResponseEntity.status(ResponseEntity.Status.NOT_FOUND).entity(e.getMessage()).build();
     } catch (LockerException e) {
-      return Response.status(Response.Status.CONFLICT).entity(e.getMessage()).build();
+      return ResponseEntity.status(ResponseEntity.Status.CONFLICT).entity(e.getMessage()).build();
     }
   }
 
-  @PUT
+  @PutMapping
   @Produces(MediaType.APPLICATION_JSON)
   @Path("/{id}/take-out")
-  public Response takeOutDelivery(
+  public ResponseEntity takeOutDelivery(
       @PathParam("id") UUID deliveryId,
-      @QueryParam("telNumber") String telNumber,
-      @QueryParam("accessCode") String accessCode) {
+      @RequestParam("telNumber") String telNumber,
+      @RequestParam("accessCode") String accessCode) {
     try {
       deliveryManager.takeOutDelivery(deliveryId, telNumber, accessCode);
-      return Response.ok().build();
+      return ResponseEntity.ok().build();
     } catch (ValidationException | NullPointerException e) {
-      return Response.status(Response.Status.NOT_ACCEPTABLE).build();
+      return ResponseEntity.status(ResponseEntity.Status.NOT_ACCEPTABLE).build();
     } catch (DeliveryManagerException e) {
-      return Response.status(Response.Status.NOT_FOUND).entity(e.getMessage()).build();
+      return ResponseEntity.status(ResponseEntity.Status.NOT_FOUND).entity(e.getMessage()).build();
     } catch (LockerException e) {
-      return Response.status(Response.Status.CONFLICT).entity(e.getMessage()).build();
+      return ResponseEntity.status(ResponseEntity.Status.CONFLICT).entity(e.getMessage()).build();
     }
   }
 }

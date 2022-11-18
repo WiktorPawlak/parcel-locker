@@ -1,81 +1,75 @@
 package pl.pas.parcellocker.controllers;
 
 
-import java.util.UUID;
-
-import jakarta.inject.Inject;
 import jakarta.persistence.NoResultException;
 import jakarta.validation.Valid;
 import jakarta.validation.ValidationException;
-import jakarta.ws.rs.Consumes;
-import jakarta.ws.rs.GET;
-import jakarta.ws.rs.POST;
-import jakarta.ws.rs.PUT;
-import jakarta.ws.rs.Path;
-import jakarta.ws.rs.PathParam;
-import jakarta.ws.rs.Produces;
-import jakarta.ws.rs.QueryParam;
-import jakarta.ws.rs.core.MediaType;
-import jakarta.ws.rs.core.Response;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import pl.pas.parcellocker.controllers.dto.ClientDto;
 import pl.pas.parcellocker.exceptions.ClientManagerException;
-import pl.pas.parcellocker.exceptions.DeliveryManagerException;
 import pl.pas.parcellocker.managers.UserManager;
 import pl.pas.parcellocker.model.user.User;
 
-@Path(value = "/clients")
+import java.util.UUID;
+
+import static org.springframework.http.HttpStatus.CONFLICT;
+import static org.springframework.http.HttpStatus.CREATED;
+import static org.springframework.http.HttpStatus.NOT_ACCEPTABLE;
+import static org.springframework.http.HttpStatus.NOT_FOUND;
+
+@RequestMapping(value = "/clients")
 public class ClientController {
 
-    @Inject
+    @Autowired
     private UserManager userManager;
 
-    @GET
-    @Path("/{telNumber}")
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response getClient(@PathParam("telNumber") String telNumber) {
+    @GetMapping("/{telNumber}")
+    public ResponseEntity getClient(@PathVariable("telNumber") String telNumber) {
         try {
-            return Response.ok().entity(userManager.getUser(telNumber)).build();
+            return ResponseEntity.ok().body(userManager.getUser(telNumber));
         } catch (NoResultException e) {
-            return Response.status(Response.Status.NOT_FOUND).build();
+            return ResponseEntity.status(NOT_FOUND).build();
         }
     }
 
-    @GET
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response getClientsByPhoneNumberPattern(@QueryParam("telNumber") String telNumber) {
+    @GetMapping
+    public ResponseEntity getClientsByPhoneNumberPattern(@RequestParam("telNumber") String telNumber) {
         try {
-            return Response.ok().entity(userManager.getUsersByPartialTelNumber(telNumber)).build();
+            return ResponseEntity.ok().body(userManager.getUsersByPartialTelNumber(telNumber));
         } catch (NoResultException e) {
-            return Response.status(Response.Status.NOT_FOUND).build();
+            return ResponseEntity.status(NOT_FOUND).build();
         }
     }
 
-    @POST
-    @Produces(MediaType.APPLICATION_JSON)
-    @Consumes(MediaType.APPLICATION_JSON)
-    public Response registerClient(@QueryParam("operatorId") UUID operatorID, @Valid ClientDto clientDTO) {
+    @PostMapping
+    public ResponseEntity registerClient(@RequestParam("operatorId") UUID operatorID, @Valid ClientDto clientDTO) {
         try {
             User newUser = userManager.registerClient(operatorID, clientDTO.firstName, clientDTO.lastName, clientDTO.telNumber);
-            return Response.status(Response.Status.CREATED).entity(newUser).build();
+            return ResponseEntity.status(CREATED).body(newUser);
         } catch (ValidationException | NullPointerException e) {
-            return Response.status(Response.Status.NOT_ACCEPTABLE).build();
+            return ResponseEntity.status(NOT_ACCEPTABLE).build();
         } catch (ClientManagerException e) {
-            return Response.status(Response.Status.CONFLICT).entity(e.getMessage()).build();
+            return ResponseEntity.status(CONFLICT).body(e.getMessage());
         }
     }
 
-    @PUT
-    @Produces(MediaType.APPLICATION_JSON)
-    @Consumes({MediaType.TEXT_PLAIN})
-    public Response unregisterClient(@QueryParam("operatorId") UUID operatorId, String telNumber) {
+    @PutMapping
+    public ResponseEntity unregisterClient(@RequestParam("operatorId") UUID operatorId, String telNumber) {
         try {
             User user = userManager.getUser(telNumber);
             User unregisteredUser = userManager.unregisterClient(operatorId, user);
-            return Response.ok().entity(unregisteredUser).build();
+            return ResponseEntity.ok().body(unregisteredUser);
         } catch (ValidationException | NullPointerException e) {
-            return Response.status(Response.Status.NOT_ACCEPTABLE).build();
+            return ResponseEntity.status(NOT_ACCEPTABLE).build();
         } catch (ClientManagerException e) {
-            return Response.status(Response.Status.CONFLICT).entity(e.getMessage()).build();
+            return ResponseEntity.status(CONFLICT).body(e.getMessage());
         }
     }
 }
