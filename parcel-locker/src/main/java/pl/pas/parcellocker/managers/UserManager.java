@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.UUID;
 
 import jakarta.enterprise.context.ApplicationScoped;
-import jakarta.inject.Inject;
 import lombok.NoArgsConstructor;
 import pl.pas.parcellocker.exceptions.ClientManagerException;
 import pl.pas.parcellocker.exceptions.PermissionValidationException;
@@ -21,10 +20,10 @@ import pl.pas.parcellocker.security.PermissionValidator;
 @NoArgsConstructor
 public class UserManager {
 
-    @Inject
+    @Autowired
     private PermissionValidator permissionValidator;
 
-    @Inject
+    @Autowired
     private UserRepository clientRepository;
 
     public UserManager(UserRepository clientRepository, PermissionValidator permissionValidator) {

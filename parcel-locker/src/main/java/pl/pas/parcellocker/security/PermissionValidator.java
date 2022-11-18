@@ -3,7 +3,8 @@ package pl.pas.parcellocker.security;
 import java.util.List;
 import java.util.UUID;
 
-import jakarta.inject.Inject;
+import org.springframework.beans.factory.annotation.Autowired;
+
 import lombok.NoArgsConstructor;
 import pl.pas.parcellocker.model.user.UserRepository;
 
@@ -11,7 +12,7 @@ import pl.pas.parcellocker.model.user.UserRepository;
 @NoArgsConstructor
 public class PermissionValidator {
 
-    @Inject
+    @Autowired
     private UserRepository clientRepository;
 
     public PermissionValidator(final UserRepository clientRepository) {
