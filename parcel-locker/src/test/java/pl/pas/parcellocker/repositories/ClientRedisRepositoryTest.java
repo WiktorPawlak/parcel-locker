@@ -4,8 +4,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import pl.pas.parcellocker.model.Client;
 
-import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class ClientRedisRepositoryTest {
 
@@ -22,6 +22,13 @@ public class ClientRedisRepositoryTest {
         clientRedisRepository.add(client1);
 
         assertEquals(getClientFromRepo(client1), client1);
+    }
+
+    @Test
+    void shouldGetByTel() {
+        clientRedisRepository.add(client1);
+
+        assertEquals(clientRedisRepository.findByTelNumber(client1.getTelNumber()), client1);
     }
 
     @Test

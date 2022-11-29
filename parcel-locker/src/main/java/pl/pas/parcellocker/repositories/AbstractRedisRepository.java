@@ -14,10 +14,10 @@ import java.util.UUID;
 
 public abstract class AbstractRedisRepository<T extends MongoEntityModel> implements AutoCloseable {
 
-  private static JedisPooled pool;
+  protected static JedisPooled pool;
   private final Class<T> entityClass;
-  private final Jsonb jsonb = JsonbBuilder.create();
-  private final String prefix;
+  protected final Jsonb jsonb = JsonbBuilder.create();
+  protected final String prefix;
 
   public AbstractRedisRepository(Class<T> entityClass) {
     this.entityClass = entityClass;
@@ -38,13 +38,12 @@ public abstract class AbstractRedisRepository<T extends MongoEntityModel> implem
 
   public void add(T object) {
     String json = jsonb.toJson(object);
-    pool.set(prefix + object.getId(), json);
+    pool.jsonSet(prefix + object.getId(), json);
     pool.expire(prefix + object.getId(), 3600);
   }
 
   public T findById(UUID id) {
-    String json = pool.get(prefix + id);
-    return jsonb.fromJson(json, entityClass);
+    return pool.jsonGet(prefix + id, entityClass);
   }
 
   public Set<String> findAllKeys() {
