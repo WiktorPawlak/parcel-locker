@@ -1,4 +1,4 @@
-version: '3.8'
+version: '3.9'
 services:
     mongo:
         image: mongo:6.0.2
@@ -17,6 +17,16 @@ services:
             timeout: 2s
             retries: 5
 
+    redis-stack:
+        image: redis/redis-stack:latest
+        volumes:
+            - redis-stack-data:/bitnami/redis/data
+        ports:
+            - "8001:8001"
+            - "6379:6379"
+        networks:
+            - redisnet
+
     mongo-express:
         image: mongo-express:6.0.2
         container_name: mongo-express
@@ -33,6 +43,10 @@ services:
         depends_on:
             - mongo
 
+volumes:
+    redis-stack-data:
+        driver: local
 
 networks:
     mongonet: {}
+    redisnet: { }

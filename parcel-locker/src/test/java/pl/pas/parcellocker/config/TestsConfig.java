@@ -14,11 +14,6 @@ public class TestsConfig {
     protected final DeliveryMongoRepository deliveryRepository = new DeliveryMongoRepository();
     protected final LockerMongoRepository lockerRepository = new LockerMongoRepository();
 
-//    @BeforeAll
-//    static void beforeAll() {
-//        PostgresContainerInitializer.start();
-//    }
-
     @AfterAll
     void finisher() {
         deliveryRepository.findAll().forEach(delivery -> deliveryRepository.delete(delivery.getId()));
