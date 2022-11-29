@@ -8,6 +8,7 @@ import org.bson.codecs.pojo.annotations.BsonDiscriminator;
 import org.bson.codecs.pojo.annotations.BsonProperty;
 
 import java.math.BigDecimal;
+import java.util.UUID;
 
 @Getter
 @Setter
@@ -80,7 +81,7 @@ public class Delivery extends MongoEntityModel {
                      Client receiver,
                      Locker locker
     ) {
-        super(new UniqueId());
+        super(new UniqueId(UUID.randomUUID()));
         this.shipper = shipper;
         this.receiver = receiver;
         this.locker = locker;

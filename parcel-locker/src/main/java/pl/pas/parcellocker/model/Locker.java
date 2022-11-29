@@ -44,7 +44,7 @@ public class Locker extends MongoEntityModel {
                   String address,
                   int boxAmount
     ) {
-        super(new UniqueId());
+        super(new UniqueId(UUID.randomUUID()));
         try {
             if (boxAmount <= 0)
                 throw new LockerException("Locker with 0 boxes can not be created!");

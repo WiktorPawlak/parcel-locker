@@ -10,13 +10,16 @@ import java.util.UUID;
 @NoArgsConstructor
 public class MongoEntityModel implements Serializable {
 
-
     @BsonProperty("_id")
     @BsonId
     private UniqueId entityId;
 
     public MongoEntityModel(UniqueId id) {
         this.entityId = id;
+    }
+
+    public UniqueId getEntityId() {
+        return entityId;
     }
 
     public UUID getId() {

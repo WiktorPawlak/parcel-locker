@@ -8,6 +8,7 @@ import org.bson.codecs.pojo.annotations.BsonDiscriminator;
 import org.bson.codecs.pojo.annotations.BsonProperty;
 
 import java.math.BigDecimal;
+import java.util.UUID;
 
 @Getter
 @Setter
@@ -26,7 +27,7 @@ public abstract class Package extends MongoEntityModel {
     }
 
     public Package(BigDecimal basePrice) {
-        super(new UniqueId());
+        super(new UniqueId(UUID.randomUUID()));
         this.basePrice = basePrice;
     }
 

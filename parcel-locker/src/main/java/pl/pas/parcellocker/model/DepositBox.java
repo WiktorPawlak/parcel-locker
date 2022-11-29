@@ -36,7 +36,7 @@ public class DepositBox extends MongoEntityModel {
     }
 
     public DepositBox() {
-        super(new UniqueId());
+        super(new UniqueId(UUID.randomUUID()));
         isEmpty = true;
         telNumber = "";
         accessCode = "";

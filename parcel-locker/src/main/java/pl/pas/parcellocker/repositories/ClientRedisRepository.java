@@ -8,5 +8,4 @@ public class ClientRedisRepository extends AbstractRedisRepository<Client> {
         super(Client.class);
     }
 
-
 }
