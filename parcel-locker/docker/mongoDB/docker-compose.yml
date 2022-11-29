@@ -28,7 +28,7 @@ services:
             - redisnet
 
     mongo-express:
-        image: mongo-express:6.0.2
+        image: mongo-express:latest
         container_name: mongo-express
         restart: unless-stopped
         networks:

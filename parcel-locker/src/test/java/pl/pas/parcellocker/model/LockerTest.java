@@ -37,7 +37,7 @@ class LockerTest extends TestsConfig {
         DepositBox depositBox = locker.getDepositBox(depositBoxId);
         assertEquals("123456789", depositBox.getTelNumber());
         assertEquals("k0z4k", depositBox.getAccessCode());
-        assertEquals(delivery.getId(), depositBox.getDeliveryId().getUUID());
+        assertEquals(delivery.getId(), depositBox.getDeliveryId());
     }
 
 }

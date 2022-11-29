@@ -75,7 +75,7 @@ public class Locker extends MongoEntityModel {
         for (DepositBox depositBox : depositBoxes) {
             if (depositBox.canAccess(code, telNumber)) {
                 depositBox.clean();
-                return depositBox.getDeliveryId().getUUID();
+                return depositBox.getDeliveryId();
             }
         }
         throw new LockerException("Couldn't get any package out with access code: "

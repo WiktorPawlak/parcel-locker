@@ -1,20 +1,18 @@
 package pl.pas.parcellocker.model;
 
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
 import java.util.UUID;
 
 @EqualsAndHashCode
+@NoArgsConstructor
 public class UniqueId {
 
-    private final UUID id;
+    private UUID id;
 
     UniqueId(UUID id) {
         this.id = id;
-    }
-
-    UniqueId() {
-        this.id = UUID.randomUUID();
     }
 
     public UUID getUUID() {

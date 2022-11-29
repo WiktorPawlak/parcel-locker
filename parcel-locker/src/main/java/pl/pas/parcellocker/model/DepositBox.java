@@ -14,7 +14,7 @@ import java.util.UUID;
 public class DepositBox extends MongoEntityModel {
 
     @BsonProperty("deliveryId")
-    private UniqueId deliveryId;
+    private UUID deliveryId;
     @BsonProperty("isEmpty")
     private Boolean isEmpty;
     @BsonProperty("accessCode")
@@ -24,7 +24,7 @@ public class DepositBox extends MongoEntityModel {
 
     @BsonCreator
     public DepositBox(@BsonProperty("_id") UniqueId id,
-                      @BsonProperty("delivery") UniqueId deliveryId,
+                      @BsonProperty("delivery") UUID deliveryId,
                       @BsonProperty("isEmpty") Boolean isEmpty,
                       @BsonProperty("accessCode") String accessCode,
                       @BsonProperty("telNumber") String telNumber) {
@@ -53,7 +53,7 @@ public class DepositBox extends MongoEntityModel {
         this.accessCode = accessCode;
         this.isEmpty = false;
         this.telNumber = telNumber;
-        this.deliveryId = delivery.getEntityId();
+        this.deliveryId = delivery.getId();
     }
 
     public void clean() {

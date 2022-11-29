@@ -47,7 +47,7 @@ class DeliveryMongoRepositoryTest {
     void Should_DeleteDelivery() {
         abstractMongoRepository.add(delivery1);
 
-        abstractMongoRepository.delete(delivery1.getEntityId().getUUID());
+        abstractMongoRepository.delete(delivery1.getId());
 
         assertNull(getDeliveryFromRepo(delivery1));
     }

@@ -2,15 +2,19 @@ package pl.pas.parcellocker.model;
 
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.bson.codecs.pojo.annotations.BsonCreator;
 import org.bson.codecs.pojo.annotations.BsonProperty;
 import pl.pas.parcellocker.exceptions.ClientException;
 
+import java.util.UUID;
+
 
 @EqualsAndHashCode
 @Getter
 @Setter
+@NoArgsConstructor
 public class Client extends MongoEntityModel {
 
     @BsonProperty("firstname")
@@ -40,7 +44,7 @@ public class Client extends MongoEntityModel {
     }
 
     public Client(String firstName, String lastName, String telNumber) {
-        super(new UniqueId());
+        super(new UniqueId(UUID.randomUUID()));
         validateName(firstName);
         validateName(lastName);
         validateTelNumber(telNumber);

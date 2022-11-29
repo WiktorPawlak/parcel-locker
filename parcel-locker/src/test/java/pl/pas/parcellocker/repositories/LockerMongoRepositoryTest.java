@@ -44,7 +44,7 @@ class LockerMongoRepositoryTest {
     void Should_DeleteDelivery() {
         abstractMongoRepository.add(locker1);
 
-        abstractMongoRepository.delete(locker1.getEntityId().getUUID());
+        abstractMongoRepository.delete(locker1.getId());
 
         assertNull(getLockerFromRepo(locker1));
     }
