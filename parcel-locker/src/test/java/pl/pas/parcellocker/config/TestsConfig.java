@@ -1,9 +1,11 @@
 package pl.pas.parcellocker.config;
 
+import org.checkerframework.checker.units.qual.C;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.TestInstance;
 import pl.pas.parcellocker.repositories.ClientMongoRepository;
+import pl.pas.parcellocker.repositories.ClientRedisRepository;
 import pl.pas.parcellocker.repositories.DeliveryMongoRepository;
 import pl.pas.parcellocker.repositories.LockerMongoRepository;
 
@@ -13,12 +15,14 @@ public class TestsConfig {
     protected final ClientMongoRepository clientRepository = new ClientMongoRepository();
     protected final DeliveryMongoRepository deliveryRepository = new DeliveryMongoRepository();
     protected final LockerMongoRepository lockerRepository = new LockerMongoRepository();
+    protected final ClientRedisRepository clientRedisRepository = new ClientRedisRepository();
 
     @AfterAll
     void finisher() {
         deliveryRepository.findAll().forEach(delivery -> deliveryRepository.delete(delivery.getId()));
         clientRepository.findAll().forEach(client -> clientRepository.delete(client.getId()));
         lockerRepository.findAll().forEach(locker -> lockerRepository.delete(locker.getId()));
+        clientRedisRepository.clear();
     }
 
 }

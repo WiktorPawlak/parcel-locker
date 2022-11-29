@@ -1,10 +1,10 @@
-package pl.pas.parcellocker.managers;
+package pl.pas.parcellocker.managers.client;
 
-import jakarta.persistence.NoResultException;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import pl.pas.parcellocker.config.TestsConfig;
 import pl.pas.parcellocker.exceptions.ClientManagerException;
+import pl.pas.parcellocker.managers.client.ClientManagerImpl;
 
 import static com.mongodb.assertions.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -12,9 +12,9 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-class ClientManagerTest extends TestsConfig {
+class ClientManagerImplTest extends TestsConfig {
 
-    private static final ClientManager clientManager = new ClientManager();
+    private static final ClientManagerImpl clientManager = new ClientManagerImpl();
 
     private final String TEST_NAME = "Bartosh";
     private final String TEST_SURNAME = "Byniowski";

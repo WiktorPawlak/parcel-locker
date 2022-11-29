@@ -7,18 +7,19 @@ import redis.clients.jedis.DefaultJedisClientConfig;
 import redis.clients.jedis.HostAndPort;
 import redis.clients.jedis.JedisClientConfig;
 import redis.clients.jedis.JedisPooled;
+import redis.clients.jedis.exceptions.JedisConnectionException;
 
 import java.util.Set;
 import java.util.UUID;
 
 public abstract class AbstractRedisRepository<T extends MongoEntityModel> implements AutoCloseable {
 
-    private static JedisPooled pool;
+    protected static JedisPooled pool;
     private Jsonb jsonb = JsonbBuilder.create();
     private final Class<T> entityClass;
     private String prefix;
 
-    public void initDbConnection() {
+    private void initDbConnection() {
         JedisClientConfig clientConfig = DefaultJedisClientConfig.builder().build();
         pool = new JedisPooled(new HostAndPort("localhost", 6379), clientConfig);
     }
@@ -49,6 +50,15 @@ public abstract class AbstractRedisRepository<T extends MongoEntityModel> implem
         Set<String> keys = pool.keys(prefix + "*");
         for (String key : keys) {
             pool.del(key);
+        }
+    }
+
+    public boolean isConnected() {
+        try {
+            pool.getPool().getResource();
+            return true;
+        } catch (JedisConnectionException e) {
+            return false;
         }
     }
 
