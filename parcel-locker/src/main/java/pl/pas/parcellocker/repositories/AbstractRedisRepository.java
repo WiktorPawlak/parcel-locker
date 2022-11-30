@@ -9,6 +9,9 @@ import redis.clients.jedis.HostAndPort;
 import redis.clients.jedis.JedisClientConfig;
 import redis.clients.jedis.JedisPooled;
 import redis.clients.jedis.exceptions.JedisConnectionException;
+import redis.clients.jedis.search.IndexDefinition;
+import redis.clients.jedis.search.IndexOptions;
+import redis.clients.jedis.search.Schema;
 
 import java.util.Set;
 import java.util.UUID;
@@ -35,6 +38,21 @@ public abstract class AbstractRedisRepository<T extends MongoEntityModel> implem
                 PropertiesLoader.getProperty("redis.host"),
                 Integer.parseInt(PropertiesLoader.getProperty("redis.port"))),
             clientConfig);
+
+      Schema schema = new Schema().addTextField("$.telNumber", 1.0);
+      IndexDefinition rule = new IndexDefinition(IndexDefinition.Type.JSON).setPrefixes(prefix);
+    try{
+        pool.ftDropIndex("parcel-locker");
+    } catch (Exception e) {
+
+    }
+
+      try{
+          pool.ftCreate("parcel-locker", IndexOptions.defaultOptions().setDefinition(rule), schema);
+      } catch (Exception e) {
+
+      }
+
   }
 
   public void add(T object) {
@@ -50,6 +68,11 @@ public abstract class AbstractRedisRepository<T extends MongoEntityModel> implem
   public Set<String> findAllKeys() {
     return pool.keys(prefix + "*");
   }
+
+    public void remove(UUID id) {
+        Set<String> keys = pool.keys(prefix + id);
+        pool.del(keys.stream().findFirst().get());
+    }
 
   public void clear() {
     Set<String> keys = pool.keys(prefix + "*");

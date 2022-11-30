@@ -16,11 +16,16 @@ public class CachedClientManagerImpl implements ClientManager {
 
     @Override
     public Client getClient(String telNumber) {
-        Client client = cache.findByTelNumber(telNumber);
+        Client client = null;
+        if (cache.isConnected()) {
+            client = cache.findByTelNumber(telNumber);
+        }
 
-        if (client == null || cache.isConnected()) {
+        if (client == null) {
             client = clientManager.getClient(telNumber);
-            cache.add(client);
+            if (client != null && cache.isConnected()) {
+                cache.add(client);
+            }
         }
         return client;
     }
@@ -32,6 +37,9 @@ public class CachedClientManagerImpl implements ClientManager {
 
     @Override
     public Client unregisterClient(Client client) {
-        return clientManager.unregisterClient(client);
+        Client changedClient = clientManager.unregisterClient(client);
+        cache.remove(client.getId());
+        cache.add(client);
+        return changedClient;
     }
 }

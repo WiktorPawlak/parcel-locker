@@ -19,6 +19,20 @@ class CachedClientManagerImplTest extends TestsConfig {
     }
 
     @Test
+    void Should_UpdateCache_WhenUnregisterClient() {
+        Client client = new Client("asd-test", "asd-test", "123");
+        clientRepository.add(client);
+        clientRedisRepository.add(client);
+
+        cachedClientManager.unregisterClient(client);
+
+        Client cachedClient = cachedClientManager.getClient("123");
+        Client unregisteredClient = clientRepository.findByTelNumber(client.getTelNumber());
+
+        assertEquals(unregisteredClient, cachedClient);
+    }
+
+    @Test
     void Should_RetrieveClient_WhenDataInCache() {
         Client client = new Client("asd-test", "asd-test", "123");
         clientRedisRepository.add(client);
