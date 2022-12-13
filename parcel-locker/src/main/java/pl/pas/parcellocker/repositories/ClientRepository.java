@@ -17,6 +17,7 @@ import java.net.InetSocketAddress;
 import java.util.UUID;
 
 import static com.datastax.oss.driver.api.querybuilder.SchemaBuilder.createKeyspace;
+import static pl.pas.parcellocker.configuration.SchemaConst.PARCEL_LOCKER_NAMESPACE;
 
 public class ClientRepository implements AutoCloseable {
 
@@ -25,13 +26,13 @@ public class ClientRepository implements AutoCloseable {
             CqlSession.builder()
                 .addContactPoint(new InetSocketAddress("127.22.0.2", 9042))
                 .addContactPoint(new InetSocketAddress("127.22.0.3", 9043))
-                .withKeyspace(CqlIdentifier.fromCql("parcel_locker"))
+                .withKeyspace(CqlIdentifier.fromCql(PARCEL_LOCKER_NAMESPACE))
                 .withLocalDatacenter("dc1")
                 .withAuthCredentials("user", "password")
                 .build();
 
         CreateKeyspace keyspace =
-            createKeyspace(CqlIdentifier.fromCql("parcel_locker"))
+            createKeyspace(CqlIdentifier.fromCql(PARCEL_LOCKER_NAMESPACE))
                 .ifNotExists()
                 .withSimpleStrategy(2)
                 .withDurableWrites(true);
@@ -39,7 +40,7 @@ public class ClientRepository implements AutoCloseable {
         SimpleStatement createKeyspace = keyspace.build();
         session.execute(createKeyspace);
 
-        CreateTable table = SchemaBuilder.createTable(SchemaConst.PARCEL_LOCKER_NAMESPACE ,"clients")
+        CreateTable table = SchemaBuilder.createTable(PARCEL_LOCKER_NAMESPACE ,"clients")
             .ifNotExists()
             .withPartitionKey("entity_id", DataTypes.UUID)
             .withColumn("first_name", DataTypes.TEXT)
@@ -53,7 +54,7 @@ public class ClientRepository implements AutoCloseable {
     }
 
     public ClientDao getClientDao() {
-        ClientMapper clientMapper = new ClientMapperBuilder(initSession()).build();
+        ClientMapper clientMapper = ClientMapper.builder(initSession()).build();
         return clientMapper.clientDao();
     }
 
