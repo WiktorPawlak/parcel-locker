@@ -9,15 +9,14 @@ services:
             - "7000:7000"
             - "9042:9042"
         environment:
-            - CASSANDRA_LISTEN_ADDRESS=cassandra1
-            - CASSANDRA_BROADCAST_ADDRESS=cassandra1
+            - CASSANDRA_LISTEN_ADDRESS=172.22.0.2
             - CASSANDRA_SEEDS=cassandra1,cassandra2
             - CASSANDRA_CLUSTER_NAME=nbd-cassandra-cluster
             - CASSANDRA_DATACENTER=dc1
             - CASSANDRA_PASSWORD_SEEDER=yes
             - CASSANDRA_ENDPOINT_SNITCH=GossipingPropertyFileSnitch
-            - CASSANDRA_USER=admin
-            - CASANDARA_PASSWORD=admin
+            - CASSANDRA_USER=user
+            - CASSANDRA_PASSWORD=password
             - MAX_HEAP_SIZE=2G
             - HEAP_NEWSIZE=200M
     cassandra2:
@@ -29,15 +28,14 @@ services:
             - "7001:7001"
             - "9043:9043"
         environment:
-            - CASSANDRA_LISTEN_ADDRESS=cassandra2
-            - CASSANDRA_BROADCAST_ADDRESS=cassandra2
+            - CASSANDRA_LISTEN_ADDRESS=172.22.0.3
             - CASSANDRA_SEEDS=cassandra1,cassandra2
             - CASSANDRA_CLUSTER_NAME=nbd-cassandra-cluster
             - CASSANDRA_DATACENTER=dc1
-            - CASSANDRA_PASSWORD_SEEDER=yes
+            - CASSANDRA_PASSWORD_SEEDER=no
             - CASSANDRA_ENDPOINT_SNITCH=GossipingPropertyFileSnitch
-            - CASSANDRA_USER=admin
-            - CASANDARA_PASSWORD=admin
+            - CASSANDRA_USER=user
+            - CASSANDRA_PASSWORD=password
             - MAX_HEAP_SIZE=2G
             - HEAP_NEWSIZE=200M
 

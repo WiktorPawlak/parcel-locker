@@ -12,14 +12,14 @@ class ClientSessionTest {
     @Test
     void test() {
         try (CqlSession session = CqlSession.builder()
-            .addContactPoint(new InetSocketAddress("1.2.3.4", 9042))
-            .addContactPoint(new InetSocketAddress("5.6.7.8", 9043))
+            .addContactPoint(new InetSocketAddress("127.22.0.2", 9042))
+            .addContactPoint(new InetSocketAddress("127.22.0.3", 9043))
             .withLocalDatacenter("dc1")
-            .withAuthCredentials("admin", "admin")
+            .withAuthCredentials("user", "password")
             .build()) {                                  // (1)
             ResultSet rs = session.execute("select release_version from system.local");              // (2)
             Row row = rs.one();
-            System.out.println(row.getString("release_version"));                                    // (3)
+            System.out.println("Dupa" + row.getString("release_version"));                                    // (3)
         }
     }
 }
