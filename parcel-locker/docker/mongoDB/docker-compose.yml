@@ -1,38 +1,46 @@
 version: '3.8'
 services:
-    mongo:
-        image: mongo:6.0.2
-        container_name: mongodb
-        hostname: mongodb
+    cassandra1:
+        image: docker.io/bitnami/cassandra:latest
+        hostname: cassandara1
         networks:
-            - mongonet
+            - cassandranet
         ports:
-            - "27017:27017"
+            - "7000:7000"
+            - "9042:9042"
         environment:
-            - MONGO_INITDB_ROOT_USERNAME=admin
-            - MONGO_INITDB_ROOT_PASSWORD=admin
-        healthcheck:
-            test: [ "CMD","mongosh","--eval","db.adminCommand('ping')" ]
-            interval: 10s
-            timeout: 2s
-            retries: 5
-
-    mongo-express:
-        image: mongo-express:6.0.2
-        container_name: mongo-express
-        restart: unless-stopped
+            - CASSANDRA_LISTEN_ADDRESS=cassandra1
+            - CASSANDRA_BROADCAST_ADDRESS=cassandra1
+            - CASSANDRA_SEEDS=cassandra1,cassandra2
+            - CASSANDRA_CLUSTER_NAME=nbd-cassandra-cluster
+            - CASSANDRA_DATACENTER=dc1
+            - CASSANDRA_PASSWORD_SEEDER=yes
+            - CASSANDRA_ENDPOINT_SNITCH=GossipingPropertyFileSnitch
+            - CASSANDRA_USER=admin
+            - CASANDARA_PASSWORD=admin
+            - MAX_HEAP_SIZE=2G
+            - HEAP_NEWSIZE=200M
+    cassandra2:
+        image: docker.io/bitnami/cassandra:latest
+        hostname: cassandara2
         networks:
-            - mongonet
-        environment:
-            ME_CONFIG_MONGODB_ADMINUSERNAME: admin
-            ME_CONFIG_MONGODB_ADMINPASSWORD: admin
-            ME_CONFIG_MONGODB_SERVER: mongodb
-            ME_CONFIG_MONGODB_PORT: "27017"
+            - cassandranet
         ports:
-            - "8081:8081"
-        depends_on:
-            - mongo
+            - "7001:7001"
+            - "9043:9043"
+        environment:
+            - CASSANDRA_LISTEN_ADDRESS=cassandra2
+            - CASSANDRA_BROADCAST_ADDRESS=cassandra2
+            - CASSANDRA_SEEDS=cassandra1,cassandra2
+            - CASSANDRA_CLUSTER_NAME=nbd-cassandra-cluster
+            - CASSANDRA_DATACENTER=dc2
+            - CASSANDRA_PASSWORD_SEEDER=yes
+            - CASSANDRA_ENDPOINT_SNITCH=GossipingPropertyFileSnitch
+            - CASSANDRA_USER=admin
+            - CASANDARA_PASSWORD=admin
+            - MAX_HEAP_SIZE=2G
+            - HEAP_NEWSIZE=200M
 
 
 networks:
-    mongonet: {}
+    cassandranet: {}
