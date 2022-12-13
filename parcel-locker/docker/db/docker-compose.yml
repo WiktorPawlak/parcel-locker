@@ -33,7 +33,7 @@ services:
             - CASSANDRA_BROADCAST_ADDRESS=cassandra2
             - CASSANDRA_SEEDS=cassandra1,cassandra2
             - CASSANDRA_CLUSTER_NAME=nbd-cassandra-cluster
-            - CASSANDRA_DATACENTER=dc2
+            - CASSANDRA_DATACENTER=dc1
             - CASSANDRA_PASSWORD_SEEDER=yes
             - CASSANDRA_ENDPOINT_SNITCH=GossipingPropertyFileSnitch
             - CASSANDRA_USER=admin
