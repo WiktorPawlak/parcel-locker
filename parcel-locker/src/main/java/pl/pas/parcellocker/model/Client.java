@@ -1,46 +1,36 @@
 package pl.pas.parcellocker.model;
 
-import lombok.EqualsAndHashCode;
+import com.datastax.oss.driver.api.mapper.annotations.ClusteringColumn;
+import com.datastax.oss.driver.api.mapper.annotations.CqlName;
+import com.datastax.oss.driver.api.mapper.annotations.Entity;
+import com.datastax.oss.driver.api.mapper.annotations.PartitionKey;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.Setter;
-import org.bson.codecs.pojo.annotations.BsonCreator;
-import org.bson.codecs.pojo.annotations.BsonProperty;
+import lombok.NoArgsConstructor;
+import pl.pas.parcellocker.configuration.SchemaConst;
 import pl.pas.parcellocker.exceptions.ClientException;
 
+import java.util.UUID;
 
-@EqualsAndHashCode
+@Entity(defaultKeyspace = SchemaConst.PARCEL_LOCKER_NAMESPACE)
+@CqlName("clients")
 @Getter
-@Setter
-public class Client extends MongoEntityModel {
+@NoArgsConstructor
+public class Client extends AbstractEntity {
 
-    @BsonProperty("firstname")
     private String firstName;
-    @BsonProperty("lastname")
     private String lastName;
-    @BsonProperty("telnumber")
+
+    @PartitionKey
+    @CqlName("telNumber")
     private String telNumber;
-    @BsonProperty("active")
+
+    @ClusteringColumn
+    @CqlName("active")
     private boolean active;
 
-    @BsonCreator
-    public Client(@BsonProperty("_id") UniqueId id,
-                  @BsonProperty("firstname") String firstName,
-                  @BsonProperty("lastname") String lastName,
-                  @BsonProperty("telnumber") String telNumber,
-                  @BsonProperty("active") boolean isActive) {
-        super(id);
-        validateName(firstName);
-        validateName(lastName);
-        validateTelNumber(telNumber);
-
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.telNumber = telNumber;
-        this.active = isActive;
-    }
-
     public Client(String firstName, String lastName, String telNumber) {
-        super(new UniqueId());
+        super(UUID.randomUUID());
         validateName(firstName);
         validateName(lastName);
         validateTelNumber(telNumber);
@@ -52,6 +42,10 @@ public class Client extends MongoEntityModel {
         active = true;
     }
 
+    public void setActive(boolean active) {
+        this.active = active;
+    }
+
     private void validateName(String name) {
         if (name.isEmpty())
             throw new ClientException("Empty lastName variable!");
@@ -60,26 +54,6 @@ public class Client extends MongoEntityModel {
     private void validateTelNumber(String telNumber) {
         if (telNumber.isEmpty())
             throw new ClientException("Empty lastName variable!");
-    }
-
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public String getTelNumber() {
-        return telNumber;
-    }
-
-    public boolean isActive() {
-        return active;
-    }
-
-    public void setActive(boolean active) {
-        this.active = active;
     }
 
     @Override

@@ -12,19 +12,13 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <maven.compiler.target>1.8</maven.compiler.target>
-        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>11</maven.compiler.target>
+        <maven.compiler.source>11</maven.compiler.source>
 
         <jakarta.jakartaee-api.version>9.1.0</jakarta.jakartaee-api.version>
         <jakarta.persistence-api.version>3.1.0</jakarta.persistence-api.version>
 
         <junit.version>5.9.0</junit.version>
-
-        <postgres.version>42.5.0</postgres.version>
-        <hibernate.version>6.1.4.Final</hibernate.version>
-        <hibernate-core-jakarta.version>5.6.12.Final</hibernate-core-jakarta.version>
-        <hibernate-jpamodelgen-jakarta.version>5.6.12.Final</hibernate-jpamodelgen-jakarta.version>
-        <testcontainers.version>1.17.5</testcontainers.version>
 
         <lombok.version>1.18.24</lombok.version>
         <apache-commons.version>3.12.0</apache-commons.version>
@@ -66,33 +60,6 @@
         </dependency>
 
         <dependency>
-            <groupId>org.hibernate</groupId>
-            <artifactId>hibernate-core</artifactId>
-            <version>${hibernate.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.hibernate</groupId>
-            <artifactId>hibernate-core-jakarta</artifactId>
-            <version>${hibernate-core-jakarta.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.hibernate</groupId>
-            <artifactId>hibernate-jpamodelgen-jakarta</artifactId>
-            <version>${hibernate-jpamodelgen-jakarta.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.postgresql</groupId>
-            <artifactId>postgresql</artifactId>
-            <version>${postgres.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.testcontainers</groupId>
-            <artifactId>postgresql</artifactId>
-            <version>${testcontainers.version}</version>
-            <scope>test</scope>
-        </dependency>
-
-        <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
             <version>${lombok.version}</version>
@@ -120,23 +87,36 @@
             <version>${glassfish.jaxb-runtime.version}</version>
         </dependency>
 
-<!--        mongoDb-->
         <dependency>
-            <groupId>org.mongodb</groupId>
-            <artifactId>mongodb-driver-sync</artifactId>
-            <version>4.7.2</version>
+            <groupId>com.datastax.oss</groupId>
+            <artifactId>java-driver-core</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.mongodb</groupId>
-            <artifactId>mongodb-crypt</artifactId>
-            <version>1.5.2</version>
+            <groupId>com.datastax.oss</groupId>
+            <artifactId>java-driver-query-builder</artifactId>
         </dependency>
         <dependency>
-            <groupId>ch.qos.logback</groupId>
-            <artifactId>logback-classic</artifactId>
-            <version>1.4.4</version>
+            <groupId>com.datastax.oss</groupId>
+            <artifactId>java-driver-mapper-runtime</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.datastax.oss</groupId>
+            <artifactId>java-driver-mapper-processor</artifactId>
+            <scope>provided</scope>
         </dependency>
     </dependencies>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>com.datastax.oss</groupId>
+                <artifactId>java-driver-bom</artifactId>
+                <version>4.15.0</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
 
     <build>
         <plugins>

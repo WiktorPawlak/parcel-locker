@@ -3,53 +3,21 @@ package pl.pas.parcellocker.model;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
-import org.bson.codecs.pojo.annotations.BsonCreator;
-import org.bson.codecs.pojo.annotations.BsonDiscriminator;
-import org.bson.codecs.pojo.annotations.BsonProperty;
 
 import java.math.BigDecimal;
+import java.util.UUID;
 
 @Getter
 @Setter
 @EqualsAndHashCode
-@BsonDiscriminator
-public class Delivery extends MongoEntityModel {
+public class Delivery extends AbstractEntity {
 
-    @BsonProperty("shipper")
     private Client shipper;
-
-    @BsonProperty("receiver")
     private Client receiver;
-
-    @BsonProperty("status")
     private DeliveryStatus status;
-
-    @BsonProperty(value = "pack", useDiscriminator = true)
     private Package pack;
-
-    @BsonProperty("locker")
     private Locker locker;
-
-    @BsonProperty("archived")
     private boolean isArchived;
-
-    @BsonCreator
-    public Delivery(@BsonProperty("_id") UniqueId id,
-                    @BsonProperty("shipper") Client shipper,
-                    @BsonProperty("receiver") Client receiver,
-                    @BsonProperty("status") DeliveryStatus status,
-                    @BsonProperty("pack") Package pack,
-                    @BsonProperty("locker") Locker locker,
-                    @BsonProperty("archived") boolean isArchived
-    ) {
-        super(id);
-        this.shipper = shipper;
-        this.receiver = receiver;
-        this.status = status;
-        this.pack = pack;
-        this.locker = locker;
-        this.isArchived = isArchived;
-    }
 
     public Delivery(BigDecimal basePrice,
                     double width,
@@ -80,7 +48,7 @@ public class Delivery extends MongoEntityModel {
                      Client receiver,
                      Locker locker
     ) {
-        super(new UniqueId());
+        super(UUID.randomUUID());
         this.shipper = shipper;
         this.receiver = receiver;
         this.locker = locker;

@@ -3,40 +3,21 @@ package pl.pas.parcellocker.model;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
-import org.bson.codecs.pojo.annotations.BsonCreator;
-import org.bson.codecs.pojo.annotations.BsonProperty;
 
 import java.util.UUID;
 
 @Getter
 @Setter
 @EqualsAndHashCode
-public class DepositBox extends MongoEntityModel {
+public class DepositBox extends AbstractEntity {
 
-    @BsonProperty("deliveryId")
-    private UniqueId deliveryId;
-    @BsonProperty("isEmpty")
+    private UUID deliveryId;
     private Boolean isEmpty;
-    @BsonProperty("accessCode")
     private String accessCode;
-    @BsonProperty("telNumber")
     private String telNumber;
 
-    @BsonCreator
-    public DepositBox(@BsonProperty("_id") UniqueId id,
-                      @BsonProperty("delivery") UniqueId deliveryId,
-                      @BsonProperty("isEmpty") Boolean isEmpty,
-                      @BsonProperty("accessCode") String accessCode,
-                      @BsonProperty("telNumber") String telNumber) {
-        super(id);
-        this.isEmpty = isEmpty;
-        this.telNumber = telNumber;
-        this.accessCode = accessCode;
-        this.deliveryId = deliveryId;
-    }
-
     public DepositBox() {
-        super(new UniqueId());
+        super(UUID.randomUUID());
         isEmpty = true;
         telNumber = "";
         accessCode = "";
