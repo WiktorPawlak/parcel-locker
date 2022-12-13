@@ -2,7 +2,7 @@
 //
 //import pl.pas.parcellocker.exceptions.ClientManagerException;
 //import pl.pas.parcellocker.model.Client;
-//import pl.pas.parcellocker.repositories.ClientDao;
+//import pl.pas.parcellocker.repositories.dao.ClientDao;
 //
 //import java.util.Arrays;
 //
