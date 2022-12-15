@@ -3,7 +3,6 @@ package pl.pas.parcellocker.model;
 import com.datastax.oss.driver.api.mapper.annotations.CqlName;
 import com.datastax.oss.driver.api.mapper.annotations.Entity;
 import com.datastax.oss.driver.api.mapper.annotations.PartitionKey;
-import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -23,10 +22,6 @@ public class Client {
 
     @PartitionKey
     private UUID entityId;
-
-    public UUID getEntityId() {
-        return entityId;
-    }
     private String firstName;
     private String lastName;
     private String telNumber;
