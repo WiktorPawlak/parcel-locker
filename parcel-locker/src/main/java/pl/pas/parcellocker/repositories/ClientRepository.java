@@ -7,9 +7,11 @@ import com.datastax.oss.driver.api.core.type.DataTypes;
 import com.datastax.oss.driver.api.querybuilder.SchemaBuilder;
 import com.datastax.oss.driver.api.querybuilder.schema.CreateKeyspace;
 import com.datastax.oss.driver.api.querybuilder.schema.CreateTable;
+import pl.pas.parcellocker.configuration.SchemaConst;
 import pl.pas.parcellocker.model.Client;
 import pl.pas.parcellocker.repositories.dao.ClientDao;
 import pl.pas.parcellocker.repositories.mapper.ClientMapper;
+import pl.pas.parcellocker.repositories.mapper.ClientMapperBuilder;
 
 import java.net.InetSocketAddress;
 import java.util.UUID;
@@ -51,21 +53,13 @@ public class ClientRepository implements AutoCloseable {
         return session;
     }
 
-    private ClientDao getClientDao() {
+    public ClientDao getClientDao() {
         ClientMapper clientMapper = ClientMapper.builder(initSession()).build();
         return clientMapper.clientDao();
     }
 
     public void save(Client client) {
         getClientDao().create(client);
-    }
-
-    public void update(Client client) {
-        getClientDao().update(client, client.getEntityId());
-    }
-
-    public void delete(Client client) {
-        getClientDao().delete(client);
     }
 
     public Client findById(UUID id) {
