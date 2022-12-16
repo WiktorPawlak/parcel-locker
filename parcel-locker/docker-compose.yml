@@ -1,13 +1,41 @@
+version: '2'
 services:
-    postgres:
-        image: postgres:15.0-alpine
-        environment:
-            - POSTGRES_DB
-            - POSTGRES_USER
-            - POSTGRES_PASSWORD
+    cassandra1:
+        image: docker.io/bitnami/cassandra:4.0
+        hostname: cassandara1
+        networks:
+            - cassandranet
         ports:
-            - "5432:5432"
-        volumes:
-            - /var/lib/postgresql/data
-volumes:
-    postgres:
+            - "7000:7000"
+            - "9042:9042"
+        environment:
+            - CASSANDRA_SEEDS=cassandra1,cassandra2
+            - CASSANDRA_CLUSTER_NAME=nbd-cassandra-cluster
+            - CASSANDRA_DATACENTER=dc1
+            - CASSANDRA_PASSWORD_SEEDER=yes
+            - CASSANDRA_ENDPOINT_SNITCH=GossipingPropertyFileSnitch
+            - CASSANDRA_USER=user
+            - CASSANDRA_PASSWORD=password
+            - MAX_HEAP_SIZE=250M
+            - HEAP_NEWSIZE=50M
+    cassandra2:
+        image: docker.io/bitnami/cassandra:4.0
+        hostname: cassandara2
+        networks:
+            - cassandranet
+        ports:
+            - "7001:7000"
+            - "9043:9042"
+        environment:
+            - CASSANDRA_SEEDS=cassandra1,cassandra2
+            - CASSANDRA_CLUSTER_NAME=nbd-cassandra-cluster
+            - CASSANDRA_DATACENTER=dc1
+            - CASSANDRA_PASSWORD_SEEDER=no
+            - CASSANDRA_ENDPOINT_SNITCH=GossipingPropertyFileSnitch
+            - CASSANDRA_USER=user
+            - CASSANDRA_PASSWORD=password
+            - MAX_HEAP_SIZE=250M
+            - HEAP_NEWSIZE=50M
+
+networks:
+    cassandranet: {}

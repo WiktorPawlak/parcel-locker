@@ -19,11 +19,24 @@ import static pl.pas.parcellocker.configuration.SchemaConst.PARCEL_LOCKER_NAMESP
 
 public class ClientRepository implements AutoCloseable {
 
+    private final CqlSession session;
+    private final ClientDao clientDao;
+
+    public ClientRepository() {
+        this.session = initSession();
+        ClientMapper clientMapper = initClientMapper(session);
+        this.clientDao = clientMapper.clientDao();
+    }
+
+    private ClientMapper initClientMapper(CqlSession session) {
+        return ClientMapper.builder(session).build();
+    }
+
     private CqlSession initSession() {
         CqlSession session =
             CqlSession.builder()
-                .addContactPoint(new InetSocketAddress("127.22.0.2", 9042))
-                .addContactPoint(new InetSocketAddress("127.22.0.3", 9043))
+                .addContactPoint(new InetSocketAddress("127.20.0.2", 9042))
+                .addContactPoint(new InetSocketAddress("127.20.0.3", 9043))
                 .withKeyspace(CqlIdentifier.fromCql(PARCEL_LOCKER_NAMESPACE))
                 .withLocalDatacenter("dc1")
                 .withAuthCredentials("user", "password")
@@ -51,29 +64,24 @@ public class ClientRepository implements AutoCloseable {
         return session;
     }
 
-    private ClientDao getClientDao() {
-        ClientMapper clientMapper = ClientMapper.builder(initSession()).build();
-        return clientMapper.clientDao();
-    }
-
     public void save(Client client) {
-        getClientDao().create(client);
+        clientDao.create(client);
     }
 
     public void update(Client client) {
-        getClientDao().update(client, client.getEntityId());
+        clientDao.update(client, client.getEntityId());
     }
 
     public void delete(Client client) {
-        getClientDao().delete(client);
+        clientDao.delete(client);
     }
 
     public Client findById(UUID id) {
-       return  getClientDao().findById(id);
+       return clientDao.findById(id);
     }
 
     @Override
-    public void close() throws Exception {
-
+    public void close() {
+        session.close();
     }
 }
