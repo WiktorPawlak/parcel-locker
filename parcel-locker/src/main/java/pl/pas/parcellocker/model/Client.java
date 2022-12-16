@@ -1,8 +1,10 @@
 package pl.pas.parcellocker.model;
 
+import com.datastax.oss.driver.api.mapper.annotations.ClusteringColumn;
 import com.datastax.oss.driver.api.mapper.annotations.CqlName;
 import com.datastax.oss.driver.api.mapper.annotations.Entity;
 import com.datastax.oss.driver.api.mapper.annotations.PartitionKey;
+import lombok.AccessLevel;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -25,6 +27,7 @@ public class Client {
     private String firstName;
     private String lastName;
     private String telNumber;
+    @ClusteringColumn
     private boolean active;
 
     public Client(String firstName, String lastName, String telNumber) {

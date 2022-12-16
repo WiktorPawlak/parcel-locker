@@ -7,6 +7,7 @@ import pl.pas.parcellocker.model.Client;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class ClientRepositoryTest {
     ClientRepository clientRepository = new ClientRepository();
@@ -42,13 +43,13 @@ class ClientRepositoryTest {
         assertNull(getClientFromRepo(client1));
     }
 
-//    @Test
-//    void shouldReturnAllClients() {
-//        clientRepository.save(client1);
-//        clientRepository.save(new Client("test", "test", "test"));
-//
-//        assertTrue(abstractMongoRepository.findAll().size() >= 2);
-//    }
+    @Test
+    void shouldReturnAllClients() {
+        clientRepository.save(client1);
+        clientRepository.save(new Client("test", "test", "test"));
+
+        assertTrue(clientRepository.findAll().getAvailableWithoutFetching() >= 2);
+    }
 
     private Client getClientFromRepo(Client client) {
         return clientRepository.findById(client.getEntityId());

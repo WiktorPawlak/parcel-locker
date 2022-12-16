@@ -2,11 +2,13 @@ package pl.pas.parcellocker.repositories;
 
 import com.datastax.oss.driver.api.core.CqlIdentifier;
 import com.datastax.oss.driver.api.core.CqlSession;
+import com.datastax.oss.driver.api.core.PagingIterable;
 import com.datastax.oss.driver.api.core.cql.SimpleStatement;
 import com.datastax.oss.driver.api.core.type.DataTypes;
 import com.datastax.oss.driver.api.querybuilder.SchemaBuilder;
 import com.datastax.oss.driver.api.querybuilder.schema.CreateKeyspace;
 import com.datastax.oss.driver.api.querybuilder.schema.CreateTable;
+import pl.pas.parcellocker.configuration.SchemaConst;
 import pl.pas.parcellocker.model.Client;
 import pl.pas.parcellocker.repositories.dao.ClientDao;
 import pl.pas.parcellocker.repositories.mapper.ClientMapper;
@@ -29,15 +31,16 @@ public class ClientRepository implements AutoCloseable {
     }
 
     private ClientMapper initClientMapper(CqlSession session) {
-        return ClientMapper.builder(session).build();
+        return ClientMapper.builder(session)
+            .withDefaultKeyspace(SchemaConst.PARCEL_LOCKER_NAMESPACE)
+            .build();
     }
 
     private CqlSession initSession() {
         CqlSession session =
             CqlSession.builder()
-                .addContactPoint(new InetSocketAddress("127.20.0.2", 9042))
-                .addContactPoint(new InetSocketAddress("127.20.0.3", 9043))
-                .withKeyspace(CqlIdentifier.fromCql(PARCEL_LOCKER_NAMESPACE))
+                .addContactPoint(new InetSocketAddress("127.22.0.2", 9042))
+                .addContactPoint(new InetSocketAddress("127.22.0.3", 9043))
                 .withLocalDatacenter("dc1")
                 .withAuthCredentials("user", "password")
                 .build();
@@ -74,6 +77,10 @@ public class ClientRepository implements AutoCloseable {
 
     public void delete(Client client) {
         clientDao.delete(client);
+    }
+
+    public PagingIterable<Client> findAll() {
+        return clientDao.all();
     }
 
     public Client findById(UUID id) {
