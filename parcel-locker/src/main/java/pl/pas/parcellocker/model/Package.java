@@ -1,7 +1,9 @@
 package pl.pas.parcellocker.model;
 
+import com.datastax.oss.driver.api.mapper.annotations.PartitionKey;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.math.BigDecimal;
@@ -10,17 +12,21 @@ import java.util.UUID;
 @Getter
 @Setter
 @EqualsAndHashCode
-public abstract class Package extends AbstractEntity {
+@NoArgsConstructor
+public abstract class Package {
+
+    @PartitionKey
+    private UUID entityId;
 
     public BigDecimal basePrice;
 
     public Package(UUID id, BigDecimal basePrice) {
-        super(id);
+        this.entityId = id;
         this.basePrice = basePrice;
     }
 
     public Package(BigDecimal basePrice) {
-        super(UUID.randomUUID());
+        this.entityId = UUID.randomUUID();
         this.basePrice = basePrice;
     }
 

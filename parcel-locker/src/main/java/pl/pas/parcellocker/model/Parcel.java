@@ -1,8 +1,11 @@
 package pl.pas.parcellocker.model;
 
+import com.datastax.oss.driver.api.mapper.annotations.Entity;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
+import pl.pas.parcellocker.configuration.SchemaConst;
 import pl.pas.parcellocker.exceptions.ParcelException;
 
 import java.math.BigDecimal;
@@ -22,6 +25,8 @@ import static pl.pas.parcellocker.configuration.ParcelConfig.SMALL_PACKAGE_MULTI
 @Getter
 @Setter
 @EqualsAndHashCode
+@NoArgsConstructor
+@Entity(defaultKeyspace = SchemaConst.PARCEL_LOCKER_NAMESPACE)
 public class Parcel extends Package {
 
     private double width;
