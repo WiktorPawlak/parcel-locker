@@ -2,12 +2,17 @@ package pl.pas.parcellocker.repositories;
 
 import com.datastax.oss.driver.api.core.CqlSession;
 import com.datastax.oss.driver.api.core.PagingIterable;
+import com.datastax.oss.driver.api.core.cql.SimpleStatement;
+import com.datastax.oss.driver.api.querybuilder.select.Select;
 import pl.pas.parcellocker.configuration.SchemaConst;
 import pl.pas.parcellocker.model.Client;
 import pl.pas.parcellocker.repositories.dao.ClientDao;
 import pl.pas.parcellocker.repositories.mapper.ClientMapper;
 
 import java.util.UUID;
+
+import static com.datastax.oss.driver.api.querybuilder.QueryBuilder.bindMarker;
+import static com.datastax.oss.driver.api.querybuilder.QueryBuilder.selectFrom;
 
 public class ClientRepository extends SessionConnector {
 
@@ -42,5 +47,13 @@ public class ClientRepository extends SessionConnector {
 
     public Client findById(UUID id) {
        return clientDao.findById(id);
+    }
+
+    public SimpleStatement findByTelNumber(String telNumber) {
+        return selectFrom("clients")
+            .all()
+            .whereColumn("telNumber")
+            .isEqualTo(bindMarker())
+            .build();
     }
 }

@@ -1,22 +1,39 @@
 package pl.pas.parcellocker.model;
 
+import com.datastax.oss.driver.api.mapper.annotations.ClusteringColumn;
+import com.datastax.oss.driver.api.mapper.annotations.CqlName;
+import com.datastax.oss.driver.api.mapper.annotations.Entity;
+import com.datastax.oss.driver.api.mapper.annotations.PartitionKey;
+import jakarta.persistence.Table;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
+import pl.pas.parcellocker.configuration.SchemaConst;
 
 import java.math.BigDecimal;
 import java.util.UUID;
 
+@Entity(defaultKeyspace = SchemaConst.PARCEL_LOCKER_NAMESPACE)
+@CqlName(value = "delivery_by_id")
 @Getter
 @Setter
 @EqualsAndHashCode
-public class Delivery extends AbstractEntity {
+@NoArgsConstructor
+public class Delivery {
 
-    private Client shipper;
-    private Client receiver;
+    @PartitionKey
+    private UUID entityId;
+    @CqlName("shipper_id")
+    private UUID shipper;
+    @CqlName("receiver_id")
+    private UUID receiver;
     private DeliveryStatus status;
-    private Package pack;
-    private Locker locker;
+    @CqlName("package_id")
+    private UUID pack;
+    @CqlName("locker_id")
+    private UUID locker;
+    @ClusteringColumn
     private boolean isArchived;
 
     public Delivery(BigDecimal basePrice,
@@ -30,7 +47,9 @@ public class Delivery extends AbstractEntity {
                     Locker locker) {
         this(shipper, receiver, locker);
 
-        this.pack = new Parcel(basePrice, width, length, height, weight, isFragile);
+        //this.pack = new Parcel(basePrice, width, length, height, weight, isFragile);
+
+        this.pack = UUID.randomUUID();
     }
 
     public Delivery(BigDecimal basePrice,
@@ -41,50 +60,51 @@ public class Delivery extends AbstractEntity {
     ) {
         this(shipper, receiver, locker);
 
-        this.pack = new List(basePrice, isPriority);
+        //this.pack = new List(basePrice, isPriority);
+        this.pack = UUID.randomUUID();
     }
 
     private Delivery(Client shipper,
                      Client receiver,
                      Locker locker
     ) {
-        super(UUID.randomUUID());
-        this.shipper = shipper;
-        this.receiver = receiver;
-        this.locker = locker;
+        this.entityId = UUID.randomUUID();
+        this.shipper = shipper.getEntityId();
+        this.receiver = receiver.getEntityId();
+        this.locker = locker.getEntityId();
         this.status = DeliveryStatus.READY_TO_SHIP;
     }
 
     public BigDecimal getCost() {
         return BigDecimal.TEN;
     }
-
-    public Client getShipper() {
-        return shipper;
-    }
-
-    public Client getReceiver() {
-        return receiver;
-    }
-
-    public DeliveryStatus getStatus() {
-        return status;
-    }
-
-    public Locker getLocker() {
-        return locker;
-    }
-
-    public void setStatus(DeliveryStatus status) {
-        this.status = status;
-    }
-
-    public boolean isArchived() {
-        return isArchived;
-    }
-
-    public void setArchived(boolean archived) {
-        isArchived = archived;
-    }
+//
+//    public Client getShipper() {
+//        return shipper;
+//    }
+//
+//    public Client getReceiver() {
+//        return receiver;
+//    }
+//
+//    public DeliveryStatus getStatus() {
+//        return status;
+//    }
+//
+//    public Locker getLocker() {
+//        return locker;
+//    }
+//
+//    public void setStatus(DeliveryStatus status) {
+//        this.status = status;
+//    }
+//
+//    public boolean isArchived() {
+//        return isArchived;
+//    }
+//
+//    public void setArchived(boolean archived) {
+//        isArchived = archived;
+//    }
 
 }

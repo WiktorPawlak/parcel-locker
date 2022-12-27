@@ -1,6 +1,7 @@
 package pl.pas.parcellocker.repositories.dao;
 
 import com.datastax.oss.driver.api.core.PagingIterable;
+import com.datastax.oss.driver.api.mapper.annotations.CqlName;
 import com.datastax.oss.driver.api.mapper.annotations.Dao;
 import com.datastax.oss.driver.api.mapper.annotations.Delete;
 import com.datastax.oss.driver.api.mapper.annotations.Insert;
@@ -24,7 +25,7 @@ public interface ClientDao {
     Client findById(UUID id);
 
     @Update
-    void update(Client client, UUID entity_id);
+    void update(Client client, @CqlName("entity_id") UUID entity_id);
 
     @Delete
     void delete(Client client);
