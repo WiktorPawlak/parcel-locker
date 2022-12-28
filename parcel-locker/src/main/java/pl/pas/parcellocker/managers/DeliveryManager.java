@@ -4,6 +4,7 @@
 //import pl.pas.parcellocker.model.Client;
 //import pl.pas.parcellocker.model.Delivery;
 //import pl.pas.parcellocker.model.Locker;
+//import pl.pas.parcellocker.repositories.DeliveryRepository;
 //
 //import java.math.BigDecimal;
 //import java.util.List;
@@ -14,10 +15,10 @@
 //
 //public class DeliveryManager {
 //
-//    private final DeliveryMongoRepository deliveries;
+//    private final DeliveryRepository deliveries;
 //
 //    public DeliveryManager() {
-//        deliveries = new DeliveryMongoRepository();
+//        deliveries = new DeliveryRepository();
 //    }
 //
 //    public Delivery makeParcelDelivery(
@@ -32,7 +33,7 @@
 //        Locker locker
 //    ) {
 //        Delivery delivery = new Delivery(basePrice, width, height, length, weight, isFragile, shipper, receiver, locker);
-//        deliveries.add(delivery);
+//        deliveries.save(delivery);
 //        return delivery;
 //    }
 //
@@ -44,7 +45,7 @@
 //        Locker locker
 //    ) {
 //        Delivery delivery = new Delivery(basePrice, isPriority, shipper, receiver, locker);
-//        deliveries.add(delivery);
+//        deliveries.save(delivery);
 //        return delivery;
 //    }
 //
@@ -80,10 +81,10 @@
 //    }
 //
 //    public List<Delivery> getAllClientDeliveries(Client client) {
-//        return deliveries.findByClient(client);
+//        return deliveries.findByClientId(client.getEntityId());
 //    }
 //
 //    public List<Delivery> getAllReceivedClientDeliveries(Client client) {
-//        return deliveries.findArchivedByClient(client);
+//        return deliveries.findArchivedByClientId(client.getEntityId());
 //    }
 //}

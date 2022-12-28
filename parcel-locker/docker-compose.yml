@@ -1,4 +1,4 @@
-version: '2'
+version: '3.7'
 services:
     cassandra1:
         image: docker.io/bitnami/cassandra:4.0
@@ -18,6 +18,8 @@ services:
             - CASSANDRA_PASSWORD=password
             - MAX_HEAP_SIZE=250M
             - HEAP_NEWSIZE=50M
+        volumes:
+            - ./src/main/resources/cassandra1.yaml:/bitnami/cassandra/conf/cassandra.yaml:ro
     cassandra2:
         image: docker.io/bitnami/cassandra:4.0
         hostname: cassandara2
@@ -36,6 +38,7 @@ services:
             - CASSANDRA_PASSWORD=password
             - MAX_HEAP_SIZE=250M
             - HEAP_NEWSIZE=50M
-
+        volumes:
+            - ./src/main/resources/cassandra2.yaml:/bitnami/cassandra/conf/cassandra.yaml:ro
 networks:
     cassandranet: {}

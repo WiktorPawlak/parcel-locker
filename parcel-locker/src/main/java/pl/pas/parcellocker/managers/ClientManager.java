@@ -2,16 +2,17 @@
 //
 //import pl.pas.parcellocker.exceptions.ClientManagerException;
 //import pl.pas.parcellocker.model.Client;
+//import pl.pas.parcellocker.repositories.ClientRepository;
 //import pl.pas.parcellocker.repositories.dao.ClientDao;
 //
 //import java.util.Arrays;
 //
 //public class ClientManager {
 //
-//    private final ClientDao clientRepository;
+//    private final ClientRepository clientRepository;
 //
 //    public ClientManager() {
-//        clientRepository = new ClientDao();
+//        clientRepository = new ClientRepository();
 //    }
 //
 //    public Client getClient(String telNumber) {
@@ -29,7 +30,7 @@
 //        }
 //
 //        Client newClient = new Client(firstName, lastName, telNumber);
-//        clientRepository.add(newClient);
+//        clientRepository.save(newClient);
 //        return newClient;
 //    }
 //

@@ -5,10 +5,12 @@ import com.datastax.oss.driver.api.mapper.annotations.CqlName;
 import com.datastax.oss.driver.api.mapper.annotations.Dao;
 import com.datastax.oss.driver.api.mapper.annotations.Delete;
 import com.datastax.oss.driver.api.mapper.annotations.Insert;
+import com.datastax.oss.driver.api.mapper.annotations.Query;
 import com.datastax.oss.driver.api.mapper.annotations.Select;
 import com.datastax.oss.driver.api.mapper.annotations.Update;
 import pl.pas.parcellocker.model.Delivery;
 
+import java.util.List;
 import java.util.UUID;
 
 @Dao
@@ -23,9 +25,15 @@ public interface DeliveryByIdDao {
     @Select
     Delivery findById(UUID id);
 
+    @Query("SELECT * FROM parcel_locker.delivery_by_id WHERE entity_id IN :ids")
+    PagingIterable<Delivery> findByIds(List<UUID> ids);
+
     @Update
     void update(Delivery client, @CqlName("entity_id") UUID entity_id);
 
     @Delete
     void delete(Delivery client);
+
+    @Query("TRUNCATE parcel_locker.delivery_by_id")
+    void deleteAll();
 }

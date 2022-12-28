@@ -7,6 +7,7 @@ import pl.pas.parcellocker.model.Delivery;
 import pl.pas.parcellocker.model.Locker;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
@@ -18,13 +19,17 @@ class DeliveryRepositoryTest {
     Delivery delivery1;
     Delivery delivery2;
 
-    @BeforeEach
-    void setup() {
+    DeliveryRepositoryTest() {
         Client shipper = new Client("Mati", "Kowal", "12345678");
         Client receiver = new Client("Tedi", "Tos", "2414124");
         Locker locker = new Locker("LDZ05", "test-address", 10);
         delivery1 = new Delivery(new BigDecimal("10"), true, shipper, receiver, locker);
         delivery2 = new Delivery(new BigDecimal("10"), true, shipper, receiver, locker);
+    }
+
+    @BeforeEach
+    void setup() {
+        //deliveryRepository.clear();
     }
 
     @Test
@@ -40,26 +45,32 @@ class DeliveryRepositoryTest {
 
         assertEquals(
             deliveryRepository.findById(delivery1.getEntityId()),
-            deliveryRepository.findDeliveriesByClientId(delivery1.getReceiver()).stream().findFirst().get()
+            deliveryRepository.findByClientId(delivery1.getReceiver()).stream().findFirst().get()
         );
     }
 
-//    @Test
-//    void shouldUpdateDelivery() {
-//        clientRepository.save(client1);
-//        client1.setActive(false);
-//        clientRepository.update(client1);
-//
-//        assertFalse(getClientFromRepo(client1).isActive());
-//    }
-//
     @Test
-    void shouldDeleteDelivery() {
+    void shouldFindArchivedDeliveryByDeliveryIdAndClientID() {
         deliveryRepository.save(delivery1);
+        deliveryRepository.save(delivery2);
+        delivery1.setArchived(true);
+        deliveryRepository.update(delivery1);
 
-        deliveryRepository.delete(delivery1);
+        assertEquals(
+            deliveryRepository.findArchivedByClientId(delivery1.getReceiver()),
+            List.of(delivery1)
+        );
 
-        assertNull(deliveryRepository.findById(delivery1.getEntityId()));
+        delivery1.setArchived(false);
+    }
+
+    @Test
+    void shouldUpdateDelivery() {
+        deliveryRepository.save(delivery1);
+        delivery1.setArchived(true);
+        deliveryRepository.update(delivery1);
+
+        assertTrue(deliveryRepository.findById(delivery1.getEntityId()).isArchived());
     }
 
     @Test

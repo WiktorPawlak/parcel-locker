@@ -1,14 +1,9 @@
 package pl.pas.parcellocker.repositories;
 
 import com.datastax.oss.driver.api.core.CqlSession;
-import com.datastax.oss.driver.api.core.cql.BatchStatement;
-import com.datastax.oss.driver.api.core.cql.BatchType;
-import com.datastax.oss.driver.api.core.type.codec.ExtraTypeCodecs;
-import com.datastax.oss.driver.api.querybuilder.delete.Delete;
-import com.datastax.oss.driver.api.querybuilder.insert.Insert;
-import com.datastax.oss.driver.api.querybuilder.relation.Relation;
+import com.datastax.oss.driver.api.querybuilder.select.Select;
+import com.datastax.oss.driver.api.querybuilder.truncate.Truncate;
 import pl.pas.parcellocker.model.Delivery;
-import pl.pas.parcellocker.model.DeliveryStatus;
 import pl.pas.parcellocker.repositories.dao.delivery.DeliveryByClientDao;
 import pl.pas.parcellocker.repositories.dao.delivery.DeliveryByIdDao;
 import pl.pas.parcellocker.repositories.mapper.DeliveryMapper;
@@ -17,16 +12,9 @@ import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-import static com.datastax.oss.driver.api.querybuilder.QueryBuilder.deleteFrom;
-import static com.datastax.oss.driver.api.querybuilder.QueryBuilder.insertInto;
 import static com.datastax.oss.driver.api.querybuilder.QueryBuilder.literal;
-import static pl.pas.parcellocker.configuration.DeliverySchemaNames.ARCHIVED;
-import static pl.pas.parcellocker.configuration.DeliverySchemaNames.ENTITY_ID;
-import static pl.pas.parcellocker.configuration.DeliverySchemaNames.LOCKER_ID;
-import static pl.pas.parcellocker.configuration.DeliverySchemaNames.PACKAGE_ID;
-import static pl.pas.parcellocker.configuration.DeliverySchemaNames.RECEIVER_ID;
-import static pl.pas.parcellocker.configuration.DeliverySchemaNames.SHIPPER_ID;
-import static pl.pas.parcellocker.configuration.DeliverySchemaNames.STATUS;
+import static com.datastax.oss.driver.api.querybuilder.QueryBuilder.selectFrom;
+import static com.datastax.oss.driver.api.querybuilder.QueryBuilder.truncate;
 import static pl.pas.parcellocker.configuration.SchemaConst.PARCEL_LOCKER_NAMESPACE;
 
 public class DeliveryRepository extends SessionConnector {
@@ -47,49 +35,15 @@ public class DeliveryRepository extends SessionConnector {
     }
 
     public void save(Delivery delivery) {
-        Insert insertIntoDeliveryById = insertInto("delivery_by_id")
-            .value(ENTITY_ID, literal(delivery.getEntityId()))
-            .value(SHIPPER_ID, literal(delivery.getShipper()))
-            .value(RECEIVER_ID, literal(delivery.getReceiver()))
-            .value(STATUS, literal(delivery.getStatus(), ExtraTypeCodecs.enumNamesOf(DeliveryStatus.class)))
-            .value(PACKAGE_ID, literal(delivery.getPack()))
-            .value(LOCKER_ID, literal(delivery.getLocker()))
-            .value(ARCHIVED, literal(delivery.isArchived()));
-
-        Insert insertIntoDeliveryByClient = insertInto("delivery_by_client")
-            .value(ENTITY_ID, literal(delivery.getEntityId()))
-            .value(RECEIVER_ID, literal(delivery.getReceiver()))
-            .value(ARCHIVED, literal(delivery.isArchived()));
-
-        BatchStatement batchStatement = BatchStatement.builder(BatchType.LOGGED)
-            .setKeyspace(PARCEL_LOCKER_NAMESPACE)
-            .addStatement(insertIntoDeliveryById.build())
-            .addStatement(insertIntoDeliveryByClient.build())
-            .build();
-
-        session.execute(batchStatement);
+        deliveryByIdDao.create(delivery);
     }
 
-//    public void update(Client client) {
-//        clientDao.update(client, client.getEntityId());
-//    }
-//
+    public void update(Delivery delivery) {
+        deliveryByIdDao.update(delivery, delivery.getEntityId());
+    }
+
     public void delete(Delivery delivery) {
-        Delete deleteDeliveryById = deleteFrom("delivery_by_id")
-            .where(Relation.column(ENTITY_ID)
-                .isEqualTo(literal(delivery.getEntityId())));
-
-        Delete deleteDeliveryByClient = deleteFrom("delivery_by_client")
-            .where(Relation.column(ENTITY_ID)
-                .isEqualTo(literal(delivery.getEntityId())));
-
-        BatchStatement batchStatement = BatchStatement.builder(BatchType.LOGGED)
-            .setKeyspace(PARCEL_LOCKER_NAMESPACE)
-            .addStatement(deleteDeliveryById.build())
-            .addStatement(deleteDeliveryByClient.build())
-            .build();
-
-        session.execute(batchStatement);
+        deliveryByIdDao.delete(delivery);
     }
 
     public List<Delivery> findAll() {
@@ -100,8 +54,31 @@ public class DeliveryRepository extends SessionConnector {
        return deliveryByIdDao.findById(id);
     }
 
-    public List<Delivery> findDeliveriesByClientId(UUID clientId) {
-        List<UUID> deliveryIds =  deliveryByClientDao.findByClientId(clientId).map((it) -> it.get(0, UUID.class)).all();
+    public List<Delivery> findByClientId(UUID clientId) {
+        List<UUID> deliveryIds =  deliveryByClientDao.findByClientId(clientId)
+            .map((it) -> it.get(0, UUID.class))
+            .all();
         return deliveryIds.stream().map(deliveryByIdDao::findById).collect(Collectors.toList());
+    }
+
+    public List<Delivery> findArchivedByClientId(UUID clientId) {
+        Select select = selectFrom(PARCEL_LOCKER_NAMESPACE, "delivery_by_client")
+            .column("entity_id")
+            .whereColumn("receiver_id")
+            .isEqualTo(literal(clientId))
+            .whereColumn("archived")
+            .isEqualTo(literal(true))
+            .allowFiltering();
+
+        List<UUID> deliveryIds = session.execute(select.build())
+            .map((it) -> it.get(0, UUID.class))
+            .all();
+
+        return deliveryByIdDao.findByIds(deliveryIds).all();
+    }
+
+    public void clear() {
+        Truncate truncateDeliveryById = truncate("parcel_locker", "delivery_by_id");
+        session.execute(truncateDeliveryById.build());
     }
 }

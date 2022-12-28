@@ -78,33 +78,5 @@ public class Delivery {
     public BigDecimal getCost() {
         return BigDecimal.TEN;
     }
-//
-//    public Client getShipper() {
-//        return shipper;
-//    }
-//
-//    public Client getReceiver() {
-//        return receiver;
-//    }
-//
-//    public DeliveryStatus getStatus() {
-//        return status;
-//    }
-//
-//    public Locker getLocker() {
-//        return locker;
-//    }
-//
-//    public void setStatus(DeliveryStatus status) {
-//        this.status = status;
-//    }
-//
-//    public boolean isArchived() {
-//        return isArchived;
-//    }
-//
-//    public void setArchived(boolean archived) {
-//        isArchived = archived;
-//    }
 
 }

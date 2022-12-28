@@ -12,7 +12,7 @@
 //import static org.junit.jupiter.api.Assertions.assertThrows;
 //import static org.junit.jupiter.api.Assertions.assertTrue;
 //
-//class ClientManagerTest extends TestsConfig {
+//class ClientManagerTest {
 //
 //    private static final ClientManager clientManager = new ClientManager();
 //

@@ -5,12 +5,11 @@ import com.datastax.oss.driver.api.core.CqlSession;
 import com.datastax.oss.driver.api.core.cql.SimpleStatement;
 import com.datastax.oss.driver.api.core.type.DataTypes;
 import com.datastax.oss.driver.api.core.type.codec.ExtraTypeCodecs;
-import com.datastax.oss.driver.api.core.type.codec.registry.CodecRegistry;
-import com.datastax.oss.driver.api.core.type.codec.registry.MutableCodecRegistry;
+import com.datastax.oss.driver.api.querybuilder.QueryBuilder;
 import com.datastax.oss.driver.api.querybuilder.SchemaBuilder;
 import com.datastax.oss.driver.api.querybuilder.schema.CreateKeyspace;
+import com.datastax.oss.driver.api.querybuilder.schema.CreateMaterializedViewPrimaryKey;
 import com.datastax.oss.driver.api.querybuilder.schema.CreateTable;
-import com.datastax.oss.driver.internal.core.type.codec.extras.enums.EnumNameCodec;
 import pl.pas.parcellocker.model.DeliveryStatus;
 
 import java.net.InetSocketAddress;
@@ -85,11 +84,18 @@ public class SessionConnector implements AutoCloseable {
             .withColumn("archived", DataTypes.BOOLEAN);
         SimpleStatement createDeliveryByIdTable = deliveryByIdTable.build();
 
-        CreateTable deliveryByClientTable = SchemaBuilder.createTable(PARCEL_LOCKER_NAMESPACE ,"delivery_by_client")
+        CreateMaterializedViewPrimaryKey deliveryByClientTable = SchemaBuilder.createMaterializedView(PARCEL_LOCKER_NAMESPACE ,"delivery_by_client")
             .ifNotExists()
-            .withPartitionKey("receiver_id", DataTypes.UUID)
-            .withColumn("entity_id", DataTypes.UUID)
-            .withClusteringColumn("archived", DataTypes.BOOLEAN);
+            .asSelectFrom(PARCEL_LOCKER_NAMESPACE, "delivery_by_id")
+            .columns("entity_id", "receiver_id", "archived")
+            .whereColumn("entity_id")
+            .isNotNull()
+            .whereColumn("receiver_id")
+            .isNotNull()
+            .whereColumn("archived")
+            .isNotNull()
+            .withPartitionKey("receiver_id")
+            .withClusteringColumn("entity_id");
         SimpleStatement createDeliveryByClientTable = deliveryByClientTable.build();
 
         session.execute(createClientTable);
