@@ -60,7 +60,7 @@ public class SessionConnector implements AutoCloseable {
         CreateTable createParcelTable = prepareParcelTable();
         CreateTable createDeliveryByIdTable = prepareDeliveryByIdTable();
         CreateMaterializedViewPrimaryKey createDeliveryByClientTable = prepareDeliveryByClientTable();
-        CreateTable createLockerTable = prepareLockersByIdTable();
+        CreateTable createLockerTable = prepareLockersByIdentityNumberTable();
 
         session.execute(createClientTable.build());
         session.execute(createClientByTelTable.build());
@@ -125,7 +125,7 @@ public class SessionConnector implements AutoCloseable {
             .withColumn("receiver_id", DataTypes.UUID)
             .withColumn("status", DataTypes.TEXT)
             .withColumn("package_id", DataTypes.UUID)
-            .withColumn("locker_id", DataTypes.UUID)
+            .withColumn("locker_identity_number", DataTypes.TEXT)
             .withColumn("archived", DataTypes.BOOLEAN);
     }
 
@@ -144,11 +144,11 @@ public class SessionConnector implements AutoCloseable {
             .withClusteringColumn("entity_id");
     }
 
-    private CreateTable prepareLockersByIdTable() {
+    private CreateTable prepareLockersByIdentityNumberTable() {
         return createTable(PARCEL_LOCKER_NAMESPACE, "lockers_by_id")
             .ifNotExists()
-            .withPartitionKey("entity_id", DataTypes.UUID)
-            .withColumn("identity_number", DataTypes.TEXT)
+            .withPartitionKey("identity_number", DataTypes.TEXT)
+            .withColumn("entity_id", DataTypes.UUID)
             .withColumn("address", DataTypes.TEXT)
             .withColumn("deposit_boxes", DataTypes.listOf(udt("deposit_box", true)));
     }

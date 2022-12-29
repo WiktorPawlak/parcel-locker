@@ -31,8 +31,8 @@ public class Delivery {
     private DeliveryStatus status;
     @CqlName("package_id")
     private UUID pack;
-    @CqlName("locker_id")
-    private UUID locker;
+    @CqlName("locker_identity_number")
+    private String locker;
     @ClusteringColumn
     private boolean isArchived;
 
@@ -71,7 +71,7 @@ public class Delivery {
         this.entityId = UUID.randomUUID();
         this.shipper = shipper.getEntityId();
         this.receiver = receiver.getEntityId();
-        this.locker = locker.getEntityId();
+        this.locker = locker.getIdentityNumber();
         this.status = DeliveryStatus.READY_TO_SHIP;
     }
 

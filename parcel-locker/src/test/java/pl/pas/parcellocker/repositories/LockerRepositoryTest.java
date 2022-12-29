@@ -56,7 +56,7 @@ class LockerRepositoryTest {
     }
 
     private Locker getLockerFromRepo(Locker locker) {
-        return lockerRepository.findById(locker.getEntityId());
+        return lockerRepository.findByIdentityNumber(locker.getIdentityNumber());
     }
 
 }

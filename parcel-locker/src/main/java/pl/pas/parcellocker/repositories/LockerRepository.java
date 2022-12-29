@@ -1,13 +1,14 @@
 package pl.pas.parcellocker.repositories;
 
 import com.datastax.oss.driver.api.core.CqlSession;
+import com.datastax.oss.driver.api.querybuilder.truncate.Truncate;
 import pl.pas.parcellocker.model.Locker;
 import pl.pas.parcellocker.repositories.dao.locker.LockerDao;
 import pl.pas.parcellocker.repositories.mapper.LockerMapper;
 
 import java.util.List;
-import java.util.UUID;
 
+import static com.datastax.oss.driver.api.querybuilder.QueryBuilder.truncate;
 import static pl.pas.parcellocker.configuration.SchemaConst.PARCEL_LOCKER_NAMESPACE;
 
 public class LockerRepository extends SessionConnector {
@@ -30,7 +31,7 @@ public class LockerRepository extends SessionConnector {
     }
 
     public void update(Locker locker) {
-        lockerDao.update(locker, locker.getEntityId());
+        lockerDao.update(locker, locker.getIdentityNumber());
     }
 
     public void delete(Locker locker) {
@@ -41,7 +42,12 @@ public class LockerRepository extends SessionConnector {
         return lockerDao.all().all();
     }
 
-    public Locker findById(UUID id) {
-        return lockerDao.findById(id);
+    public Locker findByIdentityNumber(String identityNumber) {
+        return lockerDao.findByIdentityNumber(identityNumber);
+    }
+
+    public void clear() {
+        Truncate truncateDeliveryById = truncate("parcel_locker", "delivery_by_id");
+        session.execute(truncateDeliveryById.build());
     }
 }

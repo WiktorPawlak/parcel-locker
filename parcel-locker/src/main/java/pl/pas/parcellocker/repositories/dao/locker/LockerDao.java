@@ -21,10 +21,10 @@ public interface LockerDao {
     void create(Locker locker);
 
     @Select
-    Locker findById(UUID id);
+    Locker findByIdentityNumber(String identityNumber);
 
     @Update
-    void update(Locker locker, @CqlName("entity_id") UUID entity_id);
+    void update(Locker locker, @CqlName("identity_number") String identityNumber);
 
     @Delete
     void delete(Locker locker);

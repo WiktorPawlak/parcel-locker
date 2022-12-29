@@ -24,8 +24,9 @@ import java.util.UUID;
 @EqualsAndHashCode
 public class Locker {
 
-    @PartitionKey
     private UUID entityId;
+    @PartitionKey
+    @CqlName("identity_number")
     private String identityNumber;
     private String address;
     private List<DepositBox> depositBoxes;
@@ -70,7 +71,7 @@ public class Locker {
         }
         throw new LockerException("Couldn't get any package out with access code: "
             + code
-            + "and phone number: "
+            + " and phone number: "
             + telNumber);
     }
 
