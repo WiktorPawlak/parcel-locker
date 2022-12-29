@@ -4,6 +4,10 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import pl.pas.parcellocker.model.Locker;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 class LockerRepositoryTest {
     LockerRepository lockerRepository = new LockerRepository();
 
@@ -17,42 +21,42 @@ class LockerRepositoryTest {
     }
 
     @Test
-    void Should_AddDelivery() {
+    void Should_AddLocker() {
        lockerRepository.save(locker1);
 
-       //assertEquals(getLockerFromRepo(locker1).getId(), locker1.getEntityId());
+       assertEquals(getLockerFromRepo(locker1).getEntityId(), locker1.getEntityId());
     }
 
-//    @Test
-//    void Should_UpdateDeliveries() {
-//        String newAddress = "new-test-address";
-//
-//        lockerRepository.add(locker1);
-//        locker1.setAddress(newAddress);
-//        lockerRepository.update(locker1);
-//
-//        assertEquals(getLockerFromRepo(locker1).getAddress(), newAddress);
-//    }
-//
-//    @Test
-//    void Should_DeleteDelivery() {
-//        lockerRepository.add(locker1);
-//
-//        lockerRepository.delete(locker1.getEntityId().getUUID());
-//
-//        assertNull(getLockerFromRepo(locker1));
-//    }
-//
-//    @Test
-//    void Should_ReturnAllDeliveries() {
-//        lockerRepository.add(locker1);
-//        lockerRepository.add(locker2);
-//
-//        assertTrue(lockerRepository.findAll().size() >= 2);
-//    }
-//
-//    private Locker getLockerFromRepo(Locker locker) {
-//        return lockerRepository.findById(locker.getId());
-//    }
+    @Test
+    void Should_UpdateLockers() {
+        String newAddress = "new-test-address";
+
+        lockerRepository.save(locker1);
+        locker1.setAddress(newAddress);
+        lockerRepository.update(locker1);
+
+        assertEquals(getLockerFromRepo(locker1).getAddress(), newAddress);
+    }
+
+    @Test
+    void Should_DeleteLockers() {
+        lockerRepository.save(locker1);
+
+        lockerRepository.delete(locker1);
+
+        assertNull(getLockerFromRepo(locker1));
+    }
+
+    @Test
+    void Should_ReturnAllLockers() {
+        lockerRepository.save(locker1);
+        lockerRepository.save(locker2);
+
+        assertTrue(lockerRepository.findAll().size() >= 2);
+    }
+
+    private Locker getLockerFromRepo(Locker locker) {
+        return lockerRepository.findById(locker.getEntityId());
+    }
 
 }
