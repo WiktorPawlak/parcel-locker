@@ -10,6 +10,7 @@ import com.datastax.oss.driver.api.querybuilder.schema.CreateTable;
 import pl.pas.parcellocker.model.DeliveryStatus;
 
 import java.net.InetSocketAddress;
+import java.util.Map;
 
 import static com.datastax.oss.driver.api.querybuilder.SchemaBuilder.createKeyspace;
 import static com.datastax.oss.driver.api.querybuilder.SchemaBuilder.createMaterializedView;
@@ -58,7 +59,7 @@ public class SessionConnector implements AutoCloseable {
     private CreateKeyspace prepareKeyspace(int replicationFactor) {
         return createKeyspace(CqlIdentifier.fromCql(PARCEL_LOCKER_NAMESPACE))
             .ifNotExists()
-            .withSimpleStrategy(replicationFactor)
+            .withNetworkTopologyStrategy(Map.of("dc1", replicationFactor))
             .withDurableWrites(true);
     }
 
