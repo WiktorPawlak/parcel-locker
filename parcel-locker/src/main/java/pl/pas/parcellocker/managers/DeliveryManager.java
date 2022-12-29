@@ -76,6 +76,7 @@ public class DeliveryManager {
         if (deliveryId != null) {
             Delivery delivery = deliveries.findById(deliveryId);
             delivery.setStatus(RECEIVED);
+            delivery.setArchived(true);
             deliveries.update(delivery);
             return true;
         }
@@ -87,7 +88,7 @@ public class DeliveryManager {
         if (client == null)
             throw new DeliveryManagerException("client is a nullptr!");
         for (Delivery delivery : deliveries.findAll()) {
-            if (delivery.getShipper().equals(client))
+            if (delivery.getShipper().equals(client.getEntityId()))
                 balance = balance.add(delivery.getCost());
         }
 

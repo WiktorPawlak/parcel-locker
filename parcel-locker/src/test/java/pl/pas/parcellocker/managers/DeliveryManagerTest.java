@@ -1,7 +1,7 @@
 package pl.pas.parcellocker.managers;
 
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import pl.pas.parcellocker.config.TestsConfig;
@@ -26,7 +26,7 @@ class DeliveryManagerTest extends TestsConfig {
     private Locker locker;
     private final BigDecimal basePrice = BigDecimal.TEN;
 
-    @BeforeAll
+    @BeforeEach
     void setup() {
         locker = new Locker("LDZ01", "Gawronska 12, Lodz 12-123", 20);
         shipper1 = new Client("Oscar", "Trel", "321312312");
@@ -40,6 +40,8 @@ class DeliveryManagerTest extends TestsConfig {
     @AfterEach
     void eachFinisher() {
         deliveryRepository.clear();
+        lockerRepository.clear();
+        clientRepository.clear();
     }
 
     @Test
@@ -49,8 +51,9 @@ class DeliveryManagerTest extends TestsConfig {
         );
         int empty = locker.countEmpty();
         deliveryManager.putInLocker(delivery, "12345");
+        Locker updatedLocker = lockerRepository.findByIdentityNumber(delivery.getLocker());
 
-        assertEquals(empty - 1, locker.countEmpty());
+        assertEquals(empty - 1, updatedLocker.countEmpty());
     }
 
     @Test
@@ -59,10 +62,11 @@ class DeliveryManagerTest extends TestsConfig {
             basePrice, 10, 20, 30, 10, false, shipper1, receiver1, locker
         );
         deliveryManager.putInLocker(delivery, "54321");
-        int empty = locker.countEmpty();
-        deliveryManager.takeOutDelivery(locker, receiver1, "54321");
+        Locker updatedLocker = lockerRepository.findByIdentityNumber(delivery.getLocker());
+        int empty = updatedLocker.countEmpty();
+        deliveryManager.takeOutDelivery(updatedLocker, receiver1, "54321");
 
-        assertEquals(empty + 1, locker.countEmpty());
+        assertEquals(empty + 1, updatedLocker.countEmpty());
     }
 
     @Test
@@ -87,8 +91,8 @@ class DeliveryManagerTest extends TestsConfig {
             basePrice, 10, 20, 30, 10, false, shipper1, receiver1, locker
         );
 
-        assertEquals(delivery, deliveryManager.getAllClientDeliveries(receiver1).get(0));
-        assertEquals(delivery1, deliveryManager.getAllClientDeliveries(receiver1).get(1));
+        assertTrue(deliveryManager.getAllClientDeliveries(receiver1).contains(delivery));
+        assertTrue(deliveryManager.getAllClientDeliveries(receiver1).contains(delivery1));
     }
 
     @Test
@@ -97,7 +101,8 @@ class DeliveryManagerTest extends TestsConfig {
             basePrice, 10, 20, 30, 10, false, shipper1, receiver1, locker
         );
         deliveryManager.putInLocker(delivery1, "2222");
-        deliveryManager.takeOutDelivery(locker, receiver1, "2222");
+        Locker updatedLocker = lockerRepository.findByIdentityNumber(delivery1.getLocker());
+        deliveryManager.takeOutDelivery(updatedLocker, receiver1, "2222");
 
         assertTrue(0 < deliveryManager.getAllReceivedClientDeliveries(receiver1).size());
     }
@@ -108,7 +113,10 @@ class DeliveryManagerTest extends TestsConfig {
             basePrice, 10, 20, 30, 10, false, shipper1, receiver1, locker
         );
         deliveryManager.putInLocker(delivery, "5555");
-        assertEquals(new BigDecimal("10"), deliveryManager.checkClientShipmentBalance(shipper1));
+        assertEquals(
+            new BigDecimal("10"),
+            deliveryManager.checkClientShipmentBalance(clientRepository.findById(shipper1.getEntityId()))
+        );
     }
 
     @Test

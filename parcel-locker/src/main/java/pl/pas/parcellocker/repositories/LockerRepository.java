@@ -47,7 +47,7 @@ public class LockerRepository extends SessionConnector {
     }
 
     public void clear() {
-        Truncate truncateDeliveryById = truncate("parcel_locker", "delivery_by_id");
+        Truncate truncateDeliveryById = truncate("parcel_locker", "lockers_by_id");
         session.execute(truncateDeliveryById.build());
     }
 }

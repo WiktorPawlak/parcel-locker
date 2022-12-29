@@ -8,8 +8,8 @@ public class LockerManager {
 
     private final LockerRepository lockerRepository;
 
-    public LockerManager() {
-        lockerRepository = new LockerRepository();
+    public LockerManager(LockerRepository lockerRepository) {
+        this.lockerRepository =lockerRepository;
     }
 
     public Locker createLocker(String identityNumber, String address, int depositBoxCount) {
