@@ -31,22 +31,6 @@ class DeliveryTest {
     }
 
     @Test
-    void Should_ReturnCorrectObjectsForParcelDelivery_WhenGettersCalled() {
-        assertEquals(shipper1, delivery1.getShipper());
-        assertEquals(receiver1, delivery1.getReceiver());
-        assertEquals(READY_TO_SHIP, delivery1.getStatus());
-        assertEquals(locker, delivery1.getLocker());
-    }
-
-    @Test
-    void Should_ReturnCorrectObjectsForListDelivery_WhenGettersCalled() {
-        assertEquals(shipper1, delivery2.getShipper());
-        assertEquals(receiver1, delivery2.getReceiver());
-        assertEquals(READY_TO_SHIP, delivery2.getStatus());
-        assertEquals(locker, delivery2.getLocker());
-    }
-
-    @Test
     void Should_SetterSetCorrectStatus() {
         assertEquals(READY_TO_SHIP, delivery1.getStatus());
         delivery1.setStatus(READY_TO_PICKUP);

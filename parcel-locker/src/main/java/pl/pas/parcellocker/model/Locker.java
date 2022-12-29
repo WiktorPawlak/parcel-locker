@@ -17,9 +17,7 @@ import java.util.UUID;
 public class Locker extends AbstractEntity {
 
     private String identityNumber;
-
     private String address;
-
     private List<DepositBox> depositBoxes;
 
     public Locker(String identityNumber,

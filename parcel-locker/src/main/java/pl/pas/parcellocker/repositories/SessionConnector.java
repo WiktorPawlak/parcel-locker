@@ -39,12 +39,14 @@ public class SessionConnector implements AutoCloseable {
         session.execute(createKeyspace.build());
 
         CreateTable createClientTable = prepareClientTable();
+        CreateTable createClientByTelTable = prepareClientByTelNumberTable();
         CreateTable createListTable = prepareListTable();
         CreateTable createParcelTable = prepareParcelTable();
         CreateTable createDeliveryByIdTable = prepareDeliveryByIdTable();
         CreateMaterializedViewPrimaryKey createDeliveryByClientTable = prepareDeliveryByClientTable();
 
         session.execute(createClientTable.build());
+        session.execute(createClientByTelTable.build());
         session.execute(createListTable.build());
         session.execute(createParcelTable.build());
         session.execute(createDeliveryByIdTable.build());
@@ -68,6 +70,13 @@ public class SessionConnector implements AutoCloseable {
             .withColumn("last_name", DataTypes.TEXT)
             .withColumn("tel_number", DataTypes.TEXT)
             .withClusteringColumn("active", DataTypes.BOOLEAN);
+    }
+
+    private CreateTable prepareClientByTelNumberTable() {
+        return createTable(PARCEL_LOCKER_NAMESPACE, "clients_by_tel")
+            .ifNotExists()
+            .withPartitionKey("tel_number", DataTypes.TEXT)
+            .withColumn("entity_id", DataTypes.UUID);
     }
 
     private CreateTable prepareListTable() {

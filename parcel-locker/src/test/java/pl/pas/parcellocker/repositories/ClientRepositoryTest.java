@@ -51,6 +51,15 @@ class ClientRepositoryTest {
         assertTrue(clientRepository.findAll().getAvailableWithoutFetching() >= 2);
     }
 
+    @Test
+    void shouldReturnClientNyTelNumber() {
+        Client wantedClient = new Client("name", "lastname", "1234");
+        clientRepository.save(wantedClient);
+        clientRepository.save(new Client("test", "test", "test"));
+
+        assertEquals(wantedClient.getEntityId(), clientRepository.findByTelNumber("1234").getEntityId());
+    }
+
     private Client getClientFromRepo(Client client) {
         return clientRepository.findById(client.getEntityId());
     }
