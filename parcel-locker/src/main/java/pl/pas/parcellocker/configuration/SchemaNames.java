@@ -14,4 +14,8 @@ public class SchemaNames {
     public static final String LAST_NAME = "last_name";
     public static final String TEL_NUMBER = "tel_number";
     public static final String ACTIVE = "active";
+
+    public static final String IDENTITY_NUMBER = "identity_number";
+    public static final String ADDRESS = "address";
+    public static final String DEPOSIT_BOXES = "deposit_boxes";
 }

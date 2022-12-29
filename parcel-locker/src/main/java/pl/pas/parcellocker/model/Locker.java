@@ -1,5 +1,6 @@
 package pl.pas.parcellocker.model;
 
+import com.datastax.oss.driver.api.mapper.annotations.PartitionKey;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -14,8 +15,10 @@ import java.util.UUID;
 @Getter
 @Setter
 @EqualsAndHashCode
-public class Locker extends AbstractEntity {
+public class Locker {
 
+    @PartitionKey
+    private UUID entityId;
     private String identityNumber;
     private String address;
     private List<DepositBox> depositBoxes;
@@ -24,7 +27,7 @@ public class Locker extends AbstractEntity {
                   String address,
                   int boxAmount
     ) {
-        super(UUID.randomUUID());
+        this.entityId = UUID.randomUUID();
         try {
             if (boxAmount <= 0)
                 throw new LockerException("Locker with 0 boxes can not be created!");

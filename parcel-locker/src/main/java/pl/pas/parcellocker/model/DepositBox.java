@@ -1,5 +1,6 @@
 package pl.pas.parcellocker.model;
 
+import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -9,15 +10,17 @@ import java.util.UUID;
 @Getter
 @Setter
 @EqualsAndHashCode
-public class DepositBox extends AbstractEntity {
+@AllArgsConstructor
+public class DepositBox {
 
+    private UUID entityId;
     private UUID deliveryId;
     private Boolean isEmpty;
     private String accessCode;
     private String telNumber;
 
     public DepositBox() {
-        super(UUID.randomUUID());
+        this.entityId = UUID.randomUUID();
         isEmpty = true;
         telNumber = "";
         accessCode = "";
