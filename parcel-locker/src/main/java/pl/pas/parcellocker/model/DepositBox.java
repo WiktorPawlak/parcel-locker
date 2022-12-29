@@ -1,9 +1,12 @@
 package pl.pas.parcellocker.model;
 
+import com.datastax.oss.driver.api.mapper.annotations.CqlName;
+import com.datastax.oss.driver.api.mapper.annotations.Entity;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
+import pl.pas.parcellocker.configuration.SchemaConst;
 
 import java.util.UUID;
 
@@ -11,6 +14,8 @@ import java.util.UUID;
 @Setter
 @EqualsAndHashCode
 @AllArgsConstructor
+@Entity(defaultKeyspace = SchemaConst.PARCEL_LOCKER_NAMESPACE)
+@CqlName("deposit_box")
 public class DepositBox {
 
     private UUID entityId;

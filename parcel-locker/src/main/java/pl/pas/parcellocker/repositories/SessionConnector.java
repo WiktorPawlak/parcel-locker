@@ -13,7 +13,6 @@ import com.datastax.oss.driver.api.querybuilder.schema.CreateKeyspace;
 import com.datastax.oss.driver.api.querybuilder.schema.CreateMaterializedViewPrimaryKey;
 import com.datastax.oss.driver.api.querybuilder.schema.CreateTable;
 import com.datastax.oss.driver.api.querybuilder.schema.CreateType;
-import com.datastax.oss.driver.internal.core.type.UserDefinedTypeBuilder;
 import pl.pas.parcellocker.model.DeliveryStatus;
 import pl.pas.parcellocker.repositories.codec.DepositBoxCodec;
 
@@ -151,11 +150,11 @@ public class SessionConnector implements AutoCloseable {
             .withPartitionKey("entity_id", DataTypes.UUID)
             .withColumn("identity_number", DataTypes.TEXT)
             .withColumn("address", DataTypes.TEXT)
-            .withColumn("deposit_boxes", udt("deposit_boxes", false));
+            .withColumn("deposit_boxes", DataTypes.listOf(udt("deposit_box", true)));
     }
 
     private CreateType prepareDepositBoxType() {
-        return createType(PARCEL_LOCKER_NAMESPACE, "deposit_boxes")
+        return createType(PARCEL_LOCKER_NAMESPACE, "deposit_box")
             .ifNotExists()
             .withField("entity_id", DataTypes.UUID)
             .withField("delivery_id", DataTypes.UUID)
@@ -171,8 +170,8 @@ public class SessionConnector implements AutoCloseable {
             session
                 .getMetadata()
                 .getKeyspace(PARCEL_LOCKER_NAMESPACE)
-                .flatMap(ks -> ks.getUserDefinedType("deposit_boxes"))
-                .orElseThrow(IllegalStateException::new);
+                .flatMap(ks -> ks.getUserDefinedType("deposit_box")).get();
+                //.orElseThrow(IllegalStateException::new);
         TypeCodec<UdtValue> innerCodec = codecRegistry.codecFor(depositBoxUdt);
 
         depositBoxCodec = new DepositBoxCodec(innerCodec);

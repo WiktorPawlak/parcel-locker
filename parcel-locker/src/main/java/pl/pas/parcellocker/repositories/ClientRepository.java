@@ -15,15 +15,14 @@ import pl.pas.parcellocker.repositories.mapper.ClientMapper;
 
 import java.util.UUID;
 
-import static com.datastax.oss.driver.api.querybuilder.QueryBuilder.bindMarker;
 import static com.datastax.oss.driver.api.querybuilder.QueryBuilder.deleteFrom;
 import static com.datastax.oss.driver.api.querybuilder.QueryBuilder.insertInto;
 import static com.datastax.oss.driver.api.querybuilder.QueryBuilder.literal;
 import static com.datastax.oss.driver.api.querybuilder.QueryBuilder.selectFrom;
 import static com.datastax.oss.driver.api.querybuilder.QueryBuilder.truncate;
+import static pl.pas.parcellocker.configuration.SchemaConst.PARCEL_LOCKER_NAMESPACE;
 import static pl.pas.parcellocker.configuration.SchemaNames.ACTIVE;
 import static pl.pas.parcellocker.configuration.SchemaNames.ENTITY_ID;
-import static pl.pas.parcellocker.configuration.SchemaConst.PARCEL_LOCKER_NAMESPACE;
 import static pl.pas.parcellocker.configuration.SchemaNames.FIRST_NAME;
 import static pl.pas.parcellocker.configuration.SchemaNames.LAST_NAME;
 import static pl.pas.parcellocker.configuration.SchemaNames.TEL_NUMBER;

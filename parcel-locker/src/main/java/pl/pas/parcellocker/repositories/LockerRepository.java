@@ -1,26 +1,31 @@
 package pl.pas.parcellocker.repositories;
 
-import com.datastax.oss.driver.api.querybuilder.insert.Insert;
+import com.datastax.oss.driver.api.core.CqlSession;
 import pl.pas.parcellocker.model.Locker;
+import pl.pas.parcellocker.repositories.dao.locker.LockerDao;
+import pl.pas.parcellocker.repositories.mapper.LockerMapper;
 
-import static com.datastax.oss.driver.api.querybuilder.QueryBuilder.insertInto;
-import static com.datastax.oss.driver.api.querybuilder.QueryBuilder.literal;
 import static pl.pas.parcellocker.configuration.SchemaConst.PARCEL_LOCKER_NAMESPACE;
-import static pl.pas.parcellocker.configuration.SchemaNames.ADDRESS;
-import static pl.pas.parcellocker.configuration.SchemaNames.DEPOSIT_BOXES;
-import static pl.pas.parcellocker.configuration.SchemaNames.ENTITY_ID;
-import static pl.pas.parcellocker.configuration.SchemaNames.IDENTITY_NUMBER;
 
 public class LockerRepository extends SessionConnector {
 
-    public void save(Locker locker) {
-        Insert insertIntoLockersById = insertInto(PARCEL_LOCKER_NAMESPACE, "lockers_by_id")
-            .value(ENTITY_ID, literal(locker.getEntityId()))
-            .value(IDENTITY_NUMBER, literal(locker.getIdentityNumber()))
-            .value(ADDRESS, literal(locker.getAddress()))
-            .value(DEPOSIT_BOXES, literal(locker.getDepositBoxes().get(0), depositBoxCodec));
+    private final LockerDao lockerDao;
 
-        session.execute(insertIntoLockersById.build());
+    public LockerRepository() {
+        LockerMapper lockerMapper = initLockerMapper(session);
+        this.lockerDao = lockerMapper.lockerDao();
     }
+
+    private LockerMapper initLockerMapper(CqlSession session) {
+        return LockerMapper.builder(session)
+            .withDefaultKeyspace(PARCEL_LOCKER_NAMESPACE)
+            .build();
+    }
+
+    public void save(Locker locker) {
+        lockerDao.create(locker);
+    }
+
+
 
 }

@@ -1,19 +1,26 @@
 package pl.pas.parcellocker.model;
 
+import com.datastax.oss.driver.api.mapper.annotations.CqlName;
+import com.datastax.oss.driver.api.mapper.annotations.Entity;
 import com.datastax.oss.driver.api.mapper.annotations.PartitionKey;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
+import pl.pas.parcellocker.configuration.SchemaConst;
 import pl.pas.parcellocker.exceptions.LockerException;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+@Entity(defaultKeyspace = SchemaConst.PARCEL_LOCKER_NAMESPACE)
+@CqlName("lockers_by_id")
 @Slf4j
 @Getter
 @Setter
+@NoArgsConstructor
 @EqualsAndHashCode
 public class Locker {
 
