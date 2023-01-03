@@ -1,5 +1,6 @@
 package pl.pas.parcellocker.repositories;
 
+import com.datastax.oss.driver.api.core.ConsistencyLevel;
 import com.datastax.oss.driver.api.core.CqlSession;
 import com.datastax.oss.driver.api.core.PagingIterable;
 import com.datastax.oss.driver.api.core.cql.BatchStatement;
@@ -15,6 +16,7 @@ import pl.pas.parcellocker.repositories.mapper.ClientMapper;
 
 import java.util.UUID;
 
+import static com.datastax.oss.driver.api.core.ConsistencyLevel.LOCAL_QUORUM;
 import static com.datastax.oss.driver.api.querybuilder.QueryBuilder.deleteFrom;
 import static com.datastax.oss.driver.api.querybuilder.QueryBuilder.insertInto;
 import static com.datastax.oss.driver.api.querybuilder.QueryBuilder.literal;
@@ -58,6 +60,7 @@ public class ClientRepository extends SessionConnector {
             .setKeyspace(PARCEL_LOCKER_NAMESPACE)
             .addStatement(insertIntoClientsById.build())
             .addStatement(insertIntoClientsByTel.build())
+            .setConsistencyLevel(LOCAL_QUORUM)
             .build();
 
         session.execute(batchStatement);
@@ -80,6 +83,7 @@ public class ClientRepository extends SessionConnector {
             .setKeyspace(PARCEL_LOCKER_NAMESPACE)
             .addStatement(deleteClientById.build())
             .addStatement(deleteClientByTel.build())
+            .setConsistencyLevel(LOCAL_QUORUM)
             .build();
 
         session.execute(batchStatement);

@@ -7,6 +7,7 @@ import com.datastax.oss.driver.api.mapper.annotations.Delete;
 import com.datastax.oss.driver.api.mapper.annotations.Insert;
 import com.datastax.oss.driver.api.mapper.annotations.Query;
 import com.datastax.oss.driver.api.mapper.annotations.Select;
+import com.datastax.oss.driver.api.mapper.annotations.StatementAttributes;
 import com.datastax.oss.driver.api.mapper.annotations.Update;
 import pl.pas.parcellocker.model.Delivery;
 
@@ -20,6 +21,7 @@ public interface DeliveryByIdDao {
     PagingIterable<Delivery> all();
 
     @Insert
+    @StatementAttributes(consistencyLevel = "LOCAL_QUORUM")
     void create(Delivery delivery);
 
     @Select
@@ -29,11 +31,10 @@ public interface DeliveryByIdDao {
     PagingIterable<Delivery> findByIds(List<UUID> ids);
 
     @Update
+    @StatementAttributes(consistencyLevel = "LOCAL_QUORUM")
     void update(Delivery client, @CqlName("entity_id") UUID entity_id);
 
     @Delete
+    @StatementAttributes(consistencyLevel = "LOCAL_QUORUM")
     void delete(Delivery client);
-
-    @Query("TRUNCATE parcel_locker.delivery_by_id")
-    void deleteAll();
 }

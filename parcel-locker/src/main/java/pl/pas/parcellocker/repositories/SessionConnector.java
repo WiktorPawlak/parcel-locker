@@ -31,7 +31,7 @@ import static pl.pas.parcellocker.configuration.TableSchemas.prepareParcelTable;
 
 public class SessionConnector implements AutoCloseable {
 
-    private final int REPLICATION_FACTOR = 2;
+    private final int REPLICATION_FACTOR = 3;
     public final CqlSession session;
     public DepositBoxCodec depositBoxCodec;
 
@@ -79,7 +79,7 @@ public class SessionConnector implements AutoCloseable {
     private CreateKeyspace prepareKeyspace(int replicationFactor) {
         return createKeyspace(CqlIdentifier.fromCql(PARCEL_LOCKER_NAMESPACE))
             .ifNotExists()
-            .withNetworkTopologyStrategy(Map.of("dc1", replicationFactor))
+            .withSimpleStrategy(replicationFactor)
             .withDurableWrites(true);
     }
 
