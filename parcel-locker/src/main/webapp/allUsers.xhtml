@@ -1,0 +1,52 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:a="http://xmlns.jcp.org/jsf/passthrough"
+                template="templates/MainTemplate.xhtml"
+                xmlns:h="http://java.sun.com/jsf/html">
+
+    <ui:define name="title">Lista wszystkich użytkowników</ui:define>
+
+    <ui:define name="left">
+        <ui:include src="./templates/menu.xhtml" />
+    </ui:define>
+
+    <ui:define name="content">
+        <h:form id="searchBar">
+            <h:inputText a:placeholder="Szukaj po nr telefonu" id="search" styleClass="js-filter" value="#{allUsersBean.searchValue}"/>
+            <h:commandButton value="Szukaj" action="#{allUsersBean.searchUsers()}"/>
+        </h:form>
+        <h:form>
+            <h:dataTable styleClass="" value="#{allUsersBean.currentUsers}" var="user">
+                <h:column>
+                    <f:facet name="header">Nr telefonu</f:facet>
+                    ${user.telNumber}
+                </h:column>
+                <h:column>
+                    <f:facet name="header">Imię</f:facet>
+                    ${user.firstName}
+                </h:column>
+                <h:column>
+                    <f:facet name="header">Nazwisko</f:facet>
+                    ${user.lastName}
+                </h:column>
+                <h:column>
+                    <f:facet name="header">Status</f:facet>
+                    ${utils.getActiveStatus(user)}
+                </h:column>
+                <h:column>
+                    <f:facet name="header">Typ uzytkownika</f:facet>
+                    ${utils.getClassName(user)}
+                </h:column>
+                <h:column>
+                    <f:facet name="header">Akcje</f:facet>
+                    <h:commandButton id="unregisterUserBtn" action="#{allUsersBean.unregisterUser(user)}" class="negative_btn" value="Dezaktywuj"/>
+                    <h:commandButton id="editUserBtn" action="#{allUsersBean.editUser(user)}" class="negative_btn" value="Edytuj"/>
+                </h:column>
+            </h:dataTable>
+        </h:form>
+    </ui:define>
+
+</ui:composition>

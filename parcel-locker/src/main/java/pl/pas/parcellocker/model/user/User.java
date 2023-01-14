@@ -7,11 +7,13 @@ import jakarta.persistence.Inheritance;
 import jakarta.persistence.InheritanceType;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
+import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import pl.pas.parcellocker.exceptions.ClientException;
 import pl.pas.parcellocker.model.EntityModel;
 
+@Data
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
 @DiscriminatorColumn(name = "USER_ROLE")
@@ -37,6 +39,14 @@ public abstract class User extends EntityModel {
         this.telNumber = telNumber;
 
         active = true;
+    }
+
+    public User(User user) {
+        this.id = user.getId();
+        this.telNumber = user.getTelNumber();
+        this.firstName = user.getFirstName();
+        this.lastName = user.getLastName();
+        this.active = user.isActive();
     }
 
     public boolean isAdmin() {

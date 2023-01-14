@@ -2,6 +2,7 @@ package pl.pas.parcellocker.managers;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 import jakarta.enterprise.context.ApplicationScoped;
@@ -44,9 +45,11 @@ public class UserManager {
         }
     }
 
-    public List<User> getUsersByPartialTelNumber(String telNumberPart) {
-        validateIfEmpty(telNumberPart);
+    public List<User> findAll() {
+        return clientRepository.findAll();
+    }
 
+    public List<User> getUsersByPartialTelNumber(String telNumberPart) {
         return clientRepository.findByTelNumberPart(telNumberPart);
     }
 
@@ -67,10 +70,41 @@ public class UserManager {
         return newUser;
     }
 
+    public User registerClient(User client) {
+        for (User user : clientRepository.findAll()) {
+            if (user.getTelNumber().equals(client.getTelNumber()))
+                throw new ClientManagerException("Client with given telephone number already exits");
+        }
+
+        client.setActive(true);
+        clientRepository.add(client);
+        return client;
+    }
+
+    public void edit(UUID id, User user) {
+        Optional<User> userToEditOptional = clientRepository.findUserById(id);
+        if (userToEditOptional.isPresent()) {
+            User userToEdit = userToEditOptional.get();
+            userToEdit.setFirstName(user.getFirstName());
+            userToEdit.setLastName(user.getLastName());
+            userToEdit.setTelNumber(user.getTelNumber());
+            clientRepository.update(userToEdit);
+        }
+    }
+
     public User unregisterClient(UUID operatorId, User user) {
         if (!permissionValidator.checkPermissions(operatorId, List.of(Administrator.class, Moderator.class))) {
             throw new PermissionValidationException("Not sufficient access rights");
         }
+        if (user == null)
+            throw new ClientManagerException("Client is a null!");
+
+        getUser(user.getTelNumber());
+        clientRepository.archive(user.getId());
+        return user;
+    }
+
+    public User unregisterClient(User user) {
         if (user == null)
             throw new ClientManagerException("Client is a null!");
 

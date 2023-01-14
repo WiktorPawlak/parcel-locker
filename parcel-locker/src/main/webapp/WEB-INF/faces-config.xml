@@ -17,4 +17,18 @@
         </message-bundle>
     </application>
 
+    <navigation-rule>
+        <from-view-id/>
+        <navigation-case>
+            <from-outcome>allUsers</from-outcome>
+            <to-view-id>/allUsers.xhtml</to-view-id>
+            <redirect/>
+        </navigation-case>
+        <navigation-case>
+            <from-outcome>editUser</from-outcome>
+            <to-view-id>/editUser.xhtml</to-view-id>
+            <redirect/>
+        </navigation-case>
+    </navigation-rule>
+
 </faces-config>

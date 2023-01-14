@@ -17,4 +17,8 @@ public class Administrator extends User {
     public Administrator(final String firstName, final String lastName, final String telNumber) {
         super(firstName, lastName, telNumber);
     }
+
+    public Administrator(User user) {
+        super(user);
+    }
 }

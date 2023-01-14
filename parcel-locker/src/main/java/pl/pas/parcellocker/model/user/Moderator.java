@@ -17,4 +17,8 @@ public class Moderator extends User {
     public Moderator(final String firstName, final String lastName, final String telNumber) {
         super(firstName, lastName, telNumber);
     }
+
+    public Moderator(User user) {
+        super(user);
+    }
 }

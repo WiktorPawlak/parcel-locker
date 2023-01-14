@@ -7,6 +7,8 @@ import java.util.UUID;
 public interface UserRepository {
     void add(User user);
 
+    void update(User user);
+
     void archive(UUID clientId);
 
     List<User> findAll();

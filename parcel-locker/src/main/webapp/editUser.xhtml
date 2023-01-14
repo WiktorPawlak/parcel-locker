@@ -14,13 +14,13 @@
 
     <ui:define name="content">
         <div id="container">
-            <h:form id="creation">
+            <h:form id="edit">
                 <div class="row">
                     <div class="col-md-3">
                         Typ uzytkownika
                     </div>
                     <div class="col-md-3">
-                        <h:selectOneListbox size="0" id="selectedType" value="#{addClientBean.userType}">
+                        <h:selectOneListbox size="0" id="selectedType" value="#{editClientBean.userType}">
                             <f:selectItem itemLabel="Client" itemValue="Client" />
                             <f:selectItem itemLabel="Moderator" itemValue="Moderator" />
                             <f:selectItem itemLabel="Administrator" itemValue="Administrator" />
@@ -33,7 +33,7 @@
                     </div>
                     <div class="col-md-3">
                         <h:inputText styleClass=""
-                                     value="#{addClientBean.currentUser.telNumber}"
+                                     value="#{editClientBean.currentUser.telNumber}"
                                      required="true"
                                      requiredMessage="Należy podać numer telefonu!"
                                      validatorMessage="Niepoprawna wartość pola!" >
@@ -47,7 +47,7 @@
                     </div>
                     <div class="col-md-3">
                         <h:inputText styleClass=""
-                                     value="#{addClientBean.currentUser.firstName}"
+                                     value="#{editClientBean.currentUser.firstName}"
                                      required="true"
                                      requiredMessage="Należy podać imię!"
                                      validatorMessage="Niepoprawna wartość pola!" >
@@ -61,7 +61,7 @@
                     </div>
                     <div class="col-md-3">
                         <h:inputText styleClass=""
-                                     value="#{addClientBean.currentUser.lastName}"
+                                     value="#{editClientBean.currentUser.lastName}"
                                      required="true"
                                      requiredMessage="Należy podać nazwisko!"
                                      validatorMessage="Niepoprawna wartość pola!" >
@@ -72,7 +72,7 @@
 
                 <h:messages/>
 
-                <h:commandButton value="Dodaj" action="#{addClientBean.add()}"
+                <h:commandButton value="Edytuj" action="#{editClientBean.edit()}"
                                  class="positive_btn"/>
             </h:form>
         </div>
