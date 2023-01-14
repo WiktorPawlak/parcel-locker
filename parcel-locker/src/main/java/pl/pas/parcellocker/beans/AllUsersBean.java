@@ -2,6 +2,7 @@ package pl.pas.parcellocker.beans;
 
 import jakarta.annotation.PostConstruct;
 import jakarta.enterprise.context.RequestScoped;
+import jakarta.faces.view.ViewScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
 import lombok.Getter;
@@ -12,7 +13,7 @@ import pl.pas.parcellocker.model.user.User;
 import java.util.List;
 
 @Named
-@RequestScoped
+@ViewScoped
 @Getter
 @Setter
 public class AllUsersBean extends Conversational {
