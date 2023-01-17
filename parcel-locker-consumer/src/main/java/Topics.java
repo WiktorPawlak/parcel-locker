@@ -12,11 +12,11 @@ import static org.hamcrest.Matchers.instanceOf;
 
 public class Topics {
     public static final String CLIENT_TOPIC = "newDeliveries";
-    public static final String KAFKA_NODES_STING = "kafka1:9192,kafka2:9292,kafka3:9392";
+    public static final String KAFKA_NODES_STRING = "kafka1:9192,kafka2:9292,kafka3:9392";
 
     public void createTopic() throws InterruptedException{
         Properties properties =  new Properties();
-        properties.put(AdminClientConfig.BOOTSTRAP_SERVERS_CONFIG, KAFKA_NODES_STING);
+        properties.put(AdminClientConfig.BOOTSTRAP_SERVERS_CONFIG, KAFKA_NODES_STRING);
         int partitionsNumber = 3;
         short replicationFactor = 3;
         try (Admin admin = Admin.create(properties)) {

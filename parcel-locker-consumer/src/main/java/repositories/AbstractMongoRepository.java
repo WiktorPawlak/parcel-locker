@@ -56,7 +56,7 @@ public abstract class AbstractMongoRepository<T> implements AutoCloseable {
             .build();
 
         mongoClient = MongoClients.create(settings);
-        parcelLocker = mongoClient.getDatabase("parcelLocker");
+        parcelLocker = mongoClient.getDatabase("consumer");
     }
 
     public void add(T object) {
@@ -75,14 +75,6 @@ public abstract class AbstractMongoRepository<T> implements AutoCloseable {
         return collection.find().into(new ArrayList<>());
     }
 
-    public void update(T object) {
-    }
-
-    public void delete(UUID id) {
-        MongoCollection<T> collection = parcelLocker.getCollection(collectionName, entityClass);
-        Bson filter = Filters.eq("_id", id);
-        collection.deleteOne(filter);
-    }
 
     @Override
     public void close() {
