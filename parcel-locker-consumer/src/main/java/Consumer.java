@@ -17,9 +17,7 @@ import java.util.*;
 public class Consumer {
 
     public static final String CONSUMER_GROUP = "ConsumersGroup";
-    private KafkaConsumer<UUID, String> kafkaConsumer;
     private List<KafkaConsumer<UUID, String>> consumerGroup = new ArrayList<>();
-
     private RecordRepository recordRepository = new RecordRepository();
 
     public void initConsumer() {
@@ -38,10 +36,6 @@ public class Consumer {
 
     private void consume(KafkaConsumer<UUID, String> consumer) {
         try {
-            consumer.poll(0);
-            Set<TopicPartition> consumerAssignment = consumer.assignment();
-
-
             Duration timeout = Duration.of(100, ChronoUnit.MILLIS);
 
             while (true) {
