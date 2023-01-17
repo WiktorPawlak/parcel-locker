@@ -12,7 +12,6 @@ import java.math.BigDecimal;
 class KafkaDeliveryTest {
     DeliveryMongoRepository abstractMongoRepository = new DeliveryMongoRepository(new ProducerHandlerImpl());
     Delivery delivery1;
-    Delivery delivery2;
 
     @BeforeEach
     void setup() {
@@ -20,7 +19,6 @@ class KafkaDeliveryTest {
         Client receiver = new Client("Tedi", "Tos", "2414124");
         Locker locker = new Locker("LDZ05", "test-address", 2);
         delivery1 = new Delivery(new BigDecimal("10"), true, shipper, receiver, locker);
-        delivery2 = new Delivery(new BigDecimal("10"), true, shipper, receiver, locker);
     }
 
     @Test
