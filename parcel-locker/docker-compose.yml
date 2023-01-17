@@ -1,13 +1,147 @@
+version: '3.9'
 services:
-    postgres:
-        image: postgres:15.0-alpine
-        environment:
-            - POSTGRES_DB
-            - POSTGRES_USER
-            - POSTGRES_PASSWORD
-        ports:
-            - "5432:5432"
-        volumes:
-            - /var/lib/postgresql/data
+  mongo:
+    image: mongo:6.0.2
+    container_name: mongodb
+    hostname: mongodb
+    networks:
+      - mongonet
+    ports:
+      - "27017:27017"
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=admin
+      - MONGO_INITDB_ROOT_PASSWORD=admin
+    healthcheck:
+      test: [ "CMD","mongosh","--eval","db.adminCommand('ping')" ]
+      interval: 10s
+      timeout: 2s
+      retries: 5
+
+#  mongo-express:
+#    image: mongo-express:6.0.2
+#    container_name: mongo-express
+#    restart: unless-stopped
+#    networks:
+#      - mongonet
+#    environment:
+#      ME_CONFIG_MONGODB_ADMINUSERNAME: admin
+#      ME_CONFIG_MONGODB_ADMINPASSWORD: admin
+#      ME_CONFIG_MONGODB_SERVER: mongodb
+#      ME_CONFIG_MONGODB_PORT: "27017"
+#    ports:
+#      - "8081:8081"
+#    depends_on:
+#      - mongo
+
+  kafka1:
+    image: docker.io/bitnami/kafka:3.3
+    hostname: kafka1
+    container_name: kafka1
+    ports:
+      - target: 9192
+        published: 9192
+        protocol: tcp
+      - target: 9193
+        published: 9193
+        protocol: tcp
+    environment:
+      - KAFKA_HOSTNAME=docker.for.win.localhost
+      - KAFKA_CFG_BROKER_ID=1
+      - KAFKA_CFG_BROKER_RACK=RACK1
+      - KAFKA_ENABLE_KRAFT=yes
+      - KAFKA_CFG_PROCESS_ROLES=broker,controller
+      - KAFKA_CFG_CONTROLLER_LISTENER_NAMES=CONTROLLER
+      - KAFKA_CFG_LISTENERS=CONTROLLER://:9193,DOCKER_EXTERNAL://kafka1:9192,DOCKER_INTERNAL://kafka1:19192
+      - KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP=CONTROLLER:PLAINTEXT,DOCKER_EXTERNAL:PLAINTEXT,DOCKER_INTERNAL:PLAINTEXT
+      - KAFKA_CFG_INTER_BROKER_LISTENER_NAME=DOCKER_INTERNAL
+      - KAFKA_CFG_ADVERTISED_LISTENERS=DOCKER_EXTERNAL://kafka1:9192,DOCKER_INTERNAL://kafka1:19192
+      - KAFKA_CFG_CONTROLLER_QUORUM_VOTERS=1@kafka1:9193,2@kafka2:9293,3@kafka3:9393
+      - KAFKA_KRAFT_CLUSTER_ID=NTg2OWZhNzY3NDhjMTFlZG
+      - ALLOW_PLAINTEXT_LISTENER=yes
+      - KAFKA_OPTS=-Dlog4j.rootLogger=DEBUG
+    volumes:
+      - kafka1_data:/bitnami/kafka
+    networks:
+      - kafkanet
+
+  kafka2:
+    image: docker.io/bitnami/kafka:3.3
+    hostname: kafka2
+    container_name: kafka2
+    ports:
+      - target: 9292
+        published: 9292
+        protocol: tcp
+      - target: 9293
+        published: 9293
+        protocol: tcp
+    environment:
+      - KAFKA_HOSTNAME=docker.for.win.localhost
+      - KAFKA_CFG_BROKER_ID=2
+      - KAFKA_CFG_BROKER_RACK=RACK1
+      - KAFKA_ENABLE_KRAFT=yes
+      - KAFKA_CFG_PROCESS_ROLES=broker,controller
+      - KAFKA_CFG_CONTROLLER_LISTENER_NAMES=CONTROLLER
+      - KAFKA_CFG_LISTENERS=CONTROLLER://:9293,DOCKER_EXTERNAL://kafka2:9292,DOCKER_INTERNAL://kafka2:19292
+      - KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP=CONTROLLER:PLAINTEXT,DOCKER_EXTERNAL:PLAINTEXT,DOCKER_INTERNAL:PLAINTEXT
+      - KAFKA_CFG_INTER_BROKER_LISTENER_NAME=DOCKER_INTERNAL
+      - KAFKA_CFG_ADVERTISED_LISTENERS=DOCKER_EXTERNAL://kafka2:9292,DOCKER_INTERNAL://kafka2:19292
+      - KAFKA_CFG_CONTROLLER_QUORUM_VOTERS=1@kafka1:9193,2@kafka2:9293,3@kafka3:9393
+      - KAFKA_KRAFT_CLUSTER_ID=NTg2OWZhNzY3NDhjMTFlZG
+      - ALLOW_PLAINTEXT_LISTENER=yes
+      - KAFKA_OPTS=-Dlog4j.rootLogger=DEBUG
+    volumes:
+      - kafka2_data:/bitnami/kafka
+    networks:
+      - kafkanet
+
+  kafka3:
+    image: docker.io/bitnami/kafka:3.3
+    hostname: kafka3
+    container_name: kafka3
+    ports:
+      - target: 9392
+        published: 9392
+        protocol: tcp
+      - target: 9393
+        published: 9393
+        protocol: tcp
+    environment:
+      - KAFKA_HOSTNAME=docker.for.win.localhost
+      - KAFKA_CFG_BROKER_ID=3
+      - KAFKA_CFG_BROKER_RACK=RACK1
+      - KAFKA_ENABLE_KRAFT=yes
+      - KAFKA_CFG_PROCESS_ROLES=broker,controller
+      - KAFKA_CFG_CONTROLLER_LISTENER_NAMES=CONTROLLER
+      - KAFKA_CFG_LISTENERS=CONTROLLER://:9393,DOCKER_EXTERNAL://kafka3:9392,DOCKER_INTERNAL://kafka3:19392
+      - KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP=CONTROLLER:PLAINTEXT,DOCKER_EXTERNAL:PLAINTEXT,DOCKER_INTERNAL:PLAINTEXT
+      - KAFKA_CFG_INTER_BROKER_LISTENER_NAME=DOCKER_INTERNAL
+      - KAFKA_CFG_ADVERTISED_LISTENERS=DOCKER_EXTERNAL://kafka3:9392,DOCKER_INTERNAL://kafka3:19392
+      - KAFKA_CFG_CONTROLLER_QUORUM_VOTERS=1@kafka1:9193,2@kafka2:9293,3@kafka3:9393
+      - KAFKA_KRAFT_CLUSTER_ID=NTg2OWZhNzY3NDhjMTFlZG
+      - ALLOW_PLAINTEXT_LISTENER=yes
+      - KAFKA_OPTS=-Dlog4j.rootLogger=DEBUG
+    volumes:
+      - kafka3_data:/bitnami/kafka
+    networks:
+      - kafkanet
+
 volumes:
-    postgres:
+  redis-stack-data:
+    driver: local
+  kafka1_data:
+    driver: local
+  kafka2_data:
+    driver: local
+  kafka3_data:
+    driver: local
+
+networks:
+  kafkanet:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.25.0.0/16
+  redisnet: {}
+  mongonet: {}

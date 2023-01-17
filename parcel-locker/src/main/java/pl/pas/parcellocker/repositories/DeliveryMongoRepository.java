@@ -1,22 +1,36 @@
 package pl.pas.parcellocker.repositories;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.Updates;
-import com.mongodb.client.model.ValidationOptions;
-import org.bson.Document;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.kafka.clients.producer.ProducerRecord;
+import org.apache.kafka.clients.producer.RecordMetadata;
 import org.bson.conversions.Bson;
 import pl.pas.parcellocker.model.Client;
 import pl.pas.parcellocker.model.Delivery;
 import pl.pas.parcellocker.model.DeliveryStatus;
+import pl.pas.parcellocker.repositories.kafka.Topics;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
 
+@Slf4j
 public class DeliveryMongoRepository extends AbstractMongoRepository<Delivery> {
-    public DeliveryMongoRepository() {
+
+    private final ProducerHandler producerHandler;
+    private final ObjectMapper objectMapper;
+
+    public DeliveryMongoRepository(ProducerHandler producerHandler) {
         super("deliveries", Delivery.class);
+        Topics.createTopic();
+        this.producerHandler = producerHandler;
+        this.objectMapper = new ObjectMapper();
     }
 
     public void update(Delivery delivery) {
@@ -48,5 +62,25 @@ public class DeliveryMongoRepository extends AbstractMongoRepository<Delivery> {
             Filters.eq("status", DeliveryStatus.RECEIVED)
         );
         return collection.find().filter(filter).into(new ArrayList<>());
+    }
+
+    @Override
+    public void add(Delivery object) {
+        super.add(object);
+        sendEvent(object);
+    }
+
+    private void sendEvent(Delivery delivery) {
+        try {
+            ProducerRecord<UUID, String> record = new ProducerRecord<>(
+                Topics.DELIVERY_TOPIC,
+                delivery.getId(),
+                objectMapper.writeValueAsString(delivery));
+
+            Future<RecordMetadata> sent = producerHandler.sentEvent(record);
+            sent.get();
+        } catch (ExecutionException | InterruptedException | JsonProcessingException e) {
+            log.error(e.getMessage());
+        }
     }
 }

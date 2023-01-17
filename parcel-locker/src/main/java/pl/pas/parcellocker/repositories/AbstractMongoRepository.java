@@ -34,6 +34,7 @@ public abstract class AbstractMongoRepository<T> implements AutoCloseable {
         .register(Package.class, pl.pas.parcellocker.model.List.class, Parcel.class)
         .conventions(Conventions.DEFAULT_CONVENTIONS)
         .build());
+
     private final Class<T> entityClass;
     protected MongoDatabase parcelLocker;
     private MongoClient mongoClient;

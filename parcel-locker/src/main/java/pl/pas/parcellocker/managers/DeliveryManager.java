@@ -5,6 +5,7 @@ import pl.pas.parcellocker.model.Client;
 import pl.pas.parcellocker.model.Delivery;
 import pl.pas.parcellocker.model.Locker;
 import pl.pas.parcellocker.repositories.DeliveryMongoRepository;
+import pl.pas.parcellocker.repositories.kafka.ProducerHandlerImpl;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -18,7 +19,7 @@ public class DeliveryManager {
     private final DeliveryMongoRepository deliveries;
 
     public DeliveryManager() {
-        deliveries = new DeliveryMongoRepository();
+        deliveries = new DeliveryMongoRepository(new ProducerHandlerImpl());
     }
 
     public Delivery makeParcelDelivery(

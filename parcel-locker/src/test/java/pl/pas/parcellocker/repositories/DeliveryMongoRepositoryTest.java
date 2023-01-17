@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 import pl.pas.parcellocker.model.Client;
 import pl.pas.parcellocker.model.Delivery;
 import pl.pas.parcellocker.model.Locker;
+import pl.pas.parcellocker.repositories.kafka.ProducerHandlerImpl;
 
 import java.math.BigDecimal;
 
@@ -14,7 +15,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static pl.pas.parcellocker.model.DeliveryStatus.RECEIVED;
 
 class DeliveryMongoRepositoryTest {
-    DeliveryMongoRepository abstractMongoRepository = new DeliveryMongoRepository();
+    DeliveryMongoRepository abstractMongoRepository = new DeliveryMongoRepository(new ProducerHandlerImpl());
     Delivery delivery1;
     Delivery delivery2;
 
