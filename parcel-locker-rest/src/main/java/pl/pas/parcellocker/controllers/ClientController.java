@@ -1,8 +1,6 @@
 package pl.pas.parcellocker.controllers;
 
 
-import java.util.UUID;
-
 import jakarta.inject.Inject;
 import jakarta.persistence.NoResultException;
 import jakarta.validation.Valid;
@@ -19,7 +17,6 @@ import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import pl.pas.parcellocker.controllers.dto.ClientDto;
 import pl.pas.parcellocker.exceptions.ClientManagerException;
-import pl.pas.parcellocker.exceptions.DeliveryManagerException;
 import pl.pas.parcellocker.managers.UserManager;
 import pl.pas.parcellocker.model.user.User;
 
@@ -53,9 +50,9 @@ public class ClientController {
     @POST
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response registerClient(@QueryParam("operatorId") UUID operatorID, @Valid ClientDto clientDTO) {
+    public Response registerClient(@Valid ClientDto clientDTO) {
         try {
-            User newUser = userManager.registerClient(operatorID, clientDTO.firstName, clientDTO.lastName, clientDTO.telNumber);
+            User newUser = userManager.registerClient(clientDTO.firstName, clientDTO.lastName, clientDTO.telNumber);
             return Response.status(Response.Status.CREATED).entity(newUser).build();
         } catch (ValidationException | NullPointerException e) {
             return Response.status(Response.Status.NOT_ACCEPTABLE).build();
@@ -67,10 +64,10 @@ public class ClientController {
     @PUT
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes({MediaType.TEXT_PLAIN})
-    public Response unregisterClient(@QueryParam("operatorId") UUID operatorId, String telNumber) {
+    public Response unregisterClient(@QueryParam("telNumber") String telNumber) {
         try {
             User user = userManager.getUser(telNumber);
-            User unregisteredUser = userManager.unregisterClient(operatorId, user);
+            User unregisteredUser = userManager.unregisterClient(user);
             return Response.ok().entity(unregisteredUser).build();
         } catch (ValidationException | NullPointerException e) {
             return Response.status(Response.Status.NOT_ACCEPTABLE).build();

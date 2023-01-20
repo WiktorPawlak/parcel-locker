@@ -1,10 +1,5 @@
 package pl.pas.parcellocker.managers;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
-
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import lombok.NoArgsConstructor;
@@ -16,6 +11,11 @@ import pl.pas.parcellocker.model.user.Moderator;
 import pl.pas.parcellocker.model.user.User;
 import pl.pas.parcellocker.model.user.UserRepository;
 import pl.pas.parcellocker.security.PermissionValidator;
+
+import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 
 
 @ApplicationScoped
@@ -53,10 +53,7 @@ public class UserManager {
         return clientRepository.findByTelNumberPart(telNumberPart);
     }
 
-    public synchronized User registerClient(UUID operatorId, String firstName, String lastName, String telNumber) {
-        if (!permissionValidator.checkPermissions(operatorId, List.of(Administrator.class))) {
-            throw new PermissionValidationException("Not sufficient access rights");
-        }
+    public synchronized User registerClient(String firstName, String lastName, String telNumber) {
 
         validateIfEmpty(firstName, lastName, telNumber);
 
