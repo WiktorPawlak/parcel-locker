@@ -1,4 +1,4 @@
-package pl.pas.parcellocker.parcellockermvc;
+package pl.pas.parcellocker;
 
 import java.io.*;
 
