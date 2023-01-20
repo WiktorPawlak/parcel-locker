@@ -1,0 +1,7 @@
+package pl.pas.parcellocker.exceptions;
+
+public class ClientException extends RuntimeException {
+    public ClientException(String message) {
+        super(message);
+    }
+}
