@@ -5,9 +5,9 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>pl.pas</groupId>
-    <artifactId>parcel-locker</artifactId>
+    <artifactId>parcel-locker-rest</artifactId>
     <version>1.0-SNAPSHOT</version>
-    <name>parcel-locker</name>
+    <name>parcel-locker-rest</name>
     <packaging>war</packaging>
 
     <properties>

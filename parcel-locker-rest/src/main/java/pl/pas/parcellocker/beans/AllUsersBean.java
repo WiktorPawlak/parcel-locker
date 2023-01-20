@@ -10,13 +10,14 @@ import lombok.Setter;
 import pl.pas.parcellocker.managers.UserManager;
 import pl.pas.parcellocker.model.user.User;
 
+import java.io.Serializable;
 import java.util.List;
 
 @Named
 @ViewScoped
 @Getter
 @Setter
-public class AllUsersBean extends Conversational {
+public class AllUsersBean extends Conversational implements Serializable {
 
     @Inject
     UserManager userManager;
