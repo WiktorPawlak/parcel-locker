@@ -25,11 +25,11 @@ public class HelloApplication extends Application {
     @PostConstruct
     void init() {
         if (!userRepository.findByTelNumber("666666666").isPresent()) {
-            User admin = new Administrator("admin", "admin", "666666666");
-            User moderator = new Moderator("moderator", "moderator", "546777890");
-            User client1 = new Client("Johnzon", "Jackson", "420213769");
-            User client2 = new Client("Yasson", "Jackson", "123456789");
-            User client3 = new Client("Geronimo", "Jackson", "234345456");
+            User admin = new Administrator("admin", "admin", "666666666", "P@ssw0rd");
+            User moderator = new Moderator("moderator", "moderator", "546777890", "P@ssw0rd");
+            User client1 = new Client("Johnzon", "Jackson", "420213769", "P@ssw0rd");
+            User client2 = new Client("Yasson", "Jackson", "123456789", "P@ssw0rd");
+            User client3 = new Client("Geronimo", "Jackson", "234345456", "P@ssw0rd");
             userRepository.add(admin);
             userRepository.add(moderator);
             userRepository.add(client1);

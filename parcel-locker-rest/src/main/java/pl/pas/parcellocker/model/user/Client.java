@@ -15,8 +15,8 @@ import lombok.NoArgsConstructor;
 public class Client extends User {
 
     @Builder
-    public Client(final String firstName, final String lastName, final String telNumber) {
-        super(firstName, lastName, telNumber);
+    public Client(final String firstName, final String lastName, final String telNumber, final String password) {
+        super(firstName, lastName, telNumber, password);
         setRole(UserRole.CLIENT);
     }
 

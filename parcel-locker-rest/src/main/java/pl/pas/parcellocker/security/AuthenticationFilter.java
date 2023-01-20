@@ -9,12 +9,15 @@ import jakarta.security.enterprise.authentication.mechanism.http.HttpMessageCont
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 @RequestScoped
-@DeclareRoles({"ADMINISTRATOR", "MODERATOR", "CLIENT"})
+@DeclareRoles({"ADMINISTRATOR", "MODERATOR", "CLIENT", "UNAUTHORIZED"})
 public class AuthenticationFilter implements HttpAuthenticationMechanism {
 
     private static final Pattern TOKEN_PATTERN = Pattern.compile("^Bearer *([^ ]+) *$", Pattern.CASE_INSENSITIVE);
@@ -31,7 +34,7 @@ public class AuthenticationFilter implements HttpAuthenticationMechanism {
         Matcher matcher = TOKEN_PATTERN.matcher(Optional.ofNullable(authorization).orElse(""));
 
         if (!matcher.matches()) {
-            return httpMessageContext.responseUnauthorized();
+            return httpMessageContext.notifyContainerAboutLogin("UNAUTHORIZED", new HashSet<>(List.of("UNAUTHORIZED")));
         }
 
         final String token = matcher.group(1);
