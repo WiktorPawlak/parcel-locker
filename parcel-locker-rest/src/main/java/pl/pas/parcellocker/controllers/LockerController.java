@@ -24,11 +24,32 @@ public class LockerController {
     private LockerManager lockerManager;
 
     @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getLockers() {
+        try {
+            return Response.ok().entity(lockerManager.getAllLockers()).build();
+        } catch (Exception e) {
+            return Response.status(Response.Status.NOT_FOUND).build();
+        }
+    }
+
+    @GET
     @Path("/{identityNumber}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getLocker(@PathParam("identityNumber") String identityNumber) {
         try {
             return Response.ok().entity(lockerManager.getLocker(identityNumber)).build();
+        } catch (LockerManagerException e) {
+            return Response.status(Response.Status.NOT_FOUND).build();
+        }
+    }
+
+    @GET
+    @Path("/{identityNumber}/empty")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getLockerEmptyBoxesCount(@PathParam("identityNumber") String identityNumber) {
+        try {
+            return Response.ok().entity(lockerManager.getEmptyBoxesCount(identityNumber)).build();
         } catch (LockerManagerException e) {
             return Response.status(Response.Status.NOT_FOUND).build();
         }

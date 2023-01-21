@@ -10,6 +10,7 @@ public interface UserRepository {
     void update(User user);
 
     void archive(UUID clientId);
+    void unarchive(UUID clientId);
 
     List<User> findAll();
 

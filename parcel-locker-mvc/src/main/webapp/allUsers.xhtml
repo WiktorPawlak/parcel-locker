@@ -19,31 +19,32 @@
             <h:commandButton value="Szukaj" action="#{allUsersBean.searchUsers()}"/>
         </h:form>
         <h:form>
-            <h:dataTable styleClass="" value="#{allUsersBean.currentUsers}" var="user">
+            <h:dataTable styleClass="" value="#{allUsersBean.currentUsers}" var="locker">
                 <h:column>
                     <f:facet name="header">Nr telefonu</f:facet>
-                    ${user.telNumber}
+                    ${locker.telNumber}
                 </h:column>
                 <h:column>
                     <f:facet name="header">Imię</f:facet>
-                    ${user.firstName}
+                    ${locker.firstName}
                 </h:column>
                 <h:column>
                     <f:facet name="header">Nazwisko</f:facet>
-                    ${user.lastName}
+                    ${locker.lastName}
                 </h:column>
                 <h:column>
                     <f:facet name="header">Status</f:facet>
-                    ${utils.getActiveStatus(user)}
+                    ${utils.getActiveStatus(locker)}
                 </h:column>
                 <h:column>
                     <f:facet name="header">Typ uzytkownika</f:facet>
-                    ${utils.getUserType(user)}
+                    ${utils.getUserType(locker)}
                 </h:column>
                 <h:column>
                     <f:facet name="header">Akcje</f:facet>
-                    <h:commandButton id="unregisterUserBtn" action="#{allUsersBean.unregisterUser(user)}" class="negative_btn" value="Dezaktywuj"/>
-                    <h:commandButton id="editUserBtn" action="#{allUsersBean.editUser(user)}" class="negative_btn" value="Edytuj"/>
+                    <h:commandButton id="archiveUserBtn" action="#{allUsersBean.archiveUser(locker)}" class="negative_btn" value="Dezaktywuj"/>
+                    <h:commandButton id="unarchiveUserBtn" action="#{allUsersBean.unarchiveUser(locker)}" class="negative_btn" value="Aktywuj"/>
+                    <h:commandButton id="editUserBtn" action="#{allUsersBean.editUser(locker)}" class="negative_btn" value="Edytuj"/>
                 </h:column>
             </h:dataTable>
         </h:form>

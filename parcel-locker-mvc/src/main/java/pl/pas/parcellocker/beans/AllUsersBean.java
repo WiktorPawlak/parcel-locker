@@ -35,9 +35,10 @@ public class AllUsersBean extends Conversational implements Serializable {
 
     String searchValue;
 
+    Client client = ClientBuilder.newClient();
+
     @PostConstruct
     public void initCurrentProducts() {
-        Client client = ClientBuilder.newClient();
         WebTarget webTarget = client.target("http://localhost:8080/parcel-locker-rest-1.0-SNAPSHOT/api/clients");
         Invocation.Builder invocationBuilder = webTarget.request(MediaType.APPLICATION_JSON);
         Response response = invocationBuilder.get();
@@ -45,21 +46,32 @@ public class AllUsersBean extends Conversational implements Serializable {
     }
 
     public void searchUsers() {
-//        currentUsers = moduleExecutor.getTarget().queryParam(searchValue).request(MediaType.APPLICATION_JSON).get().readEntity(new GenericType<>() {
-//        });
-        //currentUsers = (List<User>) clientController.getClientsByPhoneNumberPattern(searchValue);
+        WebTarget webTarget = client.target("http://localhost:8080/parcel-locker-rest-1.0-SNAPSHOT/api/clients")
+                .queryParam("telNumber", searchValue);
+        Invocation.Builder invocationBuilder = webTarget.request(MediaType.APPLICATION_JSON);
+        Response response = invocationBuilder.get();
+        currentUsers = response.readEntity(new GenericType<>() {});
     }
 
-    public String unregisterUser(User user) {
-//        moduleExecutor.getTarget().request(MediaType.APPLICATION_JSON).put(Entity.json(user.getTelNumber()));
-        //clientController.unregisterClient(user.getTelNumber());
+    public String archiveUser(UserDto user) {
+        WebTarget target = client.target("http://localhost:8080/parcel-locker-rest-1.0-SNAPSHOT/api/clients")
+                .path("{id}").path("/archive");
+
+        target.resolveTemplate("id", user.getTelNumber()).request().put(Entity.text(""));
+        return "allUsers";
+    }
+
+    public String unarchiveUser(UserDto user) {
+        WebTarget target = client.target("http://localhost:8080/parcel-locker-rest-1.0-SNAPSHOT/api/clients")
+                .path("{id}").path("/unarchive");
+
+        target.resolveTemplate("id", user.getTelNumber()).request().put(Entity.text(""));
         return "allUsers";
     }
 
     public String editUser(UserDto user) {
         beginNewConversation();
         editClientBean.setCurrentUser(user);
-        editClientBean.setUserType(user.getClass().getSimpleName());
         editClientBean.edit();
         return "editUser";
     }

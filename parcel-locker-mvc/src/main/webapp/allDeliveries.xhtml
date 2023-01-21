@@ -1,0 +1,52 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns="http://www.w3.org/1999/xhtml"
+                template="templates/MainTemplate.xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core">
+
+    <ui:define name="title">Lista wszystkich dostaw</ui:define>
+
+    <ui:define name="left">
+        <ui:include src="./templates/menu.xhtml"/>
+    </ui:define>
+
+    <ui:define name="content">
+        <h:form>
+            <h:dataTable styleClass="table table-hover table-striped table-bordered" value="#{currentDeliveriesBean.deliveries}"
+                         var="delivery">
+                <h:column>
+                    <f:facet name="header">ID</f:facet>
+                    ${delivery.id}
+                </h:column>
+                <h:column>
+                    <f:facet name="header">STATUS</f:facet>
+                    ${delivery.status}
+                </h:column>
+                <h:column>
+                    <f:facet name="header">ARCHIVED</f:facet>
+                    ${delivery.archived}
+                </h:column>
+                <h:column>
+                    <f:facet name="header">PRICE</f:facet>
+                    ${delivery.pack.basePrice}
+                </h:column>
+                <h:column>
+                    <f:facet name="header">Receiver's name</f:facet>
+                    ${delivery.receiver.firstName}
+                </h:column>
+                <h:column>
+                    <f:facet name="header">Receiver's lastname</f:facet>
+                    ${delivery.receiver.lastName}
+                </h:column>
+                <h:column>
+                    <h:commandButton id="deliveryDeleteBtn" action="#{currentDeliveriesBean.delete(delivery)}" class="negative_btn"
+                                     value="usuń">
+                    </h:commandButton>
+                </h:column>
+            </h:dataTable>
+        </h:form>
+    </ui:define>
+
+</ui:composition>

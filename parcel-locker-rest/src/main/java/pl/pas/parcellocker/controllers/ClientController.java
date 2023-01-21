@@ -20,6 +20,8 @@ import pl.pas.parcellocker.exceptions.ClientManagerException;
 import pl.pas.parcellocker.managers.UserManager;
 import pl.pas.parcellocker.model.user.User;
 
+import java.util.UUID;
+
 @Path(value = "/clients")
 public class ClientController {
 
@@ -62,13 +64,46 @@ public class ClientController {
     }
 
     @PUT
+    @Path("/{telNumber}/archive")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes({MediaType.TEXT_PLAIN})
-    public Response unregisterClient(@QueryParam("telNumber") String telNumber) {
+    public Response archiveClient(@PathParam("telNumber") String telNumber) {
         try {
             User user = userManager.getUser(telNumber);
             User unregisteredUser = userManager.unregisterClient(user);
             return Response.ok().entity(unregisteredUser).build();
+        } catch (ValidationException | NullPointerException e) {
+            return Response.status(Response.Status.NOT_ACCEPTABLE).build();
+        } catch (ClientManagerException e) {
+            return Response.status(Response.Status.NOT_FOUND).entity(e.getMessage()).build();
+        }
+    }
+
+    @PUT
+    @Path("/{telNumber}/unarchive")
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes({MediaType.TEXT_PLAIN})
+    public Response unarchiveClient(@PathParam("telNumber") String telNumber) {
+        try {
+            User user = userManager.getUser(telNumber);
+            User unregisteredUser = userManager.activateClient(user);
+            return Response.ok().entity(unregisteredUser).build();
+        } catch (ValidationException | NullPointerException e) {
+            return Response.status(Response.Status.NOT_ACCEPTABLE).build();
+        } catch (ClientManagerException e) {
+            return Response.status(Response.Status.NOT_FOUND).entity(e.getMessage()).build();
+        }
+    }
+
+    @PUT
+    @Path("/{id}")
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes({MediaType.APPLICATION_JSON})
+    public Response editClient(@PathParam(value = "id") UUID id, @Valid ClientDto clientDto) {
+        try {
+            userManager.edit(id, clientDto);
+            User user = userManager.findById(id);
+            return Response.ok().entity(user).build();
         } catch (ValidationException | NullPointerException e) {
             return Response.status(Response.Status.NOT_ACCEPTABLE).build();
         } catch (ClientManagerException e) {

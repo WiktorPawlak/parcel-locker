@@ -7,6 +7,8 @@ import pl.pas.parcellocker.exceptions.LockerManagerException;
 import pl.pas.parcellocker.model.locker.Locker;
 import pl.pas.parcellocker.model.locker.LockerRepository;
 
+import java.util.List;
+
 @ApplicationScoped
 @NoArgsConstructor
 public class LockerManager {
@@ -17,6 +19,19 @@ public class LockerManager {
     public LockerManager(LockerRepository lockerRepository) {
         this.lockerRepository = lockerRepository;
     }
+
+    public List<Locker> getAllLockers() {
+        return lockerRepository.findAll();
+    }
+
+    public int getEmptyBoxesCount(String identityNumber) {
+        Locker locker = lockerRepository.findByIdentityNumber(identityNumber)
+            .orElseThrow(() ->
+                new LockerManagerException("Locker with given name doesn't exist.")
+            );
+        return locker.countEmpty();
+    }
+
 
     public synchronized Locker createLocker(String identityNumber, String address, int depositBoxCount) {
         checkIfDuplicatedName(identityNumber);

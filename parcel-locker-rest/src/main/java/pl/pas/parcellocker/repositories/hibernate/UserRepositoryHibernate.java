@@ -32,6 +32,19 @@ public class UserRepositoryHibernate extends HibernateRepository<User> implement
         }
     }
 
+    public void unarchive(UUID id) {
+        try {
+            EntityManager entityManager = getEntityManager();
+
+            entityManager.getTransaction().begin();
+            entityManager.find(User.class, id).setActive(true);
+            entityManager.getTransaction().commit();
+
+        } catch (PersistenceException e) {
+            throw new RepositoryException(e);
+        }
+    }
+
     public Optional<User> findByTelNumber(String telNumber) {
         return Optional.of((User) getEntityManager()
             .createQuery("select u from User u where u.telNumber = :telNumber")
