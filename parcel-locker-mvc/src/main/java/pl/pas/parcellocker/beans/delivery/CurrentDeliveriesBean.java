@@ -1,4 +1,4 @@
-package pl.pas.parcellocker.beans.pakudż;
+package pl.pas.parcellocker.beans.delivery;
 
 
 import static pl.pas.parcellocker.delivery.http.ModulePaths.DELIVERIES_PATH;
@@ -42,21 +42,21 @@ public class CurrentDeliveriesBean extends Conversational implements Serializabl
 //    boolean isCreatingNewProduct = true;
 
     @PostConstruct
-    public void initCurrentProducts() {
+    public void initCurrentDeliveries() {
         moduleExecutor.setPathForRemoteCall(DELIVERIES_PATH);
         deliveries = moduleExecutor.getTarget().request(MediaType.APPLICATION_JSON).get().readEntity(new GenericType<>() {
         });
     }
 
-    public String delete(Delivery delivery) {
-        moduleExecutor.setPathForRemoteCall(DELIVERIES_PATH + "/{id}");
-
-        moduleExecutor.getTarget().resolveTemplate("id", delivery.getId())
-                .request()
-                .delete();
-
-        return "allDeliveries";
-    }
+//    public String delete(Delivery delivery) {
+//        moduleExecutor.setPathForRemoteCall(DELIVERIES_PATH + "/{id}");
+//
+//        moduleExecutor.getTarget().resolveTemplate("id", delivery.getId())
+//                .request()
+//                .delete();
+//
+//        return "allDeliveries";
+//    }
 
 //    public String editProduct(Product product) {
 //        beginNewConversation();
