@@ -37,8 +37,8 @@ class LockerManagerTest extends TestsConfig {
 
         DeliveryManager deliveryManager =
             new DeliveryManager(deliveryRepository, lockerRepository, clientRepository);
-        User shipper1 = new Client("Oscar", "Trel", "321312312");
-        User receiver1 = new Client("Bartosh", "Siekan", "123123123");
+        User shipper1 = new Client("Oscar", "Trel", "321312312", "P@ssw0rd");
+        User receiver1 = new Client("Bartosh", "Siekan", "123123123", "P@ssw0rd");
         clientRepository.add(shipper1);
         clientRepository.add(receiver1);
         Delivery delivery =

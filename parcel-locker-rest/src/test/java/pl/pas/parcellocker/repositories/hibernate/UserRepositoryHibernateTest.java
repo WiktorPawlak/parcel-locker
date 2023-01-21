@@ -24,11 +24,11 @@ class UserRepositoryHibernateTest extends TestsConfig {
 
     @BeforeEach
     void setup() {
-        c1 = new Client("Maciej", "Nowak", "123452137");
-        c2 = new Client("Tadeusz", "Byk", "123456");
-        c3 = new Client("Krzysztof", "Ryk", "1234567");
-        c4 = new Client("Mariusz", "Kwik", "12345678");
-        c5 = new Client("Jakub", "Kowalski", "123456789");
+        c1 = new Client("Maciej", "Nowak", "123452137", "P@ssw0rd");
+        c2 = new Client("Tadeusz", "Byk", "123456", "P@ssw0rd");
+        c3 = new Client("Krzysztof", "Ryk", "1234567", "P@ssw0rd");
+        c4 = new Client("Mariusz", "Kwik", "12345678", "P@ssw0rd");
+        c5 = new Client("Jakub", "Kowalski", "123456789", "P@ssw0rd");
     }
 
     @AfterEach

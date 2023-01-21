@@ -25,8 +25,8 @@ class LockerTest extends TestsConfig {
 
     @BeforeAll
     void setup() {
-        Client c1 = new Client("test", "test", "1231");
-        Client c2 = new Client("test", "test", "1231");
+        Client c1 = new Client("test", "test", "1231", "P@ssw0rd");
+        Client c2 = new Client("test", "test", "1231", "P@ssw0rd");
         locker = new Locker("LDZ01", "Gawronska 12, Lodz 12-123", 10);
         delivery = new Delivery(BigDecimal.TEN, true, c1, c2, locker);
     }

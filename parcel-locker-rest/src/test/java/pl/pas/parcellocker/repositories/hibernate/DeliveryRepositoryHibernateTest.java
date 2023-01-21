@@ -28,8 +28,8 @@ class DeliveryRepositoryHibernateTest extends TestsConfig {
     @BeforeAll
     void setup() {
         l1 = new Locker("LDZ01", "Gawronska 12, Lodz 12-123", 10);
-        c1 = new Client("Maciej", "Nowak", "12345");
-        c2 = new Client("Maciej", "Kowal", "123456");
+        c1 = new Client("Maciej", "Nowak", "12345", "P@ssw0rd");
+        c2 = new Client("Maciej", "Kowal", "123456", "P@ssw0rd");
         clientRepository.add(c1);
         clientRepository.add(c2);
         lockerRepository.add(l1);

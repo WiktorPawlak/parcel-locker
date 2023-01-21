@@ -1,5 +1,7 @@
 package pl.pas.parcellocker.model.user;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.json.bind.annotation.JsonbTransient;
 import jakarta.persistence.Column;
 import jakarta.persistence.DiscriminatorColumn;
 import jakarta.persistence.Entity;
@@ -27,10 +29,12 @@ public abstract class User extends EntityModel {
     private String lastName;
     @Column(unique = true)
     private String telNumber;
+    @JsonbTransient
+    private String password;
     private boolean active;
     private UserRole role;
 
-    protected User(String firstName, String lastName, String telNumber) {
+    protected User(String firstName, String lastName, String telNumber, String password) {
         validateName(firstName);
         validateName(lastName);
         validateTelNumber(telNumber);
@@ -38,6 +42,7 @@ public abstract class User extends EntityModel {
         this.firstName = firstName;
         this.lastName = lastName;
         this.telNumber = telNumber;
+        this.password = password;
 
         active = true;
     }

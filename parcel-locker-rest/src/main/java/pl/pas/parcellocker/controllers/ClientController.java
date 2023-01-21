@@ -54,9 +54,10 @@ public class ClientController {
     @POST
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
+    @RolesAllowed({"UNAUTHORIZED"})
     public Response registerClient(@Valid ClientDto clientDTO) {
         try {
-            User newUser = userManager.registerClient(clientDTO.firstName, clientDTO.lastName, clientDTO.telNumber);
+            User newUser = userManager.registerClient(clientDTO.firstName, clientDTO.lastName, clientDTO.telNumber, clientDTO.password);
             return Response.status(Response.Status.CREATED).entity(newUser).build();
         } catch (ValidationException | NullPointerException e) {
             return Response.status(Response.Status.NOT_ACCEPTABLE).build();

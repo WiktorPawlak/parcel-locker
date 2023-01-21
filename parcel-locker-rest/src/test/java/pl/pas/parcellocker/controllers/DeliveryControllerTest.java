@@ -26,8 +26,8 @@ import static pl.pas.parcellocker.model.delivery.DeliveryStatus.READY_TO_SHIP;
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class DeliveryControllerTest extends JakartaContainerInitializer {
 
-  Client receiver = new Client("Tony", "Stark", "1234567890");
-  Client shipper = new Client("Steven", "Rogers", "9987654321");
+  Client receiver = new Client("Tony", "Stark", "1234567890", "P@ssw0rd");
+  Client shipper = new Client("Steven", "Rogers", "9987654321", "P@ssw0rd");
   Locker locker = new Locker("PLO1", "Piotrkow", 5);
 
   String deliveryId;

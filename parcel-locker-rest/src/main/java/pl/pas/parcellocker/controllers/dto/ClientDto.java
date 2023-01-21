@@ -14,4 +14,5 @@ public class ClientDto {
   @NotEmpty public String firstName;
   @NotEmpty public String lastName;
   @NotEmpty public String telNumber;
+  @NotEmpty public String password;
 }

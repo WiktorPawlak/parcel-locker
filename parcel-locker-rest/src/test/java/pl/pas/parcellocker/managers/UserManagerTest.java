@@ -24,12 +24,13 @@ class UserManagerTest extends TestsConfig {
     private final String TEST_SURNAME = "Byniowski";
     private final String TEST_TEL_NUMBER = "123456789";
     private final String TEST_WRONG_TEL_NUMBER = "987654321";
+    private final String TEST_PASSWORD = "P@ssw0rd";
 
     private User admin;
 
     @BeforeEach
     void init() {
-        admin = new Administrator("Administrator", "surname", "666789123");
+        admin = new Administrator("Administrator", "surname", "666789123", "P@ssw0rd");
         clientRepository.add(admin);
     }
 
@@ -40,13 +41,13 @@ class UserManagerTest extends TestsConfig {
 
     @Test
     void Should_RegisterClient() {
-        userManager.registerClient(TEST_NAME, TEST_SURNAME, TEST_TEL_NUMBER);
+        userManager.registerClient(TEST_NAME, TEST_SURNAME, TEST_TEL_NUMBER, TEST_PASSWORD);
         assertEquals(TEST_TEL_NUMBER, userManager.getUser(TEST_TEL_NUMBER).getTelNumber());
     }
 
     @Test
     void Should_UnregisterClient() {
-        userManager.registerClient(TEST_NAME, TEST_SURNAME, TEST_TEL_NUMBER);
+        userManager.registerClient(TEST_NAME, TEST_SURNAME, TEST_TEL_NUMBER, TEST_PASSWORD);
         assertTrue(userManager.getUser(TEST_TEL_NUMBER).isActive());
 
         userManager.unregisterClient(admin.getId(), userManager.getUser(TEST_TEL_NUMBER));
@@ -55,14 +56,14 @@ class UserManagerTest extends TestsConfig {
 
     @Test
     void Should_GetClient() {
-        userManager.registerClient(TEST_NAME, TEST_SURNAME, TEST_TEL_NUMBER);
+        userManager.registerClient(TEST_NAME, TEST_SURNAME, TEST_TEL_NUMBER, TEST_PASSWORD);
         assertEquals(userManager.getUser(TEST_TEL_NUMBER).getFirstName(), TEST_NAME);
         assertThrows(NoResultException.class, () -> userManager.getUser(TEST_WRONG_TEL_NUMBER));
     }
 
     @Test
     void Should_ThrowException_WhenInvalidValuesPassed() {
-        userManager.registerClient(TEST_NAME, TEST_SURNAME, TEST_TEL_NUMBER);
+        userManager.registerClient(TEST_NAME, TEST_SURNAME, TEST_TEL_NUMBER, TEST_PASSWORD);
         assertThrows(ClientManagerException.class, () -> userManager.getUser(""));
         assertThrows(ClientManagerException.class, () -> userManager.unregisterClient(admin.getId(), null));
     }

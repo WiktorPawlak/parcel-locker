@@ -35,8 +35,8 @@ class DeliveryManagerTest extends TestsConfig {
     @BeforeAll
     void setup() {
         locker = new Locker("LDZ01", "Gawronska 12, Lodz 12-123", 20);
-        shipper1 = new Client("Oscar", "Trel", "321312312");
-        receiver1 = new Client("Bartosh", "Siekan", "123123123");
+        shipper1 = new Client("Oscar", "Trel", "321312312", "P@ssw0rd");
+        receiver1 = new Client("Bartosh", "Siekan", "123123123", "P@ssw0rd");
         clientRepository.add(shipper1);
         clientRepository.add(receiver1);
         lockerRepository.add(locker);
@@ -66,7 +66,7 @@ class DeliveryManagerTest extends TestsConfig {
 
     @Test
     void Should_ThrowExceptionOnPutIn_WhenClientIsInactive() {
-        User user = new Client("Mauris", "Kakel", UUID.randomUUID().toString().substring(0, 9));
+        User user = new Client("Mauris", "Kakel", UUID.randomUUID().toString().substring(0, 9), "P@ssw0rd");
         clientRepository.add(user);
 
         Delivery delivery =

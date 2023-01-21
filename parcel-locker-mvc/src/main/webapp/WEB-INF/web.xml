@@ -23,4 +23,34 @@
         <welcome-file>faces/index.xhtml</welcome-file>
     </welcome-file-list>
 
+    <error-page>
+        <error-code>401</error-code>
+        <location>/unauthorized.xhtml</location>
+    </error-page>
+
+    <error-page>
+        <error-code>403</error-code>
+        <location>/unauthorized.xhtml</location>
+    </error-page>
+
+
+    <security-constraint>
+        <web-resource-collection>
+            <web-resource-name>Viewpoint Secure URLs</web-resource-name>
+            <url-pattern>/*</url-pattern>
+        </web-resource-collection>
+        <user-data-constraint>
+            <transport-guarantee>CONFIDENTIAL</transport-guarantee>
+        </user-data-constraint>
+    </security-constraint>
+
+    <login-config>
+        <auth-method>FORM</auth-method>
+        <realm-name>file</realm-name>
+        <form-login-config>
+            <form-login-page>/logIn.xhtml</form-login-page>
+            <form-error-page>/logIn.xhtml</form-error-page>
+        </form-login-config>
+    </login-config>
+
 </web-app>

@@ -28,8 +28,8 @@ class DeliveryTest {
     @BeforeAll
     void setup() {
         locker = new Locker("LDZ01", "Gawronska 12, Lodz 12-123", 20);
-        shipper1 = new Client("Oscar", "Trel", "321312312");
-        receiver1 = new Client("Bartosh", "Siekan", "123123123");
+        shipper1 = new Client("Oscar", "Trel", "321312312", "P@ssw0rd");
+        receiver1 = new Client("Bartosh", "Siekan", "123123123", "P@ssw0rd");
         delivery1 = new Delivery(basePrice, 10, 20, 30, 10, true, shipper1, receiver1, locker);
         delivery2 = new Delivery(basePrice, true, shipper1, receiver1, locker);
     }

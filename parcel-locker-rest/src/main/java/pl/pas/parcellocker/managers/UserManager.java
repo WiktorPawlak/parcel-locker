@@ -66,16 +66,15 @@ public class UserManager {
         return foundUsers;
     }
 
-    public synchronized User registerClient(String firstName, String lastName, String telNumber) {
-
-        validateIfEmpty(firstName, lastName, telNumber);
+    public synchronized User registerClient(String firstName, String lastName, String telNumber, String password) {
+        validateIfEmpty(firstName, lastName, telNumber, password);
 
         for (User user : clientRepository.findAll()) {
             if (user.getTelNumber().equals(telNumber))
                 throw new ClientManagerException("Client with given telephone number already exits");
         }
 
-        User newUser = new Client(firstName, lastName, telNumber);
+        User newUser = new Client(firstName, lastName, telNumber, password);
         clientRepository.add(newUser);
         return newUser;
     }

@@ -23,19 +23,19 @@ class UserTest {
         "a,a,''"
     })
     void Should_ThrowException_WhenIncorrectData(String firstName, String lastName, String telNumber) {
-        assertThrows(ClientException.class, () -> new Client(firstName, lastName, telNumber));
+        assertThrows(ClientException.class, () -> new Client(firstName, lastName, telNumber, "P@ssw0rd"));
     }
 
     @Test
     void Should_SuccessfullyConfirm_isAdmin() {
-        User user = new Administrator("Janusz", "Tracz", "666666666");
+        User user = new Administrator("Janusz", "Tracz", "666666666", "P@ssw0rd");
         assertTrue(user.isAdmin());
         assertFalse(user.isModerator());
     }
 
     @Test
     void Should_SuccessfullyConfirm_isModerator() {
-        User user = new Moderator("Janusz", "Tracz", "666666666");
+        User user = new Moderator("Janusz", "Tracz", "666666666", "P@ssw0rd");
         assertTrue(user.isModerator());
         assertFalse(user.isAdmin());
     }

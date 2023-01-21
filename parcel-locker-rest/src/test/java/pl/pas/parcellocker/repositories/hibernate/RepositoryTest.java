@@ -30,8 +30,8 @@ class RepositoryTest extends TestsConfig {
 
     @BeforeEach
     void setup() {
-        c1 = new Client("Tadeusz", "Kaczmarski", "606123654");
-        c2 = new Client("Pawel", "Tubiel", "606444654");
+        c1 = new Client("Tadeusz", "Kaczmarski", "606123654", "P@ssw0rd");
+        c2 = new Client("Pawel", "Tubiel", "606444654", "P@ssw0rd");
     }
 
     @AfterEach

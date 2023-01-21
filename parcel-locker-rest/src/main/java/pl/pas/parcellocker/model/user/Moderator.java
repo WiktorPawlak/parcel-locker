@@ -14,8 +14,8 @@ import lombok.NoArgsConstructor;
 public class Moderator extends User {
 
     @Builder
-    public Moderator(final String firstName, final String lastName, final String telNumber) {
-        super(firstName, lastName, telNumber);
+    public Moderator(final String firstName, final String lastName, final String telNumber, final String password) {
+        super(firstName, lastName, telNumber, password);
         setRole(UserRole.MODERATOR);
     }
 
