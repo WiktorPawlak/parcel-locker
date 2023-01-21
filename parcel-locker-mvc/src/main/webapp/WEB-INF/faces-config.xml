@@ -21,6 +21,16 @@
             <to-view-id>/allUsers.xhtml</to-view-id>
             <redirect/>
         </navigation-case>
+        <navigation-case>
+            <from-outcome>addListDelivery</from-outcome>
+            <to-view-id>/addListDelivery.xhtml</to-view-id>
+            <redirect/>
+        </navigation-case>
+        <navigation-case>
+            <from-outcome>addParcelDelivery</from-outcome>
+            <to-view-id>/addParcelDelivery.xhtml</to-view-id>
+            <redirect/>
+        </navigation-case>
     </navigation-rule>
 
 </faces-config>

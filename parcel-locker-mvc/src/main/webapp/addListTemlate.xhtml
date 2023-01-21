@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<div class="navbar-nav mr-auto" xmlns="http://www.w3.org/1999/xhtml"
+     xmlns:h="http://xmlns.jcp.org/jsf/html"
+     xmlns:f="http://java.sun.com/jsf/core"
+>
+    <div class="row">
+        <div class="col-md-3">
+            Cena
+        </div>
+        <div class="col-md-3">
+            <h:inputText styleClass="" value="#{addDeliveryBean.currentList.basePrice}"
+                         required="true"
+                         requiredMessage="Należy podać cene!"
+                         validatorMessage="Niepoprawna wartość pola Cena!">
+                <f:validateDoubleRange minimum="0.1"/>
+            </h:inputText>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-3">
+            Priorytet
+        </div>
+        <div class="col-md-3">
+            <h:selectOneListbox size="0" id="isPriority" value="#{addDeliveryBean.isPriority}">
+                <f:selectItem itemLabel="true" itemValue="true" />
+                <f:selectItem itemLabel="false" itemValue="false" />
+            </h:selectOneListbox>
+        </div>
+    </div>
+</div>
+
