@@ -46,7 +46,6 @@ public class AddClientBean {
                 .lastName(userBasedOnType.getLastName())
                 .telNumber(userBasedOnType.getTelNumber())
                 .build();
-        System.out.println("client");
         target.request().post(Entity.json(clientDto));
 
         return "newUser";

@@ -1,20 +1,19 @@
 package pl.pas.parcellocker.beans;
 
-import jakarta.annotation.PostConstruct;
 import jakarta.enterprise.context.ConversationScoped;
-import jakarta.inject.Inject;
 import jakarta.inject.Named;
+import jakarta.ws.rs.client.Client;
+import jakarta.ws.rs.client.ClientBuilder;
 import jakarta.ws.rs.client.Entity;
+import jakarta.ws.rs.client.WebTarget;
+import jakarta.ws.rs.core.Response;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import pl.pas.parcellocker.beans.dto.UserDto;
-import pl.pas.parcellocker.delivery.http.ClientHttp;
 import pl.pas.parcellocker.model.user.User;
 
 import java.io.Serializable;
-
-import static pl.pas.parcellocker.delivery.http.ModulePaths.CLIENTS_PATH;
 
 @Named
 @ConversationScoped
@@ -23,22 +22,24 @@ import static pl.pas.parcellocker.delivery.http.ModulePaths.CLIENTS_PATH;
 @NoArgsConstructor
 public class EditClientBean implements Serializable {
 
-    @Inject
-    transient ClientHttp moduleExecutor;
-
     UserDto currentUser;
-
     String userType;
 
-    @PostConstruct
-    public void prepareModuleExecutor() {
-        moduleExecutor.setPathForRemoteCall(CLIENTS_PATH);
-    }
+    Client client = ClientBuilder.newClient();
+
 
     public String edit() {
-        User userBasedOnType = Utils.prepareUserBasedOnType(currentUser, userType);
-        moduleExecutor.getTarget().request().put(Entity.json(userBasedOnType));
-        //clientController.editClient(currentUser.getId(), currentUser);
+        WebTarget target = client.target("http://localhost:8080/parcel-locker-rest-1.0-SNAPSHOT/api/clients")
+                .path("{id}");
+
+        User userBasedOnType = Utils.prepareUserBasedOnType(currentUser, "Client");
+        final UserDto clientDto = UserDto.builder()
+                .firstName(userBasedOnType.getFirstName())
+                .lastName(userBasedOnType.getLastName())
+                .telNumber(userBasedOnType.getTelNumber())
+                .build();
+        target.resolveTemplate("id", currentUser.getId()).request().put(Entity.json(clientDto));
+
         return "allUsers";
     }
 }

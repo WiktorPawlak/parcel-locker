@@ -3,6 +3,7 @@ package pl.pas.parcellocker.managers;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import lombok.NoArgsConstructor;
+import pl.pas.parcellocker.controllers.dto.ClientDto;
 import pl.pas.parcellocker.exceptions.ClientManagerException;
 import pl.pas.parcellocker.exceptions.PermissionValidationException;
 import pl.pas.parcellocker.model.user.Administrator;
@@ -49,6 +50,12 @@ public class UserManager {
         return clientRepository.findAll();
     }
 
+    public User findById(UUID id) {
+        return clientRepository.findUserById(id)
+            .orElseThrow();
+    }
+
+
     public List<User> getUsersByPartialTelNumber(String telNumberPart) {
         List<User> foundUsers;
         if (telNumberPart == null) {
@@ -84,13 +91,13 @@ public class UserManager {
         return client;
     }
 
-    public void edit(UUID id, User user) {
+    public void edit(UUID id, ClientDto clientDto) {
         Optional<User> userToEditOptional = clientRepository.findUserById(id);
         if (userToEditOptional.isPresent()) {
             User userToEdit = userToEditOptional.get();
-            userToEdit.setFirstName(user.getFirstName());
-            userToEdit.setLastName(user.getLastName());
-            userToEdit.setTelNumber(user.getTelNumber());
+            userToEdit.setFirstName(clientDto.getFirstName());
+            userToEdit.setLastName(clientDto.getLastName());
+            userToEdit.setTelNumber(clientDto.getTelNumber());
             clientRepository.update(userToEdit);
         }
     }
@@ -113,6 +120,15 @@ public class UserManager {
 
         getUser(user.getTelNumber());
         clientRepository.archive(user.getId());
+        return user;
+    }
+
+    public User activateClient(User user) {
+        if (user == null)
+            throw new ClientManagerException("Client is a null!");
+
+        getUser(user.getTelNumber());
+        clientRepository.unarchive(user.getId());
         return user;
     }
 
