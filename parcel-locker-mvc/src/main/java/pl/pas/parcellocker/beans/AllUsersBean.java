@@ -31,7 +31,7 @@ public class AllUsersBean extends Conversational implements Serializable {
     EditClientBean editClientBean;
 
     @Inject
-    AllUserDeliveries allUserDeliveries;
+    AllUserDeliveriesBean allUserDeliveries;
 
     List<UserDto> currentUsers;
 
@@ -81,6 +81,7 @@ public class AllUsersBean extends Conversational implements Serializable {
     public String searchUserDeliveries(UserDto user) {
         beginNewConversation();
         allUserDeliveries.setCurrentUser(user);
+        allUserDeliveries.initCurrentProducts();
         return "allUserDeliveries";
     }
 

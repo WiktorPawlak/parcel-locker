@@ -1,6 +1,8 @@
 package pl.pas.parcellocker.beans;
 
 import jakarta.annotation.PostConstruct;
+import jakarta.faces.view.ViewScoped;
+import jakarta.inject.Named;
 import jakarta.ws.rs.client.Client;
 import jakarta.ws.rs.client.ClientBuilder;
 import jakarta.ws.rs.client.Invocation;
@@ -13,19 +15,21 @@ import lombok.Setter;
 import pl.pas.parcellocker.beans.dto.UserDto;
 import pl.pas.parcellocker.model.delivery.Delivery;
 
+import java.io.Serializable;
 import java.util.List;
 
 import static pl.pas.parcellocker.delivery.http.ModulePaths.DELIVERIES_PATH;
 
 @Getter
 @Setter
-public class AllUserDeliveries {
+@Named
+@ViewScoped
+public class AllUserDeliveriesBean implements Serializable {
 
     List<Delivery> deliveries;
     UserDto currentUser;
     Client client = ClientBuilder.newClient();
 
-    @PostConstruct
     public void initCurrentProducts() {
         WebTarget webTarget = client.target(DELIVERIES_PATH + "/current")
                 .queryParam("telNumber", currentUser.getTelNumber());

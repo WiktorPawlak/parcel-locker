@@ -155,8 +155,8 @@ public class DeliveryManager {
     }
 
     public List<Delivery> getAllCurrentClientDeliveries(String telNumber) {
-        Client client =
-            (Client) userRepository
+        User client =
+            userRepository
                 .findByTelNumber(telNumber)
                 .orElseThrow(() -> new DeliveryManagerException("Client not found"));
 
