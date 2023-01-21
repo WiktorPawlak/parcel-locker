@@ -132,6 +132,10 @@ public class DeliveryManager {
         }
     }
 
+    public void removeDelivery(final UUID deliveryId) {
+        deliveryRepository.remove(getDelivery(deliveryId));
+    }
+
     public BigDecimal checkClientShipmentBalance(User user) {
         BigDecimal balance = BigDecimal.ZERO;
         if (user == null) throw new DeliveryManagerException("User is a nullptr!");
@@ -140,6 +144,10 @@ public class DeliveryManager {
         }
 
         return balance;
+    }
+
+    public List<Delivery> getAllDeliveries() {
+        return deliveryRepository.findAll();
     }
 
     public List<Delivery> getAllClientDeliveries(User user) {

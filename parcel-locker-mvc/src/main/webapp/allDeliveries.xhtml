@@ -1,0 +1,54 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:f="http://java.sun.com/jsf/core"
+                template="templates/MainTemplate.xhtml"
+                xmlns:h="http://java.sun.com/jsf/html">
+
+    <ui:define name="title">Przesyłki</ui:define>
+
+    <ui:define name="content">
+        <h:form>
+            <h:dataTable styleClass="table table-hover table-striped table-bordered" value="#{listAllProductsController.currentProducts}" var="product">
+                <h:column>
+                    <f:facet name="header">#{msg.product_field_Id}</f:facet>
+                    ${product.id}
+                </h:column>
+                <h:column>
+                    <f:facet name="header">#{msg.product_field_name}</f:facet>
+                    ${product.name}
+                </h:column>
+                <h:column>
+                    <f:facet name="header">#{msg.product_field_price}</f:facet>
+                    ${product.price}
+                </h:column>
+                <h:column>
+                    <f:facet name="header">#{msg.product_field_producer}</f:facet>
+                    ${product.producer}
+                </h:column>
+                <h:column>
+                    <f:facet name="header">#{msg.product_field_description}</f:facet>
+                    ${product.productDescription}
+                </h:column>
+                <h:column>
+                    <f:facet name="header">#{msg.product_field_availableAmount}</f:facet>
+                    ${product.availableAmount}
+                </h:column>
+                <h:column>
+                    <f:facet name="header">#{msg.product_field_category}</f:facet>
+                    ${viewUtils.getClassName(product)}
+                </h:column>
+                <h:column>
+                    <h:commandButton id="productDetailsBtn" action="#{listAllProductsController.getDetails(product)}" class="negative_btn" value="#{msg.details}">
+                    </h:commandButton>
+                    <h:commandButton id="productEditBtn" action="#{listAllProductsController.editProduct(product)}" class="negative_btn" value="#{msg.edit}">
+                    </h:commandButton>
+                    <h:commandButton id="productDeleteBtn" action="#{listAllProductsController.delete(product)}" class="negative_btn" value="#{msg.delete}">
+                    </h:commandButton>
+                </h:column>
+            </h:dataTable>
+        </h:form>
+    </ui:define>
+
+</ui:composition>

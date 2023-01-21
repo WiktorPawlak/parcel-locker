@@ -1,6 +1,7 @@
 package pl.pas.parcellocker.delivery.http;
 
-import jakarta.enterprise.context.ApplicationScoped;
+
+import jakarta.enterprise.context.RequestScoped;
 import jakarta.ws.rs.client.Client;
 import jakarta.ws.rs.client.ClientBuilder;
 import jakarta.ws.rs.client.WebTarget;
@@ -9,7 +10,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 
-@ApplicationScoped
+@RequestScoped
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 public class ClientHttp {
