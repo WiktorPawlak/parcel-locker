@@ -1,6 +1,7 @@
 package pl.pas.parcellocker.controllers;
 
 
+import jakarta.annotation.security.RolesAllowed;
 import jakarta.inject.Inject;
 import jakarta.persistence.NoResultException;
 import jakarta.validation.Valid;
@@ -41,6 +42,7 @@ public class ClientController {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
+    @RolesAllowed({"ADMINISTRATOR"})
     public Response getClientsByPhoneNumberPattern(@QueryParam("telNumber") String telNumber) {
         try {
             return Response.ok().entity(userManager.getUsersByPartialTelNumber(telNumber)).build();

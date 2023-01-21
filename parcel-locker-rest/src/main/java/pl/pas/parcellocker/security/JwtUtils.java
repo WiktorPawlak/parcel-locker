@@ -9,6 +9,7 @@ import com.auth0.jwt.interfaces.DecodedJWT;
 import pl.pas.parcellocker.model.user.User;
 
 import java.time.Instant;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 
@@ -35,7 +36,7 @@ public class JwtUtils {
             final DecodedJWT jwt = verifier.verify(jwtText);
             final Claim roles = jwt.getClaim("roles");
 
-      return Optional.of(new JwtData(jwt.getId(), roles.asList(String.class)));
+      return Optional.of(new JwtData(jwt.getId(), new HashSet<>(roles.asList(String.class))));
 
         } catch (JWTVerificationException exp) {
             return Optional.empty();

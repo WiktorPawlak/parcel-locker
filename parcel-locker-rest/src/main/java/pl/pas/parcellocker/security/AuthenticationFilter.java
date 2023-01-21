@@ -9,9 +9,16 @@ import jakarta.security.enterprise.authentication.mechanism.http.HttpMessageCont
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
+import java.util.Optional;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 @RequestScoped
-@DeclareRoles({"Administrator", "Moderator", "Client"})
+@DeclareRoles({"ADMINISTRATOR", "MODERATOR", "CLIENT"})
 public class AuthenticationFilter implements HttpAuthenticationMechanism {
+
+    private static final Pattern TOKEN_PATTERN = Pattern.compile("^Bearer *([^ ]+) *$", Pattern.CASE_INSENSITIVE);
+
     @Override
     public AuthenticationStatus validateRequest(
         HttpServletRequest httpServletRequest,
@@ -19,6 +26,27 @@ public class AuthenticationFilter implements HttpAuthenticationMechanism {
         HttpMessageContext httpMessageContext
     ) throws AuthenticationException {
 
-        return null;
+        final String authorization = httpServletRequest.getHeader("Authorization");
+
+        Matcher matcher = TOKEN_PATTERN.matcher(Optional.ofNullable(authorization).orElse(""));
+
+        if (!matcher.matches()) {
+            return httpMessageContext.responseUnauthorized();
+        }
+
+        final String token = matcher.group(1);
+
+        if (token == null) {
+            return httpMessageContext.responseUnauthorized();
+        }
+
+        Optional<JwtData> optionalJwtData = JwtUtils.parse(token);
+
+        if (optionalJwtData.isPresent()) {
+            JwtData jwtData = optionalJwtData.get();
+            return httpMessageContext.notifyContainerAboutLogin(jwtData.getTelNumber(), jwtData.getRoles());
+        } else {
+            return httpMessageContext.responseUnauthorized();
+        }
     }
 }
