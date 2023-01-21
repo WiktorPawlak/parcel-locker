@@ -1,0 +1,41 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:f="http://java.sun.com/jsf/core"
+                template="templates/MainTemplate.xhtml"
+                xmlns:h="http://java.sun.com/jsf/html">
+
+    <ui:define name="title">Wyciąganie paczki z paczkomatu</ui:define>
+
+    <ui:define name="left">
+        <ui:include src="./templates/menu.xhtml" />
+    </ui:define>
+
+    <ui:define name="content">
+        <div id="container">
+            <h:form id="creation">
+                <div class="row">
+                    <div class="col-md-3">
+                        Kod dostępu
+                    </div>
+                    <div class="col-md-3">
+                        <h:inputText styleClass=""
+                                     value="#{takeOutDeliveryBean.accessCode}"
+                                     required="true"
+                                     requiredMessage="Należy podać kod dostępu!"
+                                     validatorMessage="Niepoprawna wartość pola!" >
+                            <f:validateRegex pattern="^[0-9]{9}"/>
+                        </h:inputText>
+                    </div>
+                </div>
+
+                <h:messages/>
+
+                <h:commandButton value="Wyjmij z paczkomatu" action="#{takeOutDeliveryBean.takeOut()}"
+                                 class="positive_btn"/>
+            </h:form>
+        </div>
+    </ui:define>
+
+</ui:composition>

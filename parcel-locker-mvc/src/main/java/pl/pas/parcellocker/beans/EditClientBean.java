@@ -24,9 +24,7 @@ public class EditClientBean implements Serializable {
 
     UserDto currentUser;
     String userType;
-
     Client client = ClientBuilder.newClient();
-
 
     public String edit() {
         WebTarget target = client.target("http://localhost:8080/parcel-locker-rest-1.0-SNAPSHOT/api/clients")
