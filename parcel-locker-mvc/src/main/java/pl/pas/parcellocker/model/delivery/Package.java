@@ -8,7 +8,7 @@ import pl.pas.parcellocker.model.EntityModel;
 import java.math.BigDecimal;
 
 @Data
-public abstract class Package extends EntityModel {
+public class Package extends EntityModel {
     public BigDecimal basePrice;
 
 }
