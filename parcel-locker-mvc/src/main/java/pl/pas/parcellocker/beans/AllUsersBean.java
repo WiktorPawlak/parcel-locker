@@ -13,7 +13,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import pl.pas.parcellocker.beans.dto.UserDto;
 import pl.pas.parcellocker.delivery.http.ClientHttp;
-import pl.pas.parcellocker.model.user.User;
 
 import java.io.Serializable;
 import java.util.List;
@@ -30,6 +29,9 @@ public class AllUsersBean extends Conversational implements Serializable {
 
     @Inject
     EditClientBean editClientBean;
+
+    @Inject
+    AllUserDeliveries allUserDeliveries;
 
     List<UserDto> currentUsers;
 
@@ -74,6 +76,12 @@ public class AllUsersBean extends Conversational implements Serializable {
         editClientBean.setCurrentUser(user);
         editClientBean.edit();
         return "editUser";
+    }
+
+    public String searchUserDeliveries(UserDto user) {
+        beginNewConversation();
+        allUserDeliveries.setCurrentUser(user);
+        return "allUserDeliveries";
     }
 
 }
