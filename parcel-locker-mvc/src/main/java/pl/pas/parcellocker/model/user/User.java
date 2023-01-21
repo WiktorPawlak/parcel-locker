@@ -1,9 +1,12 @@
 package pl.pas.parcellocker.model.user;
 
-import lombok.Data;
+import lombok.*;
+import pl.pas.parcellocker.beans.dto.UserDto;
 import pl.pas.parcellocker.model.EntityModel;
 
-@Data
+@Getter
+@Setter
+@AllArgsConstructor
 public abstract class User extends EntityModel {
 
     private String firstName;
@@ -11,7 +14,7 @@ public abstract class User extends EntityModel {
     private String telNumber;
     private boolean active;
 
-    public User(User user) {
+    public User(UserDto user) {
         this.id = user.getId();
         this.telNumber = user.getTelNumber();
         this.firstName = user.getFirstName();

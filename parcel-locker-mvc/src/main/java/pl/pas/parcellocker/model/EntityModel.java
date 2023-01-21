@@ -7,9 +7,11 @@ public abstract class EntityModel implements Serializable {
 
     protected UUID id;
 
-    protected Long version;
-
     public UUID getId() {
         return id;
+    }
+
+    public void setId(UUID id) {
+        this.id = id;
     }
 }

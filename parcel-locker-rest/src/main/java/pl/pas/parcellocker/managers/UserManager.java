@@ -50,7 +50,13 @@ public class UserManager {
     }
 
     public List<User> getUsersByPartialTelNumber(String telNumberPart) {
-        return clientRepository.findByTelNumberPart(telNumberPart);
+        List<User> foundUsers;
+        if (telNumberPart == null) {
+            foundUsers = clientRepository.findAll();
+        } else {
+            foundUsers = clientRepository.findByTelNumberPart(telNumberPart);
+        }
+        return foundUsers;
     }
 
     public synchronized User registerClient(String firstName, String lastName, String telNumber) {

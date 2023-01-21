@@ -16,6 +16,11 @@
             <to-view-id>/editUser.xhtml</to-view-id>
             <redirect/>
         </navigation-case>
+        <navigation-case>
+            <from-outcome>newUser</from-outcome>
+            <to-view-id>/allUsers.xhtml</to-view-id>
+            <redirect/>
+        </navigation-case>
     </navigation-rule>
 
 </faces-config>

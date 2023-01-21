@@ -1,6 +1,7 @@
 package pl.pas.parcellocker.beans;
 
 import jakarta.inject.Named;
+import pl.pas.parcellocker.beans.dto.UserDto;
 import pl.pas.parcellocker.model.user.Administrator;
 import pl.pas.parcellocker.model.user.Client;
 import pl.pas.parcellocker.model.user.Moderator;
@@ -13,11 +14,23 @@ public class Utils {
         return object.getClass().getSimpleName();
     }
 
-    public static String getActiveStatus(User user) {
+    public static String getUserType(UserDto userDto) {
+        String type;
+        if (userDto.isAdmin()) {
+            type = "Administrator";
+        } else if (userDto.isModerator()) {
+            type = "Moderator";
+        } else {
+            type = "Client";
+        }
+        return type;
+    }
+
+    public static String getActiveStatus(UserDto user) {
         return user.isActive() ? "Aktywny" : "Nieaktywny";
     }
 
-    public static User prepareUserBasedOnType(User user, String type) {
+    public static User prepareUserBasedOnType(UserDto user, String type) {
         if (type.equals("Client")) {
             return new Client(user);
         } else if (type.equals("Moderator")) {

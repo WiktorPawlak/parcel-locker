@@ -8,6 +8,7 @@ import jakarta.ws.rs.client.Entity;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import pl.pas.parcellocker.beans.dto.UserDto;
 import pl.pas.parcellocker.delivery.http.ClientHttp;
 import pl.pas.parcellocker.model.user.User;
 
@@ -25,7 +26,7 @@ public class EditClientBean implements Serializable {
     @Inject
     transient ClientHttp moduleExecutor;
 
-    User currentUser;
+    UserDto currentUser;
 
     String userType;
 
@@ -35,8 +36,8 @@ public class EditClientBean implements Serializable {
     }
 
     public String edit() {
-        currentUser = Utils.prepareUserBasedOnType(currentUser, userType);
-        moduleExecutor.getTarget().request().put(Entity.json(currentUser));
+        User userBasedOnType = Utils.prepareUserBasedOnType(currentUser, userType);
+        moduleExecutor.getTarget().request().put(Entity.json(userBasedOnType));
         //clientController.editClient(currentUser.getId(), currentUser);
         return "allUsers";
     }
