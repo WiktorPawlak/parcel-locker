@@ -1,16 +1,17 @@
 package pl.pas.parcellocker.repositories.hibernate;
 
-import static pl.pas.parcellocker.repositories.hibernate.EntityManagerUtil.getEntityManager;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.NoResultException;
+import jakarta.persistence.PersistenceException;
+import pl.pas.parcellocker.exceptions.RepositoryException;
+import pl.pas.parcellocker.model.user.User;
+import pl.pas.parcellocker.model.user.UserRepository;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.PersistenceException;
-import pl.pas.parcellocker.exceptions.RepositoryException;
-import pl.pas.parcellocker.model.user.User;
-import pl.pas.parcellocker.model.user.UserRepository;
+import static pl.pas.parcellocker.repositories.hibernate.EntityManagerUtil.getEntityManager;
 
 
 public class UserRepositoryHibernate extends HibernateRepository<User> implements UserRepository {
@@ -46,10 +47,14 @@ public class UserRepositoryHibernate extends HibernateRepository<User> implement
     }
 
     public Optional<User> findByTelNumber(String telNumber) {
-        return Optional.of((User) getEntityManager()
-            .createQuery("select u from User u where u.telNumber = :telNumber")
-            .setParameter("telNumber", telNumber)
-            .getSingleResult());
+        try {
+            return Optional.of((User) getEntityManager()
+                .createQuery("select u from User u where u.telNumber = :telNumber")
+                .setParameter("telNumber", telNumber)
+                .getSingleResult());
+        } catch (NoResultException e) {
+            return Optional.empty();
+        }
     }
 
     public List<User> findByTelNumberPart(String telNumberPart) {

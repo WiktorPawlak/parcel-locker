@@ -31,6 +31,26 @@
             <to-view-id>/addParcelDelivery.xhtml</to-view-id>
             <redirect/>
         </navigation-case>
+        <navigation-case>
+            <from-outcome>allDeliveries</from-outcome>
+            <to-view-id>/allDeliveries.xhtml</to-view-id>
+            <redirect/>
+        </navigation-case>
+        <navigation-case>
+            <from-outcome>allUserDeliveries</from-outcome>
+            <to-view-id>/allUserDeliveries.xhtml</to-view-id>
+            <redirect/>
+        </navigation-case>
+        <navigation-case>
+            <from-outcome>putInDelivery</from-outcome>
+            <to-view-id>/putInDelivery.xhtml</to-view-id>
+            <redirect/>
+        </navigation-case>
+        <navigation-case>
+            <from-outcome>takeOutDelivery</from-outcome>
+            <to-view-id>/takeOutDelivery.xhtml</to-view-id>
+            <redirect/>
+        </navigation-case>
     </navigation-rule>
 
 </faces-config>
