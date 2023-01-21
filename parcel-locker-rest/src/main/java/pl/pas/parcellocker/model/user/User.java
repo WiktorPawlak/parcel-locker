@@ -28,6 +28,7 @@ public abstract class User extends EntityModel {
     @Column(unique = true)
     private String telNumber;
     private boolean active;
+    private UserRole role;
 
     protected User(String firstName, String lastName, String telNumber) {
         validateName(firstName);

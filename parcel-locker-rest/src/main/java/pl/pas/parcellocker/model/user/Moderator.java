@@ -16,6 +16,7 @@ public class Moderator extends User {
     @Builder
     public Moderator(final String firstName, final String lastName, final String telNumber) {
         super(firstName, lastName, telNumber);
+        setRole(UserRole.MODERATOR);
     }
 
     public Moderator(User user) {

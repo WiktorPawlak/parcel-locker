@@ -16,6 +16,7 @@ public class Administrator extends User {
     @Builder
     public Administrator(final String firstName, final String lastName, final String telNumber) {
         super(firstName, lastName, telNumber);
+        setRole(UserRole.ADMINISTRATOR);
     }
 
     public Administrator(User user) {
