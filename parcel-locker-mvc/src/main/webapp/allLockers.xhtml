@@ -1,0 +1,39 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:a="http://xmlns.jcp.org/jsf/passthrough"
+                template="templates/MainTemplate.xhtml"
+                xmlns:h="http://java.sun.com/jsf/html">
+
+    <ui:define name="title">Lista wszystkich użytkowników</ui:define>
+
+    <ui:define name="left">
+        <ui:include src="./templates/menu.xhtml" />
+    </ui:define>
+
+    <ui:define name="content">
+        <h:form>
+            <h:dataTable styleClass="" value="#{allLockersBean.currentLockers}" var="locker">
+                <h:column>
+                    <f:facet name="header">Nr identifikacyjny</f:facet>
+                    ${locker.identityNumber}
+                </h:column>
+                <h:column>
+                    <f:facet name="header">Adres</f:facet>
+                    ${locker.address}
+                </h:column>
+                <h:column>
+                    <f:facet name="header">Wolne skrytki</f:facet>
+                    ${allLockersBean.emptyBoxes(locker.identityNumber)}
+                </h:column>
+<!--                <h:column>-->
+<!--                    <f:facet name="header">Akcje</f:facet>-->
+<!--                    <h:commandButton id="archiveUserBtn" action="#{allLockersBean.currentLockers}" class="negative_btn" value="Alokacje"/>-->
+<!--                </h:column>-->
+            </h:dataTable>
+        </h:form>
+    </ui:define>
+
+</ui:composition>

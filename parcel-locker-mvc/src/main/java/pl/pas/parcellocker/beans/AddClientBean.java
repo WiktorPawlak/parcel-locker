@@ -4,11 +4,13 @@ import jakarta.annotation.PostConstruct;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
+import jakarta.ws.rs.client.ClientBuilder;
 import jakarta.ws.rs.client.Entity;
+import jakarta.ws.rs.client.WebTarget;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import pl.pas.parcellocker.beans.dto.ClientDto;
+import pl.pas.parcellocker.beans.dto.UserDto;
 import pl.pas.parcellocker.delivery.http.ClientHttp;
 import pl.pas.parcellocker.model.user.Client;
 import pl.pas.parcellocker.model.user.User;
@@ -25,7 +27,7 @@ public class AddClientBean {
     @Inject
     ClientHttp moduleExecutor;
 
-    User currentUser = new Client();
+    UserDto currentUser = new UserDto();
 
     String userType = "Client";
 
@@ -35,14 +37,16 @@ public class AddClientBean {
     }
 
     public String add() {
-        currentUser = Utils.prepareUserBasedOnType(currentUser, userType);
+        jakarta.ws.rs.client.Client client = ClientBuilder.newClient();
+        WebTarget target = client.target("http://localhost:8080/parcel-locker-rest-1.0-SNAPSHOT/api/clients");
 
-        final ClientDto clientDto = ClientDto.builder()
-                .firstName(currentUser.getFirstName())
-                .lastName(currentUser.getLastName())
-                .telNumber(currentUser.getTelNumber())
+        User userBasedOnType = Utils.prepareUserBasedOnType(currentUser, userType);
+        final UserDto clientDto = UserDto.builder()
+                .firstName(userBasedOnType.getFirstName())
+                .lastName(userBasedOnType.getLastName())
+                .telNumber(userBasedOnType.getTelNumber())
                 .build();
-        moduleExecutor.getTarget().request().post(Entity.json(clientDto));
+        target.request().post(Entity.json(clientDto));
 
         return "newUser";
     }

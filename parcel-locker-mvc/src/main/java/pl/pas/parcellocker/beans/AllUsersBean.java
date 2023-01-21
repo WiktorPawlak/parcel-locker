@@ -4,19 +4,19 @@ import jakarta.annotation.PostConstruct;
 import jakarta.faces.view.ViewScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
-import jakarta.ws.rs.client.Entity;
+import jakarta.ws.rs.client.*;
 import jakarta.ws.rs.core.GenericType;
 import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.Response;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import pl.pas.parcellocker.beans.dto.UserDto;
 import pl.pas.parcellocker.delivery.http.ClientHttp;
 import pl.pas.parcellocker.model.user.User;
 
 import java.io.Serializable;
 import java.util.List;
-
-import static pl.pas.parcellocker.delivery.http.ModulePaths.CLIENTS_PATH;
 
 @Named
 @ViewScoped
@@ -31,34 +31,47 @@ public class AllUsersBean extends Conversational implements Serializable {
     @Inject
     EditClientBean editClientBean;
 
-    List<User> currentUsers;
+    List<UserDto> currentUsers;
 
     String searchValue;
 
+    Client client = ClientBuilder.newClient();
+
     @PostConstruct
     public void initCurrentProducts() {
-        moduleExecutor.setPathForRemoteCall(CLIENTS_PATH);
-        moduleExecutor.getTarget().request(MediaType.APPLICATION_JSON).get().readEntity(new GenericType<List<User>>() {
-        });
-        //currentUsers = (List<User>) clientController.getAllClients().getEntity();
+        WebTarget webTarget = client.target("http://localhost:8080/parcel-locker-rest-1.0-SNAPSHOT/api/clients");
+        Invocation.Builder invocationBuilder = webTarget.request(MediaType.APPLICATION_JSON);
+        Response response = invocationBuilder.get();
+        currentUsers = response.readEntity(new GenericType<>() {});
     }
 
     public void searchUsers() {
-        currentUsers = moduleExecutor.getTarget().queryParam(searchValue).request(MediaType.APPLICATION_JSON).get().readEntity(new GenericType<>() {
-        });
-        //currentUsers = (List<User>) clientController.getClientsByPhoneNumberPattern(searchValue);
+        WebTarget webTarget = client.target("http://localhost:8080/parcel-locker-rest-1.0-SNAPSHOT/api/clients")
+                .queryParam("telNumber", searchValue);
+        Invocation.Builder invocationBuilder = webTarget.request(MediaType.APPLICATION_JSON);
+        Response response = invocationBuilder.get();
+        currentUsers = response.readEntity(new GenericType<>() {});
     }
 
-    public String unregisterUser(User user) {
-        moduleExecutor.getTarget().request(MediaType.APPLICATION_JSON).put(Entity.json(user.getTelNumber()));
-        //clientController.unregisterClient(user.getTelNumber());
+    public String archiveUser(UserDto user) {
+        WebTarget target = client.target("http://localhost:8080/parcel-locker-rest-1.0-SNAPSHOT/api/clients")
+                .path("{id}").path("/archive");
+
+        target.resolveTemplate("id", user.getTelNumber()).request().put(Entity.text(""));
         return "allUsers";
     }
 
-    public String editUser(User user) {
+    public String unarchiveUser(UserDto user) {
+        WebTarget target = client.target("http://localhost:8080/parcel-locker-rest-1.0-SNAPSHOT/api/clients")
+                .path("{id}").path("/unarchive");
+
+        target.resolveTemplate("id", user.getTelNumber()).request().put(Entity.text(""));
+        return "allUsers";
+    }
+
+    public String editUser(UserDto user) {
         beginNewConversation();
         editClientBean.setCurrentUser(user);
-        editClientBean.setUserType(user.getClass().getSimpleName());
         editClientBean.edit();
         return "editUser";
     }
