@@ -1,0 +1,50 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<ui:composition xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:f="http://java.sun.com/jsf/core"
+                template="templates/MainTemplate.xhtml"
+                xmlns:h="http://java.sun.com/jsf/html">
+    <ui:define name="title">LOGOWANIE</ui:define>
+
+    <ui:define name="left">
+        <ui:include src="./templates/menu.xhtml"/>
+    </ui:define>
+
+    <ui:define name="content">
+        <h:form>
+            <h:panelGrid styleClass="table">
+                <table>
+                    <tr>
+                        <td> Login*:</td>
+                        <td>
+                            <h:inputText styleClass=""
+                                         value="#{authBean.credentials.telNumber}"
+                                         required="true"
+                                         requiredMessage="Należy podać numer telefonu!"
+                                         validatorMessage="Niepoprawny format numeru telefonu!">
+                                <f:validateRegex pattern="^[0-9]{9}"/>
+                            </h:inputText>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td> Hasło*:</td>
+                        <td>
+                            <h:inputText styleClass=""
+                                         value="#{authBean.credentials.password}"
+                                         required="true"
+                                         requiredMessage="Należy podać hasło!">
+                            </h:inputText>
+                        </td>
+                    </tr>
+                </table>
+
+                <h:messages/>
+
+            </h:panelGrid>
+            <h:commandButton value="Zaloguj" action="#{authBean.logIn()}"
+                             class="positive_btn"/>
+        </h:form>
+    </ui:define>
+</ui:composition>
