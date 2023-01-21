@@ -42,6 +42,11 @@
             <redirect/>
         </navigation-case>
         <navigation-case>
+            <from-outcome>allLockerDeliveries</from-outcome>
+            <to-view-id>/allLockerDeliveries.xhtml</to-view-id>
+            <redirect/>
+        </navigation-case>
+        <navigation-case>
             <from-outcome>putInDelivery</from-outcome>
             <to-view-id>/putInDelivery.xhtml</to-view-id>
             <redirect/>

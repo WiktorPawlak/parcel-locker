@@ -6,7 +6,7 @@
                 template="templates/MainTemplate.xhtml"
                 xmlns:h="http://java.sun.com/jsf/html">
 
-    <ui:define name="title">Wyciąganie paczki z paczkomatu</ui:define>
+    <ui:define name="top">Wyciąganie paczki z paczkomatu: ${takeOutDeliveryBean.currentDelivery.locker.identityNumber}</ui:define>
 
     <ui:define name="left">
         <ui:include src="./templates/menu.xhtml" />
@@ -24,8 +24,8 @@
                                      value="#{takeOutDeliveryBean.accessCode}"
                                      required="true"
                                      requiredMessage="Należy podać kod dostępu!"
-                                     validatorMessage="Niepoprawna wartość pola!" >
-                            <f:validateRegex pattern="^[0-9]{9}"/>
+                                     validatorMessage="Kod powinien zawierać 6 cyfr!" >
+                            <f:validateRegex pattern="^[0-9]{6}"/>
                         </h:inputText>
                     </div>
                 </div>

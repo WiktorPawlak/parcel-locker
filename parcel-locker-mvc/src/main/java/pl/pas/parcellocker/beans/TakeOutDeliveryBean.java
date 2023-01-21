@@ -2,16 +2,19 @@ package pl.pas.parcellocker.beans;
 
 import jakarta.enterprise.context.ConversationScoped;
 import jakarta.inject.Named;
-import jakarta.ws.rs.client.Client;
-import jakarta.ws.rs.client.ClientBuilder;
-import jakarta.ws.rs.client.Entity;
-import jakarta.ws.rs.client.WebTarget;
+import jakarta.ws.rs.client.*;
+import jakarta.ws.rs.core.GenericType;
+import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.Response;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import pl.pas.parcellocker.model.delivery.Delivery;
 
 import java.io.Serializable;
+import java.util.List;
+
+import static pl.pas.parcellocker.DeliveriesUtils.updateDeliveries;
 
 @Named
 @ConversationScoped
@@ -21,7 +24,9 @@ import java.io.Serializable;
 public class TakeOutDeliveryBean implements Serializable {
 
     Delivery currentDelivery;
+    List<Delivery> deliveries;
     String accessCode;
+    String redirect;
     Client client = ClientBuilder.newClient();
 
     public String takeOut() {
@@ -33,6 +38,10 @@ public class TakeOutDeliveryBean implements Serializable {
                 .queryParam("accessCode", accessCode)
                 .request().put(Entity.json(""));
 
-        return "allDeliveries";
+        deliveries.clear();
+        deliveries.addAll(updateDeliveries());
+
+        return redirect;
     }
+
 }

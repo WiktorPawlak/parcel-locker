@@ -164,12 +164,16 @@ public class DeliveryManager {
     }
 
     public List<Delivery> getAllReceivedClientDeliveries(String telNumber) {
-        Client receiver =
-            (Client) userRepository
+        User receiver =
+            userRepository
                 .findByTelNumber(telNumber)
                 .orElseThrow(() -> new DeliveryManagerException("Receiver not found"));
 
         return deliveryRepository.findReceivedByClient(receiver);
+    }
+
+    public List<Delivery> getAllLockerDeliveries(String identityNumber) {
+        return deliveryRepository.findByLockerIdentityNumber(identityNumber);
     }
 
     public Delivery getDelivery(UUID id) {

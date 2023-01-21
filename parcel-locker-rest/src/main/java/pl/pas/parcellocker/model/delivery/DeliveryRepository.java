@@ -18,6 +18,8 @@ public interface DeliveryRepository {
 
     List<Delivery> findReceivedByClient(User user);
 
+    List<Delivery> findByLockerIdentityNumber(String identityNumber);
+
     List<Delivery> findCurrentByClient(User user);
 
     List<Delivery> findByUser(User user);

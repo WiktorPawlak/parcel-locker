@@ -2,6 +2,7 @@ package pl.pas.parcellocker.beans;
 
 import jakarta.annotation.PostConstruct;
 import jakarta.faces.view.ViewScoped;
+import jakarta.inject.Inject;
 import jakarta.inject.Named;
 import jakarta.ws.rs.client.*;
 import jakarta.ws.rs.core.GenericType;
@@ -23,6 +24,8 @@ import java.util.List;
 @NoArgsConstructor
 public class AllLockersBean extends Conversational implements Serializable {
 
+    @Inject
+    AllLockerDeliveriesBean allLockerDeliveriesBean;
     List<Locker> currentLockers;
     Client client = ClientBuilder.newClient();
 
@@ -40,6 +43,13 @@ public class AllLockersBean extends Conversational implements Serializable {
                 .path("{id}").path("/empty");
         Invocation.Builder invocationBuilder = webTarget.resolveTemplate("id", identityNumber).request(MediaType.APPLICATION_JSON);
         return invocationBuilder.get().readEntity(Integer.class);
+    }
+
+    public String searchLockerDeliveries(Locker locker) {
+        beginNewConversation();
+        allLockerDeliveriesBean.setCurrentLocker(locker);
+        allLockerDeliveriesBean.initCurrentLockerDeliveries();
+        return "allLockerDeliveries";
     }
 
 }

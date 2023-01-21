@@ -6,7 +6,7 @@
                 xmlns:h="http://java.sun.com/jsf/html"
                 xmlns:f="http://java.sun.com/jsf/core">
 
-    <ui:define name="title">Lista wszystkich dostaw</ui:define>
+    <ui:define name="top">Lista wszystkich dostaw dla użytkownika: ${allUserDeliveriesBean.currentUser.telNumber}</ui:define>
 
     <ui:define name="left">
         <ui:include src="./templates/menu.xhtml"/>
@@ -37,28 +37,24 @@
                     ${delivery.pack.basePrice}
                 </h:column>
                 <h:column>
-                    <f:facet name="header">Pack type</f:facet>
-                    ${delivery.pack.getClass().getSimpleName()}
-                </h:column>
-                <h:column>
                     <h:commandButton
                             id="deliveryDeleteBtn"
-                            rendered="#{delivery.status != allDeliveriesBean.readyToPickupStatus}"
-                            action="#{allDeliveriesBean.delete(delivery)}"
+                            rendered="'#{delivery.status != allDeliveriesBean.readyToPickupStatus}"
+                            action='#{allDeliveriesBean.delete(delivery, "allUserDeliveries", allUserDeliveriesBean.deliveries)}'
                             class="negative_btn"
                             value="Usuń">
                     </h:commandButton>
                     <h:commandButton
                             id="deliveryPutInBtn"
                             rendered="#{delivery.status == allDeliveriesBean.readyToShipStatus}"
-                            action="#{allDeliveriesBean.putIn(delivery)}"
+                            action='#{allDeliveriesBean.putIn(delivery, "allUserDeliveries", allUserDeliveriesBean.deliveries)}'
                             class="negative_btn"
                             value="Włóż">
                     </h:commandButton>
                     <h:commandButton
                             id="deliveryTakeOutBtn"
                             rendered="#{delivery.status == allDeliveriesBean.readyToPickupStatus}"
-                            action="#{allDeliveriesBean.takeOut(delivery)}"
+                            action='#{allDeliveriesBean.takeOut(delivery, "allUserDeliveries", allUserDeliveriesBean.deliveries)}'
                             class="negative_btn"
                             value="Wyjmij">
                     </h:commandButton>

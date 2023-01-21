@@ -6,7 +6,9 @@
                 xmlns:h="http://java.sun.com/jsf/html"
                 xmlns:f="http://java.sun.com/jsf/core">
 
-    <ui:define name="title">Lista wszystkich dostaw</ui:define>
+    <f:event type="preRenderView" listener="#{allLockerDeliveriesBean.initCurrentLockerDeliveries()}"/>
+
+    <ui:define name="top">Lista wszystkich dostaw dla paczkomatu: ${allLockerDeliveriesBean.currentLocker.identityNumber}</ui:define>
 
     <ui:define name="left">
         <ui:include src="./templates/menu.xhtml"/>
@@ -14,7 +16,7 @@
 
     <ui:define name="content">
         <h:form>
-            <h:dataTable styleClass="table table-hover table-striped table-bordered" value="#{allDeliveriesBean.currentDeliveries}"
+            <h:dataTable styleClass="table table-hover table-striped table-bordered" value="#{allLockerDeliveriesBean.deliveries}"
                          var="delivery">
                 <h:column>
                     <f:facet name="header">Shippers's tel number</f:facet>
@@ -40,23 +42,24 @@
                     <h:commandButton
                             id="deliveryDeleteBtn"
                             rendered="#{delivery.status != allDeliveriesBean.readyToPickupStatus}"
-                            action="#{allDeliveriesBean.delete(delivery, 'allDeliveries', allDeliveriesBean.currentDeliveries)}"
+                            action="#{allDeliveriesBean.delete(delivery, 'allLockerDeliveries', allLockerDeliveriesBean.deliveries)}"
                             class="negative_btn"
                             value="Usuń">
                     </h:commandButton>
                     <h:commandButton
                             id="deliveryPutInBtn"
                             rendered="#{delivery.status == allDeliveriesBean.readyToShipStatus}"
-                            action="#{allDeliveriesBean.putIn(delivery, 'allDeliveries', allDeliveriesBean.currentDeliveries)}"
+                            action="#{allDeliveriesBean.putIn(delivery, 'allLockerDeliveries', allLockerDeliveriesBean.deliveries)}"
                             class="negative_btn"
                             value="Włóż">
                     </h:commandButton>
                     <h:commandButton
                             id="deliveryTakeOutBtn"
                             rendered="#{delivery.status == allDeliveriesBean.readyToPickupStatus}"
-                            action="#{allDeliveriesBean.takeOut(delivery, 'allDeliveries', allDeliveriesBean.currentDeliveries)}"
+                            action="#{allDeliveriesBean.takeOut(delivery, 'allLockerDeliveries', allLockerDeliveriesBean.deliveries)}"
                             class="negative_btn"
                             value="Wyjmij">
+                        <f:actionListener binding="#{allLockerDeliveriesBean.initCurrentLockerDeliveries()}"/>
                     </h:commandButton>
                 </h:column>
             </h:dataTable>

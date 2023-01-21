@@ -76,6 +76,19 @@ public class DeliveryController {
         }
     }
 
+    @GET
+    @Path("/locker/{identityNumber}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getLockerDeliveries(@PathParam("identityNumber") String identityNumber) {
+        try {
+            return Response.ok()
+                .entity(deliveryManager.getAllLockerDeliveries(identityNumber))
+                .build();
+        } catch (NoResultException | DeliveryManagerException e) {
+            return Response.status(Response.Status.NOT_FOUND).entity(e.getMessage()).build();
+        }
+    }
+
     @POST
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)

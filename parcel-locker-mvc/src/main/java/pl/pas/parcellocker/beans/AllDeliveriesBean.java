@@ -21,6 +21,8 @@ import pl.pas.parcellocker.model.delivery.DeliveryStatus;
 import java.io.Serializable;
 import java.util.List;
 
+import static pl.pas.parcellocker.DeliveriesUtils.updateDeliveries;
+
 
 @Named
 @ViewScoped
@@ -38,14 +40,10 @@ public class AllDeliveriesBean extends Conversational implements Serializable {
 
     @PostConstruct
     public void initCurrentDeliveries() {
-        WebTarget webTarget = client.target("http://localhost:8080/parcel-locker-rest-1.0-SNAPSHOT/api/deliveries");
-        Invocation.Builder invocationBuilder = webTarget.request(MediaType.APPLICATION_JSON);
-        Response response = invocationBuilder.get();
-        currentDeliveries = response.readEntity(new GenericType<>() {
-        });
+        currentDeliveries = updateDeliveries();
     }
 
-    public String delete(Delivery delivery) {
+    public String delete(Delivery delivery, String redirect, List<Delivery> deliveries) {
         WebTarget webTarget = client.target("http://localhost:8080/parcel-locker-rest-1.0-SNAPSHOT/api/deliveries")
                 .path("{id}");
         Invocation.Builder invocationBuilder = webTarget
@@ -53,18 +51,24 @@ public class AllDeliveriesBean extends Conversational implements Serializable {
                 .request();
         invocationBuilder.delete();
 
-        return "allDeliveries";
+        deliveries.clear();
+        deliveries.addAll(updateDeliveries());
+        return redirect;
     }
 
-    public String putIn(Delivery delivery) {
+    public String putIn(Delivery delivery, String redirect, List<Delivery> deliveries) {
         beginNewConversation();
         putInDeliveryBean.setCurrentDelivery(delivery);
+        putInDeliveryBean.setDeliveries(deliveries);
+        putInDeliveryBean.setRedirect(redirect);
         return "putInDelivery";
     }
 
-    public String takeOut(Delivery delivery) {
+    public String takeOut(Delivery delivery, String redirect, List<Delivery> deliveries) {
         beginNewConversation();
         takeOutDeliveryBean.setCurrentDelivery(delivery);
+        takeOutDeliveryBean.setDeliveries(deliveries);
+        takeOutDeliveryBean.setRedirect(redirect);
         return "takeOutDelivery";
     }
 

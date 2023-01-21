@@ -43,6 +43,11 @@ public class DeliveryRepositoryHibernate extends HibernateRepository<Delivery> i
     }
 
     @Override
+    public List<Delivery> findByLockerIdentityNumber(String identityNumber) {
+        return findBy(delivery -> delivery.getLocker().getIdentityNumber().equals(identityNumber));
+    }
+
+    @Override
     public List<Delivery> findCurrentByClient(User user) {
         return findBy(delivery -> delivery.getReceiver().equals(user) && !delivery.isArchived());
     }
