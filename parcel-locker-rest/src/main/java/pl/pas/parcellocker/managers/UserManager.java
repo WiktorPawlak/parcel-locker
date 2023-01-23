@@ -1,22 +1,18 @@
 package pl.pas.parcellocker.managers;
 
+import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
+
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import lombok.NoArgsConstructor;
 import pl.pas.parcellocker.controllers.dto.ClientDto;
 import pl.pas.parcellocker.exceptions.ClientManagerException;
-import pl.pas.parcellocker.exceptions.PermissionValidationException;
-import pl.pas.parcellocker.model.user.Administrator;
 import pl.pas.parcellocker.model.user.Client;
-import pl.pas.parcellocker.model.user.Moderator;
 import pl.pas.parcellocker.model.user.User;
 import pl.pas.parcellocker.model.user.UserRepository;
-import pl.pas.parcellocker.security.PermissionValidator;
-
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
 
 
 @ApplicationScoped
@@ -24,14 +20,10 @@ import java.util.UUID;
 public class UserManager {
 
     @Inject
-    private PermissionValidator permissionValidator;
-
-    @Inject
     private UserRepository clientRepository;
 
-    public UserManager(UserRepository clientRepository, PermissionValidator permissionValidator) {
+    public UserManager(UserRepository clientRepository) {
         this.clientRepository = clientRepository;
-        this.permissionValidator = permissionValidator;
     }
 
     public User getUser(String telNumber) {
@@ -99,18 +91,6 @@ public class UserManager {
             userToEdit.setTelNumber(clientDto.getTelNumber());
             clientRepository.update(userToEdit);
         }
-    }
-
-    public User unregisterClient(UUID operatorId, User user) {
-        if (!permissionValidator.checkPermissions(operatorId, List.of(Administrator.class, Moderator.class))) {
-            throw new PermissionValidationException("Not sufficient access rights");
-        }
-        if (user == null)
-            throw new ClientManagerException("Client is a null!");
-
-        getUser(user.getTelNumber());
-        clientRepository.archive(user.getId());
-        return user;
     }
 
     public User unregisterClient(User user) {

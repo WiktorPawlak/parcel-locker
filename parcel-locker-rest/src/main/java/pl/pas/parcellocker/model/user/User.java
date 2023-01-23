@@ -1,6 +1,5 @@
 package pl.pas.parcellocker.model.user;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.json.bind.annotation.JsonbTransient;
 import jakarta.persistence.Column;
 import jakarta.persistence.DiscriminatorColumn;
