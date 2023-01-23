@@ -24,6 +24,7 @@ import static pl.pas.parcellocker.security.JwtUtils.parse;
 public class AuthenticationFilter implements HttpAuthenticationMechanism {
 
     private static final Pattern TOKEN_PATTERN = Pattern.compile("^Bearer *([^ ]+) *$", Pattern.CASE_INSENSITIVE);
+    public static final int JWT_TOKEN_PART = 1;
 
     @Override
     public AuthenticationStatus validateRequest(
@@ -43,7 +44,7 @@ public class AuthenticationFilter implements HttpAuthenticationMechanism {
             return httpMessageContext.notifyContainerAboutLogin("UNAUTHORIZED", new HashSet<>(List.of("UNAUTHORIZED")));
         }
 
-        final String token = matcher.group(1);
+        final String token = matcher.group(JWT_TOKEN_PART);
 
         Optional<JwtData> optionalJwtData = parse(token);
 
