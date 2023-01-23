@@ -1,5 +1,6 @@
 <?xml version='1.0' encoding='UTF-8' ?>
-<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
 <ui:composition xmlns:ui="http://java.sun.com/jsf/facelets"
                 xmlns="http://www.w3.org/1999/xhtml"
@@ -10,9 +11,10 @@
     <ui:define name="left">
         <ui:include src="./templates/menu.xhtml"/>
     </ui:define>
-
     <ui:define name="content">
-        <h:commandButton value="Wyloguj" action="#{authBean.logout()}"
-                         class="positive_btn"/>
+        <h:form>
+            <h:commandButton value="Wyloguj" action="#{authBean.logOut()}"
+                             class="positive_btn"/>
+        </h:form>
     </ui:define>
 </ui:composition>
