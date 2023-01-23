@@ -5,6 +5,7 @@ import java.util.Map;
 
 import jakarta.enterprise.context.ConversationScoped;
 import jakarta.inject.Named;
+import jakarta.ws.rs.client.Entity;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -19,7 +20,7 @@ import pl.pas.parcellocker.model.user.User;
 @NoArgsConstructor
 public class EditSelfBean implements Serializable {
 
-    UserDto currentUser;
+    UserDto currentUser = new UserDto();
     String userType;
     HttpClient httpClient = new HttpClient();
 
@@ -31,7 +32,7 @@ public class EditSelfBean implements Serializable {
                 .lastName(userBasedOnType.getLastName())
                 .build();
 
-        httpClient.put("/clients/self", clientDto, Map.of("id", String.valueOf(currentUser.getId())));
+        httpClient.put("/clients/self", Entity.json(clientDto), Map.of("id", String.valueOf(currentUser.getId())));
 
         return "allUsers";
     }

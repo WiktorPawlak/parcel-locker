@@ -51,11 +51,15 @@ public class HttpClient {
         return invocationBuilder.post(Entity.json(body));
     }
 
-    public Response put(String path, Object body) {
-        return put(path, body, Collections.emptyMap());
+    public Response putTextBody(String path, Object body) {
+        return put(path, Entity.text(body), Collections.emptyMap());
     }
 
-    public Response put(String path, Object body, Map<String, String> params) {
+    public Response putJsonBody(String path, Object body) {
+        return put(path, Entity.json(body), Collections.emptyMap());
+    }
+
+    public Response put(String path, Entity entity, Map<String, String> params) {
         Invocation.Builder invocationBuilder = getInvocationBuilder(path, params);
 
         Cookie cookie = getCookie();
@@ -63,7 +67,7 @@ public class HttpClient {
             invocationBuilder.cookie(jakartaToJaxRs(cookie));
         }
 
-        return invocationBuilder.put(Entity.json(body));
+        return invocationBuilder.put(entity);
     }
 
     public Response delete(String path) {

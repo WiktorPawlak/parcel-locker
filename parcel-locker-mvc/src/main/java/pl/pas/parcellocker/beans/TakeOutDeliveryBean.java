@@ -8,6 +8,7 @@ import java.util.Map;
 
 import jakarta.enterprise.context.ConversationScoped;
 import jakarta.inject.Named;
+import jakarta.ws.rs.client.Entity;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -30,7 +31,7 @@ public class TakeOutDeliveryBean implements Serializable {
     public String takeOut() {
         httpClient.put(
                 "/deliveries/" + currentDelivery.getId() + "/take-out",
-                "",
+                Entity.text(""),
                 Map.of("lockerId", currentDelivery.getReceiver().getTelNumber(), "accessCode", accessCode));
         deliveries.clear();
         deliveries.addAll(updateDeliveries());

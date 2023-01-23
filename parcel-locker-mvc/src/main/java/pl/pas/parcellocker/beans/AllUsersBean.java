@@ -53,12 +53,12 @@ public class AllUsersBean extends Conversational implements Serializable {
     }
 
     public String archiveUser(UserDto user) {
-        httpClient.put("/clients/" + user.getTelNumber() + "/archive", "");
+        httpClient.putTextBody("/clients/" + user.getTelNumber() + "/archive", "");
         return "allUsers";
     }
 
     public String unarchiveUser(UserDto user) {
-        httpClient.put("/clients/" + user.getTelNumber() + "/unarchive", "");
+        httpClient.putTextBody("/clients/" + user.getTelNumber() + "/unarchive", "");
         return "allUsers";
     }
 

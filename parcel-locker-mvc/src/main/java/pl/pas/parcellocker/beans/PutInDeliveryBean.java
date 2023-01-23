@@ -8,6 +8,7 @@ import java.util.Map;
 
 import jakarta.enterprise.context.ConversationScoped;
 import jakarta.inject.Named;
+import jakarta.ws.rs.client.Entity;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -30,7 +31,7 @@ public class PutInDeliveryBean extends Conversational implements Serializable {
     public String putIn() {
         httpClient.put(
                 "/deliveries/" + currentDelivery.getId() + "/put-in",
-                "",
+                Entity.text(""),
                 Map.of("lockerId", currentDelivery.getLocker().getIdentityNumber(), "accessCode", accessCode));
         deliveries.clear();
         deliveries.addAll(updateDeliveries());

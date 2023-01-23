@@ -30,7 +30,7 @@ public class EditClientBean implements Serializable {
                 .lastName(userBasedOnType.getLastName())
                 .build();
 
-        httpClient.put("/clients/" + currentUser.getId(), clientDto);
+        httpClient.putJsonBody("/clients/" + currentUser.getId(), clientDto);
 
         return "allUsers";
     }
