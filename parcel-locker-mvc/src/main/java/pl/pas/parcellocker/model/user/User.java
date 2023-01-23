@@ -20,6 +20,7 @@ public abstract class User extends EntityModel {
     public User(UserDto user) {
         this.id = user.getId();
         this.telNumber = user.getTelNumber();
+        this.password = user.getPassword();
         this.firstName = user.getFirstName();
         this.lastName = user.getLastName();
         this.active = user.isActive();

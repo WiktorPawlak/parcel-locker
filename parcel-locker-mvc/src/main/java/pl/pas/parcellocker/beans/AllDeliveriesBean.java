@@ -7,14 +7,8 @@ import jakarta.inject.Inject;
 import jakarta.inject.Named;
 import jakarta.ws.rs.client.Client;
 import jakarta.ws.rs.client.ClientBuilder;
-import jakarta.ws.rs.client.Invocation;
-import jakarta.ws.rs.client.WebTarget;
-import jakarta.ws.rs.core.GenericType;
-import jakarta.ws.rs.core.MediaType;
-import jakarta.ws.rs.core.Response;
 import lombok.Getter;
 import lombok.Setter;
-import pl.pas.parcellocker.beans.Conversational;
 import pl.pas.parcellocker.model.delivery.Delivery;
 import pl.pas.parcellocker.model.delivery.DeliveryStatus;
 
@@ -36,7 +30,7 @@ public class AllDeliveriesBean extends Conversational implements Serializable {
     TakeOutDeliveryBean takeOutDeliveryBean;
     List<Delivery> currentDeliveries;
     Client client = ClientBuilder.newClient();
-
+    HttpClient httpClient = new HttpClient();
 
     @PostConstruct
     public void initCurrentDeliveries() {
@@ -44,12 +38,7 @@ public class AllDeliveriesBean extends Conversational implements Serializable {
     }
 
     public String delete(Delivery delivery, String redirect, List<Delivery> deliveries) {
-        WebTarget webTarget = client.target("http://localhost:8080/parcel-locker-rest-1.0-SNAPSHOT/api/deliveries")
-                .path("{id}");
-        Invocation.Builder invocationBuilder = webTarget
-                .resolveTemplate("id", delivery.getId())
-                .request();
-        invocationBuilder.delete();
+        httpClient.delete("/deliveries/" + delivery.getId());
 
         deliveries.clear();
         deliveries.addAll(updateDeliveries());

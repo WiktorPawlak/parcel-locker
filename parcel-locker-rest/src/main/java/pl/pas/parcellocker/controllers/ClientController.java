@@ -1,6 +1,7 @@
 package pl.pas.parcellocker.controllers;
 
 
+import jakarta.annotation.security.PermitAll;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.inject.Inject;
 import jakarta.persistence.NoResultException;
@@ -54,7 +55,7 @@ public class ClientController {
     @POST
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    @RolesAllowed({"UNAUTHORIZED"})
+    @PermitAll //@RolesAllowed({"UNAUTHORIZED"})
     public Response registerClient(@Valid ClientDto clientDTO) {
         try {
             User newUser = userManager.registerClient(clientDTO.firstName, clientDTO.lastName, clientDTO.telNumber, clientDTO.password);

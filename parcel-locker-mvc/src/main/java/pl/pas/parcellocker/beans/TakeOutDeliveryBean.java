@@ -2,10 +2,8 @@ package pl.pas.parcellocker.beans;
 
 import jakarta.enterprise.context.ConversationScoped;
 import jakarta.inject.Named;
-import jakarta.ws.rs.client.*;
-import jakarta.ws.rs.core.GenericType;
-import jakarta.ws.rs.core.MediaType;
-import jakarta.ws.rs.core.Response;
+import jakarta.ws.rs.client.Client;
+import jakarta.ws.rs.client.ClientBuilder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -13,6 +11,7 @@ import pl.pas.parcellocker.model.delivery.Delivery;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.Map;
 
 import static pl.pas.parcellocker.DeliveriesUtils.updateDeliveries;
 
@@ -28,15 +27,15 @@ public class TakeOutDeliveryBean implements Serializable {
     String accessCode;
     String redirect;
     Client client = ClientBuilder.newClient();
+    HttpClient httpClient = new HttpClient();
 
     public String takeOut() {
-        WebTarget target = client.target("http://localhost:8080/parcel-locker-rest-1.0-SNAPSHOT/api/deliveries")
-                .path("{id}").path("/take-out");
-
-        target.resolveTemplate("id", currentDelivery.getId())
-                .queryParam("telNumber", currentDelivery.getReceiver().getTelNumber())
-                .queryParam("accessCode", accessCode)
-                .request().put(Entity.json(""));
+        httpClient.put(
+                "/deliveries/" + currentDelivery.getId() + "/take-out",
+                "",
+                Map.of("lockerId", currentDelivery.getReceiver().getTelNumber(), "accessCode", accessCode));
+        deliveries.clear();
+        deliveries.addAll(updateDeliveries());
 
         deliveries.clear();
         deliveries.addAll(updateDeliveries());
