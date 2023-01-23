@@ -1,6 +1,9 @@
 package pl.pas.parcellocker.beans;
 
-import jakarta.enterprise.context.RequestScoped;
+import java.io.Serializable;
+import java.util.Map;
+
+import jakarta.enterprise.context.ConversationScoped;
 import jakarta.inject.Named;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -10,30 +13,26 @@ import pl.pas.parcellocker.delivery.http.HttpClient;
 import pl.pas.parcellocker.model.user.User;
 
 @Named
-@RequestScoped
+@ConversationScoped
 @Getter
 @Setter
 @NoArgsConstructor
-public class AddClientBean {
+public class EditSelfBean implements Serializable {
 
-    UserDto currentUser = new UserDto();
-
-    String userType = "Client";
-
+    UserDto currentUser;
+    String userType;
     HttpClient httpClient = new HttpClient();
 
-
-    public String add() {
-        User userBasedOnType = Utils.prepareUserBasedOnType(currentUser, userType);
+    public String edit() {
+        User userBasedOnType = Utils.prepareUserBasedOnType(currentUser, "Client");
         final UserDto clientDto = UserDto.builder()
-                .firstName(userBasedOnType.getFirstName())
                 .password(userBasedOnType.getPassword())
+                .firstName(userBasedOnType.getFirstName())
                 .lastName(userBasedOnType.getLastName())
-                .telNumber(userBasedOnType.getTelNumber())
                 .build();
 
-        httpClient.post("/clients", clientDto);
+        httpClient.put("/clients/self", clientDto, Map.of("id", String.valueOf(currentUser.getId())));
 
-        return "newUser";
+        return "allUsers";
     }
 }

@@ -1,5 +1,8 @@
 package pl.pas.parcellocker.beans;
 
+import java.io.Serializable;
+import java.util.List;
+
 import jakarta.enterprise.context.ConversationScoped;
 import jakarta.inject.Named;
 import jakarta.ws.rs.client.Client;
@@ -8,11 +11,9 @@ import jakarta.ws.rs.core.GenericType;
 import jakarta.ws.rs.core.Response;
 import lombok.Getter;
 import lombok.Setter;
+import pl.pas.parcellocker.delivery.http.HttpClient;
 import pl.pas.parcellocker.model.delivery.Delivery;
 import pl.pas.parcellocker.model.locker.Locker;
-
-import java.io.Serializable;
-import java.util.List;
 
 @Getter
 @Setter

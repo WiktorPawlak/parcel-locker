@@ -1,21 +1,20 @@
 package pl.pas.parcellocker.beans;
 
 
-import jakarta.annotation.PostConstruct;
-import jakarta.faces.view.ViewScoped;
-import jakarta.inject.Inject;
-import jakarta.inject.Named;
-import jakarta.ws.rs.client.Client;
-import jakarta.ws.rs.client.ClientBuilder;
-import lombok.Getter;
-import lombok.Setter;
-import pl.pas.parcellocker.model.delivery.Delivery;
-import pl.pas.parcellocker.model.delivery.DeliveryStatus;
+import static pl.pas.parcellocker.DeliveriesUtils.updateDeliveries;
 
 import java.io.Serializable;
 import java.util.List;
 
-import static pl.pas.parcellocker.DeliveriesUtils.updateDeliveries;
+import jakarta.annotation.PostConstruct;
+import jakarta.faces.view.ViewScoped;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
+import lombok.Getter;
+import lombok.Setter;
+import pl.pas.parcellocker.delivery.http.HttpClient;
+import pl.pas.parcellocker.model.delivery.Delivery;
+import pl.pas.parcellocker.model.delivery.DeliveryStatus;
 
 
 @Named
@@ -26,10 +25,12 @@ public class AllDeliveriesBean extends Conversational implements Serializable {
 
     @Inject
     PutInDeliveryBean putInDeliveryBean;
+
     @Inject
     TakeOutDeliveryBean takeOutDeliveryBean;
+
     List<Delivery> currentDeliveries;
-    Client client = ClientBuilder.newClient();
+
     HttpClient httpClient = new HttpClient();
 
     @PostConstruct

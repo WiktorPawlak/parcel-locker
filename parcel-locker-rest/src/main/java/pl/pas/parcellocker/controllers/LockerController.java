@@ -1,5 +1,6 @@
 package pl.pas.parcellocker.controllers;
 
+import jakarta.annotation.security.RolesAllowed;
 import jakarta.inject.Inject;
 import jakarta.validation.Valid;
 import jakarta.validation.ValidationException;
@@ -25,10 +26,11 @@ public class LockerController {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
+    @RolesAllowed({"MODERATOR", "ADMINISTRATOR"})
     public Response getLockers() {
         try {
             return Response.ok().entity(lockerManager.getAllLockers()).build();
-        } catch (Exception e) {
+        } catch (LockerManagerException e) {
             return Response.status(Response.Status.NOT_FOUND).build();
         }
     }
@@ -36,6 +38,7 @@ public class LockerController {
     @GET
     @Path("/{identityNumber}")
     @Produces(MediaType.APPLICATION_JSON)
+    @RolesAllowed({"MODERATOR", "ADMINISTRATOR"})
     public Response getLocker(@PathParam("identityNumber") String identityNumber) {
         try {
             return Response.ok().entity(lockerManager.getLocker(identityNumber)).build();
@@ -47,6 +50,7 @@ public class LockerController {
     @GET
     @Path("/{identityNumber}/empty")
     @Produces(MediaType.APPLICATION_JSON)
+    @RolesAllowed({"MODERATOR", "ADMINISTRATOR"})
     public Response getLockerEmptyBoxesCount(@PathParam("identityNumber") String identityNumber) {
         try {
             return Response.ok().entity(lockerManager.getEmptyBoxesCount(identityNumber)).build();
@@ -58,6 +62,7 @@ public class LockerController {
     @POST
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
+    @RolesAllowed({"ADMINISTRATOR"})
     public Response addLocker(@Valid LockerDto lockerDto) {
         try {
             Locker newLocker = lockerManager.createLocker(
@@ -76,6 +81,7 @@ public class LockerController {
     @DELETE
     @Path("/{identityNumber}")
     @Produces(MediaType.APPLICATION_JSON)
+    @RolesAllowed({"ADMINISTRATOR"})
     public Response removeLocker(@PathParam("identityNumber") String identityNumber) {
         try {
             lockerManager.removeLocker(identityNumber);

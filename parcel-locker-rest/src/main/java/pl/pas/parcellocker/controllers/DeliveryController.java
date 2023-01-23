@@ -2,6 +2,7 @@ package pl.pas.parcellocker.controllers;
 
 import java.util.UUID;
 
+import jakarta.annotation.security.RolesAllowed;
 import jakarta.inject.Inject;
 import jakarta.persistence.NoResultException;
 import jakarta.validation.Valid;
@@ -15,8 +16,10 @@ import jakarta.ws.rs.Path;
 import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.QueryParam;
+import jakarta.ws.rs.core.Context;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
+import jakarta.ws.rs.core.SecurityContext;
 import pl.pas.parcellocker.controllers.dto.DeliveryListDto;
 import pl.pas.parcellocker.controllers.dto.DeliveryParcelDto;
 import pl.pas.parcellocker.exceptions.DeliveryManagerException;
@@ -28,12 +31,16 @@ import pl.pas.parcellocker.model.delivery.Delivery;
 @Path(value = "/deliveries")
 public class DeliveryController {
 
+    @Context
+    private SecurityContext securityContext;
+
     @Inject
     private DeliveryManager deliveryManager;
 
     @GET
     @Path("/{id}")
     @Produces(MediaType.APPLICATION_JSON)
+    @RolesAllowed({"ADMINISTRATOR"})
     public Response getDelivery(@PathParam("id") UUID id) {
         try {
             return Response.ok().entity(deliveryManager.getDelivery(id)).build();
@@ -44,6 +51,7 @@ public class DeliveryController {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
+    @RolesAllowed({"ADMINISTRATOR"})
     public Response getAllDeliveries() {
         try {
             return Response.ok().entity(deliveryManager.getAllDeliveries()).build();
@@ -55,9 +63,11 @@ public class DeliveryController {
     @GET
     @Path("/current")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getCurrentDeliveries(@QueryParam("telNumber") String telNumber) {
+    @RolesAllowed({"CLIENT", "MODERATOR", "ADMINISTRATOR"})
+    public Response getCurrentDeliveries() {
         try {
-            return Response.ok().entity(deliveryManager.getAllCurrentClientDeliveries(telNumber)).build();
+            String clientTelNumber = securityContext.getUserPrincipal().getName();
+            return Response.ok().entity(deliveryManager.getAllCurrentClientDeliveries(clientTelNumber)).build();
         } catch (NoResultException e) {
             return Response.status(Response.Status.NOT_FOUND).entity(e.getMessage()).build();
         }
@@ -66,10 +76,12 @@ public class DeliveryController {
     @GET
     @Path("/received")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getReceivedDelivery(@QueryParam("telNumber") String telNumber) {
+    @RolesAllowed({"CLIENT", "MODERATOR", "ADMINISTRATOR"})
+    public Response getReceivedDelivery() {
         try {
+            String clientTelNumber = securityContext.getUserPrincipal().getName();
             return Response.ok()
-                .entity(deliveryManager.getAllReceivedClientDeliveries(telNumber))
+                .entity(deliveryManager.getAllReceivedClientDeliveries(clientTelNumber))
                 .build();
         } catch (NoResultException | DeliveryManagerException e) {
             return Response.status(Response.Status.NOT_FOUND).entity(e.getMessage()).build();
@@ -79,6 +91,7 @@ public class DeliveryController {
     @GET
     @Path("/locker/{identityNumber}")
     @Produces(MediaType.APPLICATION_JSON)
+    @RolesAllowed({"MODERATOR", "ADMINISTRATOR"})
     public Response getLockerDeliveries(@PathParam("identityNumber") String identityNumber) {
         try {
             return Response.ok()
@@ -93,6 +106,7 @@ public class DeliveryController {
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     @Path("/list")
+    @RolesAllowed({"CLIENT", "MODERATOR", "ADMINISTRATOR"})
     public Response addListDelivery(@Valid DeliveryListDto deliveryListDto) {
         try {
             Delivery delivery =
@@ -114,6 +128,7 @@ public class DeliveryController {
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     @Path("/parcel")
+    @RolesAllowed({"CLIENT", "MODERATOR", "ADMINISTRATOR"})
     public Response addParcelDelivery(@Valid DeliveryParcelDto deliveryParcelDto) {
         try {
             Delivery delivery =
@@ -138,6 +153,7 @@ public class DeliveryController {
     @PUT
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/{id}/put-in")
+    @RolesAllowed({"CLIENT", "MODERATOR", "ADMINISTRATOR"})
     public Response putInLocker(
         @PathParam("id") UUID deliveryId,
         @QueryParam("lockerId") String lockerId,
@@ -157,6 +173,7 @@ public class DeliveryController {
     @PUT
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/{id}/take-out")
+    @RolesAllowed({"CLIENT", "MODERATOR", "ADMINISTRATOR"})
     public Response takeOutDelivery(
         @PathParam("id") UUID deliveryId,
         @QueryParam("telNumber") String telNumber,
@@ -176,6 +193,7 @@ public class DeliveryController {
     @DELETE
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/{id}")
+    @RolesAllowed({"ADMINISTRATOR"})
     public Response removeDelivery(@PathParam("id") UUID deliveryId) {
         try {
             deliveryManager.removeDelivery(deliveryId);

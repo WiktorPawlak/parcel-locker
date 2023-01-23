@@ -1,15 +1,19 @@
-package pl.pas.parcellocker.beans;
+package pl.pas.parcellocker.delivery.http;
 
-import jakarta.faces.context.FacesContext;
-import jakarta.servlet.http.Cookie;
-import jakarta.ws.rs.client.*;
-import jakarta.ws.rs.core.MediaType;
-import jakarta.ws.rs.core.Response;
+import static pl.pas.parcellocker.beans.CookiePackageConverter.jakartaToJaxRs;
 
 import java.util.Collections;
 import java.util.Map;
 
-import static pl.pas.parcellocker.beans.CookiePackageConverter.jakartaToJaxRs;
+import jakarta.faces.context.FacesContext;
+import jakarta.servlet.http.Cookie;
+import jakarta.ws.rs.client.Client;
+import jakarta.ws.rs.client.ClientBuilder;
+import jakarta.ws.rs.client.Entity;
+import jakarta.ws.rs.client.Invocation;
+import jakarta.ws.rs.client.WebTarget;
+import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.Response;
 
 public class HttpClient {
 
@@ -33,7 +37,7 @@ public class HttpClient {
     }
 
     public Response post(String path, Object body) {
-        return post(path, body,Collections.emptyMap());
+        return post(path, body, Collections.emptyMap());
     }
 
     public Response post(String path, Object body, Map<String, String> params) {
@@ -48,7 +52,7 @@ public class HttpClient {
     }
 
     public Response put(String path, Object body) {
-        return put(path, body,Collections.emptyMap());
+        return put(path, body, Collections.emptyMap());
     }
 
     public Response put(String path, Object body, Map<String, String> params) {

@@ -1,5 +1,8 @@
 package pl.pas.parcellocker.beans;
 
+import java.io.Serializable;
+import java.util.List;
+
 import jakarta.annotation.PostConstruct;
 import jakarta.faces.view.ViewScoped;
 import jakarta.inject.Inject;
@@ -11,10 +14,8 @@ import jakarta.ws.rs.core.Response;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import pl.pas.parcellocker.delivery.http.HttpClient;
 import pl.pas.parcellocker.model.locker.Locker;
-
-import java.io.Serializable;
-import java.util.List;
 
 @Named
 @ViewScoped
@@ -37,7 +38,7 @@ public class AllLockersBean extends Conversational implements Serializable {
     }
 
     public int emptyBoxes(String identityNumber) {
-        return  httpClient.get("/lockers/" + identityNumber + "/empty").readEntity(Integer.class);
+        return httpClient.get("/lockers/" + identityNumber + "/empty").readEntity(Integer.class);
     }
 
     public String searchLockerDeliveries(Locker locker) {

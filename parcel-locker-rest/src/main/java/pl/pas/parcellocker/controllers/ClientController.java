@@ -1,6 +1,9 @@
 package pl.pas.parcellocker.controllers;
 
 
+import java.security.Principal;
+import java.util.UUID;
+
 import jakarta.annotation.security.PermitAll;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.inject.Inject;
@@ -15,17 +18,21 @@ import jakarta.ws.rs.Path;
 import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.QueryParam;
+import jakarta.ws.rs.core.Context;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
+import jakarta.ws.rs.core.SecurityContext;
 import pl.pas.parcellocker.controllers.dto.ClientDto;
+import pl.pas.parcellocker.controllers.dto.ClientEditDto;
 import pl.pas.parcellocker.exceptions.ClientManagerException;
 import pl.pas.parcellocker.managers.UserManager;
 import pl.pas.parcellocker.model.user.User;
 
-import java.util.UUID;
-
 @Path(value = "/clients")
 public class ClientController {
+
+    @Context
+    private SecurityContext securityContext;
 
     @Inject
     private UserManager userManager;
@@ -33,6 +40,7 @@ public class ClientController {
     @GET
     @Path("/{telNumber}")
     @Produces(MediaType.APPLICATION_JSON)
+    @RolesAllowed({"UNAUTHORIZED"})
     public Response getClient(@PathParam("telNumber") String telNumber) {
         try {
             return Response.ok().entity(userManager.getUser(telNumber)).build();
@@ -71,6 +79,7 @@ public class ClientController {
     @Path("/{telNumber}/archive")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes({MediaType.TEXT_PLAIN})
+    @RolesAllowed({"ADMINISTRATOR"})
     public Response archiveClient(@PathParam("telNumber") String telNumber) {
         try {
             User user = userManager.getUser(telNumber);
@@ -87,6 +96,7 @@ public class ClientController {
     @Path("/{telNumber}/unarchive")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes({MediaType.TEXT_PLAIN})
+    @RolesAllowed({"ADMINISTRATOR"})
     public Response unarchiveClient(@PathParam("telNumber") String telNumber) {
         try {
             User user = userManager.getUser(telNumber);
@@ -103,10 +113,30 @@ public class ClientController {
     @Path("/{id}")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes({MediaType.APPLICATION_JSON})
-    public Response editClient(@PathParam(value = "id") UUID id, @Valid ClientDto clientDto) {
+    @RolesAllowed({"ADMINISTRATOR"})
+    public Response editClient(@PathParam(value = "id") UUID id, @Valid ClientEditDto clientEditDto) {
         try {
-            userManager.edit(id, clientDto);
+            userManager.edit(id, clientEditDto);
             User user = userManager.findById(id);
+            return Response.ok().entity(user).build();
+        } catch (ValidationException | NullPointerException e) {
+            return Response.status(Response.Status.NOT_ACCEPTABLE).build();
+        } catch (ClientManagerException e) {
+            return Response.status(Response.Status.NOT_FOUND).entity(e.getMessage()).build();
+        }
+    }
+
+    @PUT
+    @Path("/self")
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes({MediaType.APPLICATION_JSON})
+    @RolesAllowed({"CLIENT", "MODERATOR", "ADMINISTRATOR"})
+    public Response editSelf(@Valid ClientEditDto clientEditDto) {
+        try {
+            Principal callerPrincipal = securityContext.getUserPrincipal();
+            String callerTelNumber = callerPrincipal.getName();
+            User user = userManager.getUser(callerTelNumber);
+            userManager.edit(user.getId(), clientEditDto);
             return Response.ok().entity(user).build();
         } catch (ValidationException | NullPointerException e) {
             return Response.status(Response.Status.NOT_ACCEPTABLE).build();

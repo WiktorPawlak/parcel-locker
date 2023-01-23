@@ -8,7 +8,7 @@ import java.util.UUID;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import lombok.NoArgsConstructor;
-import pl.pas.parcellocker.controllers.dto.ClientDto;
+import pl.pas.parcellocker.controllers.dto.ClientEditDto;
 import pl.pas.parcellocker.exceptions.ClientManagerException;
 import pl.pas.parcellocker.model.user.Client;
 import pl.pas.parcellocker.model.user.User;
@@ -82,13 +82,12 @@ public class UserManager {
         return client;
     }
 
-    public void edit(UUID id, ClientDto clientDto) {
+    public void edit(UUID id, ClientEditDto clientDto) {
         Optional<User> userToEditOptional = clientRepository.findUserById(id);
         if (userToEditOptional.isPresent()) {
             User userToEdit = userToEditOptional.get();
             userToEdit.setFirstName(clientDto.getFirstName());
             userToEdit.setLastName(clientDto.getLastName());
-            userToEdit.setTelNumber(clientDto.getTelNumber());
             clientRepository.update(userToEdit);
         }
     }

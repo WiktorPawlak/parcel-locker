@@ -21,7 +21,7 @@
                     </div>
                     <div class="col-md-3">
                         <h:inputText styleClass=""
-                                     value="#{editClientBean.currentUser.firstName}"
+                                     value="#{editSelfBean.currentUser.firstName}"
                                      required="true"
                                      requiredMessage="Należy podać imię!"
                                      validatorMessage="Niepoprawna wartość pola!">
@@ -35,7 +35,7 @@
                     </div>
                     <div class="col-md-3">
                         <h:inputText styleClass=""
-                                     value="#{editClientBean.currentUser.lastName}"
+                                     value="#{editSelfBean.currentUser.lastName}"
                                      required="true"
                                      requiredMessage="Należy podać nazwisko!"
                                      validatorMessage="Niepoprawna wartość pola!">
@@ -49,7 +49,7 @@
                     </div>
                     <div class="col-md-3">
                         <h:inputText styleClass=""
-                                     value="#{editClientBean.currentUser.password}"
+                                     value="#{editSelfBean.currentUser.password}"
                                      required="true"
                                      requiredMessage="Należy podać hasło!">
                         </h:inputText>
@@ -58,7 +58,7 @@
 
                 <h:messages/>
 
-                <h:commandButton value="Edytuj" action="#{editClientBean.edit()}"
+                <h:commandButton value="Edytuj" action="#{editSelfBean.edit()}"
                                  class="positive_btn"/>
             </h:form>
         </div>
