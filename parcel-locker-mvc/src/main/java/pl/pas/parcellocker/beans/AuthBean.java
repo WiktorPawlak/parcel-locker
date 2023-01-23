@@ -21,7 +21,7 @@ import pl.pas.parcellocker.beans.dto.CredentialsDto;
 @Setter
 public class AuthBean implements Serializable {
 
-    CredentialsDto credentials;
+    CredentialsDto credentials = new CredentialsDto();
 
     Client client = ClientBuilder.newClient();
 

@@ -1,6 +1,8 @@
 package pl.pas.parcellocker.model.user;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
 import pl.pas.parcellocker.beans.dto.UserDto;
 import pl.pas.parcellocker.model.EntityModel;
 
@@ -9,9 +11,10 @@ import pl.pas.parcellocker.model.EntityModel;
 @AllArgsConstructor
 public abstract class User extends EntityModel {
 
+    private String telNumber;
+    private String password;
     private String firstName;
     private String lastName;
-    private String telNumber;
     private boolean active;
 
     public User(UserDto user) {
@@ -22,6 +25,7 @@ public abstract class User extends EntityModel {
         this.active = user.isActive();
     }
 
-    public User() {}
+    public User() {
+    }
 
 }
