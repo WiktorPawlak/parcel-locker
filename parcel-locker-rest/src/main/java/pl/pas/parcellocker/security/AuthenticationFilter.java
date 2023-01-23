@@ -6,15 +6,18 @@ import jakarta.security.enterprise.AuthenticationException;
 import jakarta.security.enterprise.AuthenticationStatus;
 import jakarta.security.enterprise.authentication.mechanism.http.HttpAuthenticationMechanism;
 import jakarta.security.enterprise.authentication.mechanism.http.HttpMessageContext;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import static pl.pas.parcellocker.security.JwtUtils.JWT_COOKIE_NAME;
+import static pl.pas.parcellocker.security.JwtUtils.parse;
 
 @RequestScoped
 @DeclareRoles({"ADMINISTRATOR", "MODERATOR", "CLIENT", "UNAUTHORIZED"})
@@ -29,7 +32,10 @@ public class AuthenticationFilter implements HttpAuthenticationMechanism {
         HttpMessageContext httpMessageContext
     ) throws AuthenticationException {
 
-        final String authorization = httpServletRequest.getHeader("Authorization");
+        Optional<Cookie> cookie = findJwtCookie(httpServletRequest.getCookies());
+
+        final String authorization = cookie.isPresent() ?
+            cookie.get().getValue() : httpServletRequest.getHeader("Authorization");
 
         Matcher matcher = TOKEN_PATTERN.matcher(Optional.ofNullable(authorization).orElse(""));
 
@@ -39,7 +45,7 @@ public class AuthenticationFilter implements HttpAuthenticationMechanism {
 
         final String token = matcher.group(1);
 
-        Optional<JwtData> optionalJwtData = JwtUtils.parse(token);
+        Optional<JwtData> optionalJwtData = parse(token);
 
         if (optionalJwtData.isPresent()) {
             JwtData jwtData = optionalJwtData.get();
@@ -47,5 +53,16 @@ public class AuthenticationFilter implements HttpAuthenticationMechanism {
         } else {
             return httpMessageContext.responseUnauthorized();
         }
+    }
+
+    public static Optional<Cookie> findJwtCookie(Cookie[] cookies) {
+        if (cookies != null) {
+            for (Cookie cookie : cookies) {
+                if (cookie.getName().equals(JWT_COOKIE_NAME)) {
+                    return Optional.of(cookie);
+                }
+            }
+        }
+        return Optional.empty();
     }
 }

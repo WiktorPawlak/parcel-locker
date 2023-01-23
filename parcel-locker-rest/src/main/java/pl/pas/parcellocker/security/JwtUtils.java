@@ -15,6 +15,7 @@ import java.util.Set;
 
 public class JwtUtils {
 
+    public static final String JWT_COOKIE_NAME = "jwt";
     private static final String ISSUER = "parcelLocker";
     private static final Algorithm algorithm = Algorithm.HMAC256("parcelLocker123456789HeheJestSuperxDDDDDDDD");
     private static final long EXPIRATION_TIME = 3600;
