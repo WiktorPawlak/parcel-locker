@@ -1,5 +1,7 @@
 package pl.pas.parcellocker.beans;
 
+import static pl.pas.parcellocker.delivery.http.ModulePaths.CLIENTS_PATH;
+
 import jakarta.annotation.PostConstruct;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Inject;
@@ -12,10 +14,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import pl.pas.parcellocker.beans.dto.UserDto;
 import pl.pas.parcellocker.delivery.http.ClientHttp;
-import pl.pas.parcellocker.model.user.Client;
 import pl.pas.parcellocker.model.user.User;
-
-import static pl.pas.parcellocker.delivery.http.ModulePaths.CLIENTS_PATH;
 
 @Named
 @RequestScoped
@@ -43,6 +42,7 @@ public class AddClientBean {
         User userBasedOnType = Utils.prepareUserBasedOnType(currentUser, userType);
         final UserDto clientDto = UserDto.builder()
                 .firstName(userBasedOnType.getFirstName())
+                .password(userBasedOnType.getPassword())
                 .lastName(userBasedOnType.getLastName())
                 .telNumber(userBasedOnType.getTelNumber())
                 .build();

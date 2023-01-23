@@ -25,7 +25,6 @@ public class AuthBean implements Serializable {
 
     @Inject
     AuthorizationStore authorizationStore;
-
     CredentialsDto credentials = new CredentialsDto();
 
     Client client = ClientBuilder.newClient();
