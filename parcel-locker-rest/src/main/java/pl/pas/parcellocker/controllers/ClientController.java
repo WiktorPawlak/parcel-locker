@@ -1,10 +1,6 @@
 package pl.pas.parcellocker.controllers;
 
 
-import java.security.Principal;
-import java.util.UUID;
-
-import jakarta.annotation.security.PermitAll;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.inject.Inject;
 import jakarta.persistence.NoResultException;
@@ -27,6 +23,9 @@ import pl.pas.parcellocker.controllers.dto.ClientEditDto;
 import pl.pas.parcellocker.exceptions.ClientManagerException;
 import pl.pas.parcellocker.managers.UserManager;
 import pl.pas.parcellocker.model.user.User;
+
+import java.security.Principal;
+import java.util.UUID;
 
 @Path(value = "/clients")
 public class ClientController {
@@ -63,7 +62,7 @@ public class ClientController {
     @POST
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    @PermitAll //@RolesAllowed({"UNAUTHORIZED"})
+    @RolesAllowed({"UNAUTHORIZED"})
     public Response registerClient(@Valid ClientDto clientDTO) {
         try {
             User newUser = userManager.registerClient(clientDTO.firstName, clientDTO.lastName, clientDTO.telNumber, clientDTO.password);
