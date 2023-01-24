@@ -24,9 +24,6 @@ import pl.pas.parcellocker.delivery.http.HttpClient;
 public class AllUsersBean extends Conversational implements Serializable {
 
     @Inject
-    AuthorizationStore authorizationStore;
-
-    @Inject
     EditClientBean editClientBean;
 
     @Inject

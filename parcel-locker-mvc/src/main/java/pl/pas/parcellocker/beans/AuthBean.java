@@ -16,7 +16,6 @@ import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import java.io.IOException;
 import java.io.Serializable;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
@@ -28,7 +27,7 @@ import java.util.Set;
 public class AuthBean implements Serializable {
 
     @Inject
-    private RoleHandler roleHandler;
+    private IdentityHandler roleHandler;
     CredentialsDto credentials = new CredentialsDto();
 
     HttpClient httpClient = new HttpClient();
@@ -47,6 +46,7 @@ public class AuthBean implements Serializable {
         jakarta.servlet.http.Cookie cookie = (jakarta.servlet.http.Cookie) cookieMap.get("jwt");
         CookieHandler.remove(CookiePackageConverter.jakartaToJaxRs(cookie));
         roleHandler.setRoles(Set.of());
+        roleHandler.setUserLogin(null);
         return "index";
     }
 

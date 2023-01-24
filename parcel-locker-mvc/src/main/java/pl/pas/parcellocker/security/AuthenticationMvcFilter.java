@@ -10,7 +10,7 @@ import jakarta.security.enterprise.authentication.mechanism.http.HttpMessageCont
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import pl.pas.parcellocker.beans.RoleHandler;
+import pl.pas.parcellocker.beans.IdentityHandler;
 
 import java.util.Optional;
 import java.util.regex.Matcher;
@@ -27,7 +27,7 @@ public class AuthenticationMvcFilter implements HttpAuthenticationMechanism {
     public static final int JWT_TOKEN_PART = 1;
 
     @Inject
-    private RoleHandler roleHandler;
+    private IdentityHandler roleHandler;
 
     @Override
     public AuthenticationStatus validateRequest(
@@ -54,6 +54,7 @@ public class AuthenticationMvcFilter implements HttpAuthenticationMechanism {
         if (optionalJwtData.isPresent()) {
             JwtData jwtData = optionalJwtData.get();
             roleHandler.setRoles(jwtData.getRoles());
+            roleHandler.setUserLogin(jwtData.getTelNumber());
             return httpMessageContext.notifyContainerAboutLogin(jwtData.getTelNumber(), jwtData.getRoles());
         } else {
             return httpMessageContext.doNothing();
