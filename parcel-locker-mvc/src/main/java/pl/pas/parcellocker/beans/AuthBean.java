@@ -1,11 +1,5 @@
 package pl.pas.parcellocker.beans;
 
-import java.io.Serializable;
-import java.util.HashMap;
-import java.util.Map;
-
-import javax.faces.context.FacesContext;
-
 import jakarta.faces.view.ViewScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
@@ -16,6 +10,15 @@ import lombok.Getter;
 import lombok.Setter;
 import pl.pas.parcellocker.beans.dto.CredentialsDto;
 import pl.pas.parcellocker.delivery.http.HttpClient;
+import pl.pas.parcellocker.security.CookieHandler;
+
+import javax.faces.context.ExternalContext;
+import javax.faces.context.FacesContext;
+import java.io.IOException;
+import java.io.Serializable;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
 
 
 @ViewScoped
@@ -25,19 +28,16 @@ import pl.pas.parcellocker.delivery.http.HttpClient;
 public class AuthBean implements Serializable {
 
     @Inject
-    AuthorizationStore authorizationStore;
-
+    private RoleHandler roleHandler;
     CredentialsDto credentials = new CredentialsDto();
 
     HttpClient httpClient = new HttpClient();
 
-    public String logIn() {
+    public String logIn() throws IOException {
         Response response = httpClient.post("/auth/login", this.credentials);
         Cookie cookie = response.getCookies().get("jwt");
-        Map<String, Object> properties = new HashMap<>();
-        properties.put("maxAge", 31536000);
-        properties.put("path", "/");
-        FacesContext.getCurrentInstance().getExternalContext().addResponseCookie(cookie.getName(), cookie.getValue(), properties);
+        CookieHandler.save(cookie);
+        reload();
         return "index";
     }
 
@@ -45,14 +45,14 @@ public class AuthBean implements Serializable {
         httpClient.post("/auth/logout", Entity.json(""));
         Map<String, Object> cookieMap = jakarta.faces.context.FacesContext.getCurrentInstance().getExternalContext().getRequestCookieMap();
         jakarta.servlet.http.Cookie cookie = (jakarta.servlet.http.Cookie) cookieMap.get("jwt");
-        Map<String, Object> properties = new HashMap<>();
-        properties.put("maxAge", 0);
-        properties.put("path", "/");
-        if (cookie != null) {
-            cookie.setMaxAge(0);
-            FacesContext.getCurrentInstance().getExternalContext().addResponseCookie(cookie.getName(), cookie.getValue(), properties);
-        }
+        CookieHandler.remove(CookiePackageConverter.jakartaToJaxRs(cookie));
+        roleHandler.setRoles(Set.of());
         return "index";
+    }
+
+    private void reload() throws IOException {
+        ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
+        ec.redirect("index.xhtml");
     }
 //    public String logOut() {
 //        httpClient.post("/auth/logout", Entity.json(""));
