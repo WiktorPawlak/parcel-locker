@@ -32,7 +32,7 @@ public class AuthBean implements Serializable {
     HttpClient httpClient = new HttpClient();
 
     public String logIn() {
-        Response response = httpClient.post("/auth/login", Entity.json(this.credentials));
+        Response response = httpClient.post("/auth/login", this.credentials);
         Cookie cookie = response.getCookies().get("jwt");
         Map<String, Object> properties = new HashMap<>();
         properties.put("maxAge", 31536000);

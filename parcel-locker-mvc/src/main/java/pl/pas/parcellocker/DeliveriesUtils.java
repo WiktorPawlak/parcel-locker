@@ -11,6 +11,7 @@ import pl.pas.parcellocker.delivery.http.HttpClient;
 import pl.pas.parcellocker.model.delivery.Delivery;
 
 import java.util.List;
+import java.util.Map;
 
 public class DeliveriesUtils {
 
@@ -20,10 +21,10 @@ public class DeliveriesUtils {
         Response response;
         if (redirect.equals("allLockerDeliveries")) {
             response = httpClient.get("/deliveries/locker/" + delivery.getLocker().getIdentityNumber());
-        } else if (redirect.equals("allUserDelvieries")) {
-            response = httpClient.get("/deliveries");
+        } else if (redirect.equals("allUserDeliveries")) {
+            response = httpClient.get("/deliveries/current", Map.of("telNumber", delivery.getReceiver().getTelNumber()));
         } else {
-            response = httpClient.get("/deliveries/current");
+            response = httpClient.get("/deliveries");
         }
         return response.readEntity(new GenericType<>() {
         });

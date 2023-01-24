@@ -64,9 +64,14 @@ public class DeliveryController {
     @Path("/current")
     @Produces(MediaType.APPLICATION_JSON)
     @RolesAllowed({"CLIENT", "MODERATOR", "ADMINISTRATOR"})
-    public Response getCurrentDeliveries() {
+    public Response getCurrentDeliveries(@QueryParam("telNumber") String telNumber) {
         try {
-            String clientTelNumber = securityContext.getUserPrincipal().getName();
+            String clientTelNumber;
+            if (telNumber != null) {
+                clientTelNumber = telNumber;
+            } else {
+                clientTelNumber = securityContext.getUserPrincipal().getName();
+            }
             return Response.ok().entity(deliveryManager.getAllCurrentClientDeliveries(clientTelNumber)).build();
         } catch (NoResultException e) {
             return Response.status(Response.Status.NOT_FOUND).entity(e.getMessage()).build();
