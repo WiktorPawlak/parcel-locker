@@ -1,11 +1,6 @@
-import { useCallback, useEffect, useState } from 'react';
-import {
-  apiChangePassword,
-  apiGetSelf,
-  apiLogOut,
-  postLogin
-} from '../api/authApi';
-import { useNavigate } from 'react-router-dom';
+import {useCallback, useEffect, useState} from 'react';
+import {apiChangePassword, apiGetSelf, apiLogOut, postLogin} from '../api/authApi';
+import {useNavigate} from 'react-router-dom';
 
 export function useClient() {
   const [client, setClient] = useState();
@@ -16,7 +11,7 @@ export function useClient() {
     async (credentials) => {
       if (credentials) {
         const response = await postLogin(credentials);
-        if (response[1] === 202) {
+        if (response === 202) {
           navigate('/deliveries');
           window.location.reload(true);
           return true;

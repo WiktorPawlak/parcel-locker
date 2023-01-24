@@ -1,7 +1,7 @@
-import { get, post, postNoResponse, put, putWithBody } from './api';
+import { get, post, postForLogin, postNoResponse, put, putWithBody } from './api';
 
 export async function postLogin(body) {
-  return post('/auth/login', body);
+  return postForLogin('/auth/login', body);
 }
 
 export async function apiLogOut() {

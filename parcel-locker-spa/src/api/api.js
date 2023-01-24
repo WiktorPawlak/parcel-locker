@@ -60,6 +60,17 @@ export async function post(url, body, headers = defaultHeaders) {
   }
 }
 
+export async function postForLogin(url, body, headers = defaultHeaders) {
+  const response = await fetch(`${BASE_URL}${url}`, {
+    headers,
+    credentials: 'include',
+    method: 'POST',
+    body: JSON.stringify(body)
+  });
+
+  return response.status
+}
+
 export async function remove(url, body, headers = defaultHeaders) {
   const response = await fetch(`${BASE_URL}${url}`, {
     headers,
@@ -130,6 +141,24 @@ export async function put(stringUrl, params) {
   });
 
   return [await response.text(), response.status];
+}
+
+export async function putForDeliveries(stringUrl, params) {
+  const url = new URL(BASE_URL + stringUrl);
+  if (params) {
+    url.search = new URLSearchParams(params).toString();
+  }
+
+  const response = await fetch(url, {
+    // headers: {
+    //   "Content-Type": "application/json",
+    //   Accept: "application/json",
+    // },
+    credentials: 'include',
+    method: 'PUT'
+  });
+
+  return response.status
 }
 
 export async function postMultipart(url, body) {

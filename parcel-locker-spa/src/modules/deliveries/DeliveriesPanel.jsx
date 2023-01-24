@@ -9,6 +9,7 @@ import { useEffect } from 'react';
 import { getDeliveries } from '../../api/productApi';
 import { DeliveriesTable } from './DeliveriesTable';
 import { get } from '../../api/api';
+import { ToastContainer } from 'react-toastify';
 
 export function DeliveriesPanel() {
   const [fliter, setFilter] = useState('');
@@ -79,6 +80,7 @@ export function DeliveriesPanel() {
         )}
         showActive={showActive}
       />
+      <ToastContainer />
     </Box>
   );
 }

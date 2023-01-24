@@ -2,7 +2,7 @@ import { DeleteOutline } from '@mui/icons-material';
 import { Button, Modal, TextField } from '@mui/material';
 import { Box } from '@mui/system';
 import { useState } from 'react';
-import { deleteApi, put } from '../../api/api';
+import { deleteApi, put, putForDeliveries } from '../../api/api';
 import 'react-toastify/dist/ReactToastify.css';
 import { ToastContainer, toast } from 'react-toastify';
 
@@ -35,40 +35,37 @@ export function DeliveriesActions({ username: deliveryId, status }) {
 
   async function handlePutIn() {
     if (accessCode !== '') {
-      const response = await put(`/deliveries/${deliveryId}/put-in`, {
+      const response = await putForDeliveries(`/deliveries/${deliveryId}/put-in`, {
         lockerId: 'LODZ_01',
         accessCode: accessCode
       });
-      if (response[1] === 200) {
+      if (response === 200) {
         toast('Delivery placed in locker');
+        setIsPutInModalOpen(false);
+        window.location.reload(true);
       }
-      setIsPutInModalOpen(false);
-      window.location.reload(true);
+      
     }
   }
 
     async function handleTakeOut() {
     if (takeOutAccessCode !== '') {
-      const response = await put(`/deliveries/${deliveryId}/take-out`, {
+      const response = await putForDeliveries(`/deliveries/${deliveryId}/take-out`, {
         lockerId: 'LODZ_01',
         accessCode: takeOutAccessCode,
         telNumber: takeOutTelNumber
       });
 
-      setAccessCode("")
-      setIsPutInModalOpen(false);
-      window.location.reload(true);
-
-        console.log(response[1])
+      if (response === 200) {
         toast('Delivery took out from locker');
-
+        setIsPutInModalOpen(false);
+        window.location.reload(true);
+      }
     }
   }
 
-
   return (
     <Box sx={{ display: 'inline' }}>
-            <ToastContainer />
       {status === 'READY_TO_SHIP' &&
       <Button
         sx={{ marginRight: '7px' }}
