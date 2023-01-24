@@ -1,34 +1,38 @@
 <?xml version='1.0' encoding='UTF-8' ?>
-<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <ui:composition xmlns:ui="http://java.sun.com/jsf/facelets"
                 xmlns="http://www.w3.org/1999/xhtml"
                 xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:c="http://java.sun.com/jsp/jstl/core"
                 template="templates/MainTemplate.xhtml"
                 xmlns:h="http://java.sun.com/jsf/html">
 
     <ui:define name="top">Tworzenie nowej dostawy listu</ui:define>
 
     <ui:define name="left">
-        <ui:include src="./templates/menu.xhtml" />
+        <ui:include src="./templates/menu.xhtml"/>
     </ui:define>
 
     <ui:define name="content">
         <div id="container">
             <h:form id="creation">
-                <div class="row">
-                    <div class="col-md-3">
-                        Numer telefonu wysyłającego
+                <c:if test="#{identityHandler.isUserInRole('ADMINISTRATOR')}">
+                    <div class="row">
+                        <div class="col-md-3">
+                            Numer telefonu wysyłającego
+                        </div>
+                        <div class="col-md-3">
+                            <h:inputText styleClass=""
+                                         value="#{addDeliveryBean.currentDelivery.shipperTel}"
+                                         required="true"
+                                         requiredMessage="Należy podać numer telefonu!"
+                                         validatorMessage="Niepoprawna wartość pola Numer telefonu wysyłającego!">
+                                <f:validateRegex pattern="^[0-9]{9}"/>
+                            </h:inputText>
+                        </div>
                     </div>
-                    <div class="col-md-3">
-                        <h:inputText styleClass=""
-                                     value="#{addDeliveryBean.currentDelivery.shipperTel}"
-                                     required="true"
-                                     requiredMessage="Należy podać numer telefonu!"
-                                     validatorMessage="Niepoprawna wartość pola Numer telefonu wysyłającego!" >
-                            <f:validateRegex pattern="^[0-9]{9}"/>
-                        </h:inputText>
-                    </div>
-                </div>
+                </c:if>
                 <div class="row">
                     <div class="col-md-3">
                         Numer telefonu odbierającego
@@ -38,7 +42,7 @@
                                      value="#{addDeliveryBean.currentDelivery.receiverTel}"
                                      required="true"
                                      requiredMessage="Należy podać numer telefonu!"
-                                     validatorMessage="Niepoprawna wartość pola Numer telefonu odbierającego!" >
+                                     validatorMessage="Niepoprawna wartość pola Numer telefonu odbierającego!">
                             <f:validateRegex pattern="^[0-9]{9}"/>
                         </h:inputText>
                     </div>
@@ -49,7 +53,7 @@
                     </div>
                     <div class="col-md-3">
                         <h:selectOneListbox size="0" id="locker" value="#{addDeliveryBean.currentDelivery.lockerId}">
-                            <f:selectItem itemLabel="LODZ_01" itemValue="LODZ_01" />
+                            <f:selectItem itemLabel="LODZ_01" itemValue="LODZ_01"/>
                         </h:selectOneListbox>
                     </div>
                 </div>

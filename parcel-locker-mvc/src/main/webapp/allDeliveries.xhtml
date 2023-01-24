@@ -39,22 +39,22 @@
                 <h:column>
                     <h:commandButton
                             id="deliveryDeleteBtn"
-                            rendered="#{delivery.status != allDeliveriesBean.readyToPickupStatus}"
-                            action="#{allDeliveriesBean.delete(delivery, 'allDeliveries', allDeliveriesBean.currentDeliveries)}"
+                            rendered="#{(delivery.status != allDeliveriesBean.readyToPickupStatus) and identityHandler.isUserInRole('ADMINISTRATOR')}"
+                            action="#{allDeliveriesBean.delete(delivery, (identityHandler.isUserInRole('ADMINISTRATOR') ? 'allDeliveries' : 'allSelfDeliveries'), allDeliveriesBean.currentDeliveries)}"
                             class="negative_btn"
                             value="Usuń">
                     </h:commandButton>
                     <h:commandButton
                             id="deliveryPutInBtn"
                             rendered="#{delivery.status == allDeliveriesBean.readyToShipStatus}"
-                            action="#{allDeliveriesBean.putIn(delivery, 'allDeliveries', allDeliveriesBean.currentDeliveries)}"
+                            action="#{allDeliveriesBean.putIn(delivery, (identityHandler.isUserInRole('ADMINISTRATOR') ? 'allDeliveries' : 'allSelfDeliveries'), allDeliveriesBean.currentDeliveries)}"
                             class="negative_btn"
                             value="Włóż">
                     </h:commandButton>
                     <h:commandButton
                             id="deliveryTakeOutBtn"
                             rendered="#{delivery.status == allDeliveriesBean.readyToPickupStatus}"
-                            action="#{allDeliveriesBean.takeOut(delivery, 'allDeliveries', allDeliveriesBean.currentDeliveries)}"
+                            action="#{allDeliveriesBean.takeOut(delivery, (identityHandler.isUserInRole('ADMINISTRATOR') ? 'allDeliveries' : 'allSelfDeliveries'), allDeliveriesBean.currentDeliveries)}"
                             class="negative_btn"
                             value="Wyjmij">
                     </h:commandButton>

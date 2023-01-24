@@ -34,6 +34,6 @@ public class AddClientBean {
 
         httpClient.post("/clients", clientDto);
 
-        return "newUser";
+        return "index";
     }
 }

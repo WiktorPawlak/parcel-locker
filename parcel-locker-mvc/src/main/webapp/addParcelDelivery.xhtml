@@ -3,6 +3,7 @@
 <ui:composition xmlns:ui="http://java.sun.com/jsf/facelets"
                 xmlns="http://www.w3.org/1999/xhtml"
                 xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:c="http://java.sun.com/jsp/jstl/core"
                 template="templates/MainTemplate.xhtml"
                 xmlns:h="http://java.sun.com/jsf/html">
 
@@ -15,20 +16,22 @@
     <ui:define name="content">
         <div id="container">
             <h:form id="creation">
-                <div class="row">
-                    <div class="col-md-3">
-                        Numer telefonu wysyłającego
+                <c:if test="#{identityHandler.isUserInRole('ADMINISTRATOR')}">
+                    <div class="row">
+                        <div class="col-md-3">
+                            Numer telefonu wysyłającego
+                        </div>
+                        <div class="col-md-3">
+                            <h:inputText styleClass=""
+                                         value="#{addDeliveryBean.currentDelivery.shipperTel}"
+                                         required="true"
+                                         requiredMessage="Należy podać numer telefonu!"
+                                         validatorMessage="Niepoprawna wartość pola Numer telefonu wysyłającego!">
+                                <f:validateRegex pattern="^[0-9]{9}"/>
+                            </h:inputText>
+                        </div>
                     </div>
-                    <div class="col-md-3">
-                        <h:inputText styleClass=""
-                                     value="#{addDeliveryBean.currentDelivery.shipperTel}"
-                                     required="true"
-                                     requiredMessage="Należy podać numer telefonu!"
-                                     validatorMessage="Niepoprawna wartość pola Numer telefonu wysyłającego!" >
-                            <f:validateRegex pattern="^[0-9]{9}"/>
-                        </h:inputText>
-                    </div>
-                </div>
+                </c:if>
                 <div class="row">
                     <div class="col-md-3">
                         Numer telefonu odbierającego

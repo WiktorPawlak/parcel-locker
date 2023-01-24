@@ -2,6 +2,7 @@ package pl.pas.parcellocker.beans;
 
 
 import jakarta.enterprise.context.RequestScoped;
+import jakarta.inject.Inject;
 import jakarta.inject.Named;
 import jakarta.ws.rs.client.Entity;
 import lombok.Getter;
@@ -21,6 +22,9 @@ import pl.pas.parcellocker.delivery.http.HttpClient;
 @NoArgsConstructor
 public class AddDeliveryBean {
 
+    @Inject
+    IdentityHandler identityHandler;
+
     DeliveryDto currentDelivery = new DeliveryDto();
 
     ListDto currentList = new ListDto();
@@ -35,11 +39,12 @@ public class AddDeliveryBean {
 
     public String addParcel() {
         DeliveryParcelDto deliveryParcelDto = new DeliveryParcelDto(
-                currentDelivery.shipperTel,
+                prepareShipperTel(),
                 currentDelivery.receiverTel,
                 currentParcel,
                 currentDelivery.lockerId
         );
+
         httpClient.post("/deliveries/parcel", Entity.json(deliveryParcelDto));
         return null;
     }
@@ -47,13 +52,23 @@ public class AddDeliveryBean {
     public String addList() {
         DeliveryListDto deliveryListDto =
                 new DeliveryListDto(
-                        currentDelivery.shipperTel,
+                        prepareShipperTel(),
                         currentDelivery.receiverTel,
                         currentList,
                         currentDelivery.lockerId);
         httpClient.post("/deliveries/list", deliveryListDto);
 
         return null;
+    }
+
+    private String prepareShipperTel() {
+        String shipperTel;
+        if (identityHandler.isUserInRole("CLIENT")) {
+            shipperTel = identityHandler.getUserLogin();
+        } else {
+            shipperTel = currentDelivery.shipperTel;
+        }
+        return shipperTel;
     }
 }
 

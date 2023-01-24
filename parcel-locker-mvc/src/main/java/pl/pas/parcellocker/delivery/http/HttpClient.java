@@ -92,6 +92,6 @@ public class HttpClient {
             webTarget = webTarget.queryParam(param.getKey(), param.getValue());
         }
 
-        return webTarget.request();
+        return webTarget.request(MediaType.APPLICATION_JSON_TYPE);
     }
 }

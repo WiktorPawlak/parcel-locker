@@ -1,5 +1,13 @@
 package pl.pas.parcellocker.beans;
 
+import java.io.IOException;
+import java.io.Serializable;
+import java.util.Map;
+import java.util.Set;
+
+import javax.faces.context.ExternalContext;
+import javax.faces.context.FacesContext;
+
 import jakarta.faces.view.ViewScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
@@ -11,13 +19,6 @@ import lombok.Setter;
 import pl.pas.parcellocker.beans.dto.CredentialsDto;
 import pl.pas.parcellocker.delivery.http.HttpClient;
 import pl.pas.parcellocker.security.CookieHandler;
-
-import javax.faces.context.ExternalContext;
-import javax.faces.context.FacesContext;
-import java.io.IOException;
-import java.io.Serializable;
-import java.util.Map;
-import java.util.Set;
 
 
 @ViewScoped
@@ -54,13 +55,4 @@ public class AuthBean implements Serializable {
         ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
         ec.redirect("index.xhtml");
     }
-//    public String logOut() {
-//        httpClient.post("/auth/logout", Entity.json(""));
-//        Map<String, Object> properties = new HashMap<>();
-//        properties.put("maxAge", 0);
-//        properties.put("path", "/");
-//        FacesContext.getCurrentInstance().getExternalContext().addResponseCookie("jwt", "", properties);
-//        return "index";
-//    }
-
 }
