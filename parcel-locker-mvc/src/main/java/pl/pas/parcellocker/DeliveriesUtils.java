@@ -7,18 +7,25 @@ import jakarta.ws.rs.client.WebTarget;
 import jakarta.ws.rs.core.GenericType;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
+import pl.pas.parcellocker.delivery.http.HttpClient;
 import pl.pas.parcellocker.model.delivery.Delivery;
 
 import java.util.List;
+import java.util.Map;
 
 public class DeliveriesUtils {
 
-    private static Client client = ClientBuilder.newClient();
+    private static final HttpClient httpClient = new HttpClient();
 
-    public static List<Delivery> updateDeliveries() {
-        WebTarget webTarget = client.target("http://localhost:8080/parcel-locker-rest-1.0-SNAPSHOT/api/deliveries");
-        Invocation.Builder invocationBuilder = webTarget.request(MediaType.APPLICATION_JSON);
-        Response response = invocationBuilder.get();
+    public static List<Delivery> updateDeliveries(String redirect, Delivery delivery) {
+        Response response;
+        if (redirect.equals("allLockerDeliveries")) {
+            response = httpClient.get("/deliveries/locker/" + delivery.getLocker().getIdentityNumber());
+        } else if (redirect.equals("allUserDeliveries")) {
+            response = httpClient.get("/deliveries/current", Map.of("telNumber", delivery.getReceiver().getTelNumber()));
+        } else {
+            response = httpClient.get("/deliveries");
+        }
         return response.readEntity(new GenericType<>() {
         });
     }

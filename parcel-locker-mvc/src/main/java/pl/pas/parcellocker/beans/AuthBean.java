@@ -1,20 +1,21 @@
 package pl.pas.parcellocker.beans;
 
+import java.io.Serializable;
+import java.util.HashMap;
+import java.util.Map;
+
+import javax.faces.context.FacesContext;
+
 import jakarta.faces.view.ViewScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
-import jakarta.ws.rs.client.*;
+import jakarta.ws.rs.client.Entity;
 import jakarta.ws.rs.core.Cookie;
-import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import lombok.Getter;
 import lombok.Setter;
 import pl.pas.parcellocker.beans.dto.CredentialsDto;
-
-import javax.faces.context.FacesContext;
-import java.io.Serializable;
-import java.util.HashMap;
-import java.util.Map;
+import pl.pas.parcellocker.delivery.http.HttpClient;
 
 
 @ViewScoped
@@ -25,14 +26,13 @@ public class AuthBean implements Serializable {
 
     @Inject
     AuthorizationStore authorizationStore;
+
     CredentialsDto credentials = new CredentialsDto();
 
-    Client client = ClientBuilder.newClient();
+    HttpClient httpClient = new HttpClient();
 
     public String logIn() {
-        WebTarget webTarget = this.client.target("http://localhost:8080/parcel-locker-rest-1.0-SNAPSHOT/api/auth/login");
-        Invocation.Builder invocationBuilder = webTarget.request(MediaType.APPLICATION_JSON);
-        Response response = invocationBuilder.post(Entity.json(this.credentials));
+        Response response = httpClient.post("/auth/login", this.credentials);
         Cookie cookie = response.getCookies().get("jwt");
         Map<String, Object> properties = new HashMap<>();
         properties.put("maxAge", 31536000);
@@ -42,6 +42,7 @@ public class AuthBean implements Serializable {
     }
 
     public String logOut() {
+        httpClient.post("/auth/logout", Entity.json(""));
         Map<String, Object> cookieMap = jakarta.faces.context.FacesContext.getCurrentInstance().getExternalContext().getRequestCookieMap();
         jakarta.servlet.http.Cookie cookie = (jakarta.servlet.http.Cookie) cookieMap.get("jwt");
         Map<String, Object> properties = new HashMap<>();
@@ -53,4 +54,13 @@ public class AuthBean implements Serializable {
         }
         return "index";
     }
+//    public String logOut() {
+//        httpClient.post("/auth/logout", Entity.json(""));
+//        Map<String, Object> properties = new HashMap<>();
+//        properties.put("maxAge", 0);
+//        properties.put("path", "/");
+//        FacesContext.getCurrentInstance().getExternalContext().addResponseCookie("jwt", "", properties);
+//        return "index";
+//    }
+
 }

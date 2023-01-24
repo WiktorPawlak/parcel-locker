@@ -1,20 +1,20 @@
 package pl.pas.parcellocker.beans;
 
 
-import static pl.pas.parcellocker.DeliveriesUtils.updateDeliveries;
-
-import java.io.Serializable;
-import java.util.List;
-
 import jakarta.annotation.PostConstruct;
 import jakarta.faces.view.ViewScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
+import jakarta.ws.rs.core.GenericType;
+import jakarta.ws.rs.core.Response;
 import lombok.Getter;
 import lombok.Setter;
 import pl.pas.parcellocker.delivery.http.HttpClient;
 import pl.pas.parcellocker.model.delivery.Delivery;
 import pl.pas.parcellocker.model.delivery.DeliveryStatus;
+
+import java.io.Serializable;
+import java.util.List;
 
 
 @Named
@@ -36,6 +36,12 @@ public class AllDeliveriesBean extends Conversational implements Serializable {
     @PostConstruct
     public void initCurrentDeliveries() {
         currentDeliveries = updateDeliveries();
+    }
+
+    private List<Delivery> updateDeliveries() {
+        Response response = httpClient.get("/deliveries");
+        return response.readEntity(new GenericType<>() {
+        });
     }
 
     public String delete(Delivery delivery, String redirect, List<Delivery> deliveries) {
