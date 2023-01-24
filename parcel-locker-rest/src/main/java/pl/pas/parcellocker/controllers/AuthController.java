@@ -8,8 +8,6 @@ import jakarta.annotation.security.RolesAllowed;
 import jakarta.inject.Inject;
 import jakarta.security.enterprise.credential.UsernamePasswordCredential;
 import jakarta.security.enterprise.identitystore.CredentialValidationResult;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpSession;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;
@@ -24,11 +22,9 @@ import pl.pas.parcellocker.security.UserIdentityStore;
 public class AuthController {
 
     public static final int COOKIE_AGE = 3600;
-    @Inject
-    UserIdentityStore userIdentityStore;
 
     @Inject
-    private HttpServletRequest request;
+    UserIdentityStore userIdentityStore;
 
     @POST
     @Path("/login")
@@ -45,7 +41,8 @@ public class AuthController {
                 validationResult.getCallerGroups()
             );
 
-            NewCookie jwtCookie = new NewCookie(JWT_COOKIE_NAME, "Bearer " + jwt, "/", null, null, COOKIE_AGE, true, true);
+            NewCookie jwtCookie = new NewCookie(JWT_COOKIE_NAME, "Bearer " + jwt, "/", null,
+                null, COOKIE_AGE, true, true);
 
             return Response.accepted().cookie(jwtCookie).header("Authentication", "Bearer " + jwt).build();
         } else {
@@ -57,11 +54,7 @@ public class AuthController {
     @Path("/logout")
     @RolesAllowed({"CLIENT", "MODERATOR", "ADMINISTRATOR"})
     public Response logout() {
-        HttpSession session = request.getSession(false);
-        if (session != null) {
-            session.invalidate();
-        }
-        NewCookie jwtCookie = new NewCookie(JWT_COOKIE_NAME, "", "/", null, null, COOKIE_AGE, true, true);
+        NewCookie jwtCookie = new NewCookie(JWT_COOKIE_NAME, "", "/", null, null, 0, true, true);
         return Response.ok("Logged out successfully").cookie(jwtCookie).build();
     }
 }
