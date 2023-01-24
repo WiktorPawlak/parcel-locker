@@ -65,6 +65,13 @@ public class InitApplication extends Application {
             locker = new Locker("LODZ_01", "XD", 10);
             lockerRepository.add(locker);
             initDeliveries();
+
+            deliveryRepository.add(delivery1);
+            deliveryRepository.add(delivery2);
+            deliveryRepository.add(delivery3);
+            deliveryRepository.add(delivery4);
+            deliveryRepository.add(delivery5);
+            deliveryRepository.add(delivery6);
         }
     }
 
@@ -75,7 +82,7 @@ public class InitApplication extends Application {
         delivery3 = new Delivery(BigDecimal.TEN, 10, 10, 10, 10, true, (Client) geronimoShipper, (Client) johnzon, locker);
         delivery4 = new Delivery(BigDecimal.TEN, 10, 10, 10, 10, true, (Client) geronimoShipper, (Client) yasson, locker);
 
-        delivery5 = new Delivery(BigDecimal.TEN, 10, 10, 10, 10, true, (Client) geronimoShipper, (Client) admin, locker);
-        delivery6 = new Delivery(BigDecimal.TEN, true, (Client) geronimoShipper, (Client) admin, locker);
+        delivery5 = new Delivery(BigDecimal.TEN, 10, 10, 10, 10, true, (Client) geronimoShipper, (Client) johnzon, locker);
+        delivery6 = new Delivery(BigDecimal.TEN, true, (Client) geronimoShipper, (Client) yasson, locker);
     }
 }
