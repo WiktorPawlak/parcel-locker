@@ -1,0 +1,102 @@
+.sign-up {
+  margin-top: 20px;
+  width: 100vw;
+  background: url("../common/images/Bg.png") center center/cover no-repeat;
+  height: 90vh;
+  align-items: center;
+  justify-content: center;
+  font-size: 3rem;
+  color: white;
+  font-weight: bold;
+  display: block;
+}
+
+.flex {
+  display: flex;
+}
+
+.center-column {
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.form-container {
+  border-radius: 2%;
+  padding: 20px 0;
+  background-color: #edf2f8;
+  width: 35vw;
+  color: #02111b;
+  margin: 20px 30px 30px 90px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.sign-up-form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  min-width: 380px;
+}
+
+.sign-up-form > input {
+  margin: 15px;
+  background-color: #726da8;
+  color: white;
+  border: none;
+  border-radius: 2%;
+  padding: 6px;
+  min-width: 300px;
+}
+
+.sign-up-form > input:hover,
+input:focus,
+input:active {
+  border: none;
+  border-color: transparent;
+  box-shadow: none;
+  border-style: none;
+  outline: none;
+}
+.sign-up-form > label {
+  font-size: 13px;
+}
+
+.sign-up-form > .search-btn {
+  margin-top: 15px;
+  margin-bottom: 15px;
+}
+
+label {
+  color: #02111b;
+}
+.title {
+  margin-left: 165px;
+  padding-top: 60px;
+}
+
+.signInButton {
+  background: #02111b;
+  border: none;
+  padding: 10px 20px;
+  color: white;
+  min-width: 310px;
+  margin-top: 10px;
+  border-radius: 2%;
+  cursor: pointer;
+}
+
+.joinUsButton {
+  padding: 10px 20px;
+  min-width: 310px;
+  margin-top: 10px;
+  border-radius: 2%;
+  border: 1px solid #edf2f8;
+  background-color: #726da8;
+  color: #edf2f8;
+  margin-left: 215px;
+  cursor: pointer;
+}

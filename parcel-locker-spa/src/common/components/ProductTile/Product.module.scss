@@ -1,0 +1,43 @@
+.product {
+  border-radius: 10px;
+  box-shadow: 0px 5px 20px rgb(188, 188, 188);
+  margin: 20px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  background: white;
+  align-items: center;
+  //min-width: 40%;
+  width: 300px;
+}
+.parentDiv {
+  width: 260px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.childDiv {
+  float: left;
+}
+
+img {
+  margin-top: 20px;
+  height: 200px;
+}
+
+.btn {
+  padding: 8px 20px;
+  border-radius: 5px;
+  outline: none;
+  border: none;
+  cursor: pointer;
+  background-color: #726da8;
+  color: white;
+}
+
+.btn:hover {
+  transform: scale(1.1);
+  transition: all 0.5s ease-out;
+}

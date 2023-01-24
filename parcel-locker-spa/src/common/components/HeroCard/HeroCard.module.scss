@@ -1,0 +1,28 @@
+.heroCardBoxParent {
+  z-index: 1;
+  padding-left: 8%;
+  padding-right: 8%;
+  display: block;
+  margin: auto;
+  background-color: white;
+  height: 100px;
+  width: 70vw;
+  overflow: hidden;
+  border-radius: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.heroCardContainer {
+  background: linear-gradient(
+    to bottom,
+    #726da8 0%,
+    #726da8 50%,
+    #edf2f8 50%,
+    #edf2f8 100%
+  );
+}
+.childDiv {
+  float: left;
+}

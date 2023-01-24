@@ -1,0 +1,57 @@
+.opinion {
+  border-radius: 10px;
+  margin: 20px;
+  padding-top: 1px;
+  padding-bottom: 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  background: white;
+  align-items: center;
+  //min-width: 40%;
+  width: 600px;
+}
+
+.parentDiv {
+  width: 260px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.childDiv {
+  float: right;
+}
+
+.HideBtn {
+  padding: 8px 20px;
+  border-radius: 5px;
+  outline: none;
+  border: none;
+  cursor: pointer;
+  background-color: #918cc2;
+  color: white;
+  margin-bottom: 12px;
+}
+
+.DeleteBtn {
+  padding: 8px 20px;
+  border-radius: 5px;
+  outline: none;
+  border: none;
+  cursor: pointer;
+  background-color: #918cc2;
+  color: white;
+  margin-bottom: 12px;
+}
+
+.EditBtn {
+  padding: 8px 20px;
+  border-radius: 5px;
+  outline: none;
+  border: none;
+  cursor: pointer;
+  background-color: #918cc2;
+  color: white;
+  margin-bottom: 12px;
+}
+

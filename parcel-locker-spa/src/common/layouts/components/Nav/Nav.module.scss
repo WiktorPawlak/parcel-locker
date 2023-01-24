@@ -1,0 +1,66 @@
+.navbar {
+  background: #726da8;
+  height: 80px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 1.2rem;
+  position: sticky;
+  top: 0;
+  transition: ease-in;
+}
+
+.navbarLogo {
+  color: #fff;
+  justify-self: start;
+  margin-left: 99px;
+  cursor: pointer;
+  text-decoration: none;
+  font-size: 1.5rem;
+  display: flex;
+  align-items: center;
+}
+
+.navMenu {
+  display: grid;
+  grid-template-columns: repeat(7, auto);
+  grid-gap: 10px;
+  list-style: none;
+  text-align: center;
+  width: 80vw;
+  justify-content: end;
+  margin-right: 99px;
+}
+
+.navItem {
+  height: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.navBtn {
+  align-self: center;
+}
+
+.navLinks {
+  color: #fff;
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  padding: 0.5rem 1rem;
+  height: 100%;
+}
+
+.navLinks:hover {
+  color: #594157;
+}
+.navButton {
+  border-radius: 5px;
+  background-color: #edf2f8;
+  border: none;
+  cursor: pointer;
+  color: #02111b;
+  font-weight: bold;
+  padding: 12px 24px;
+}
