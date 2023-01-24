@@ -11,9 +11,8 @@
         <li><h:outputLink rendered="#{identityHandler.userLogged}" value="editSelf.xhtml">Edytuj swoje dane</h:outputLink></li>
         <li><h:outputLink rendered="#{identityHandler.isUserInRole('ADMINISTRATOR')}" value="newUser.xhtml">Formularz tworzenia uzytkownika</h:outputLink></li>
         <li><h:outputLink rendered="#{identityHandler.isUserInRole('ADMINISTRATOR')}" value="allUsers.xhtml">Lista wszystkich uzytkownikow</h:outputLink></li>
-        <li><h:outputLink rendered="#{identityHandler.isUserInRole('ADMINISTRATOR')}" value="allDeliveries.xhtml">Lista wszystkich dostaw</h:outputLink></li>
+        <li><h:outputLink rendered="#{identityHandler.userLogged}" value="allDeliveries.xhtml">Lista wszystkich dostaw</h:outputLink></li>
         <li><h:outputLink rendered="#{identityHandler.isUserInRole('ADMINISTRATOR')}" value="allLockers.xhtml">Lista wszystkich paczkomatow</h:outputLink></li>
-        <li><h:outputLink rendered="#{identityHandler.userLogged}" value="allSelfDeliveries.xhtml">Lista swoich aktywnych dostaw</h:outputLink></li>
         <li><h:outputLink rendered="#{identityHandler.userLogged}" value="addListDelivery.xhtml">Formularz tworzenia dostawy listu</h:outputLink></li>
         <li><h:outputLink rendered="#{identityHandler.userLogged}" value="addParcelDelivery.xhtml">Formularz tworzenia dostawy paczki</h:outputLink></li>
     </ul>

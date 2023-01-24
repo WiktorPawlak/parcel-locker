@@ -20,16 +20,17 @@ public class UserIdentityStore implements IdentityStore {
     private UserRepository clientRepository;
 
     public CredentialValidationResult validate(UsernamePasswordCredential credential) {
-            Optional<User> optionalUser = clientRepository.findByTelNumber(credential.getCaller());
-            if (!optionalUser.isPresent()) {
-                return INVALID_RESULT;
-            }
-
-            User user = optionalUser.get();
-            if (credential.getPassword().compareTo(user.getPassword()) && user.isActive()) {
-                return new CredentialValidationResult(user.getTelNumber(), Set.of(user.getRole().name()));
-            }
-
+        Optional<User> optionalUser = clientRepository.findByTelNumber(credential.getCaller());
+        if (!optionalUser.isPresent()) {
             return INVALID_RESULT;
+        }
+
+        User user = optionalUser.get();
+        if (credential.getPassword().compareTo(user.getPassword()) && user.isActive()) {
+            return new CredentialValidationResult(user.getTelNumber(), Set.of(user.getRole().name()));
+        }
+
+        return INVALID_RESULT;
     }
+
 }

@@ -1,6 +1,5 @@
 package pl.pas.parcellocker.beans;
 
-
 import jakarta.annotation.PostConstruct;
 import jakarta.faces.view.ViewScoped;
 import jakarta.inject.Inject;
@@ -16,7 +15,6 @@ import pl.pas.parcellocker.model.delivery.DeliveryStatus;
 import java.io.Serializable;
 import java.util.List;
 
-
 @Named
 @ViewScoped
 @Getter
@@ -31,6 +29,9 @@ public class AllDeliveriesBean extends Conversational implements Serializable {
 
     List<Delivery> currentDeliveries;
 
+    @Inject
+    IdentityHandler identityHandler;
+
     HttpClient httpClient = new HttpClient();
 
     @PostConstruct
@@ -39,7 +40,13 @@ public class AllDeliveriesBean extends Conversational implements Serializable {
     }
 
     private List<Delivery> updateDeliveries() {
-        Response response = httpClient.get("/deliveries");
+        String path;
+        if (identityHandler.isUserInRole("ADMINISTRATOR")) {
+            path = "/deliveries";
+        } else {
+            path = "/deliveries/current";
+        }
+        Response response = httpClient.get(path);
         return response.readEntity(new GenericType<>() {
         });
     }

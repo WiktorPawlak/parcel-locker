@@ -23,7 +23,10 @@ public class DeliveriesUtils {
             response = httpClient.get("/deliveries/locker/" + delivery.getLocker().getIdentityNumber());
         } else if (redirect.equals("allUserDeliveries")) {
             response = httpClient.get("/deliveries/current", Map.of("telNumber", delivery.getReceiver().getTelNumber()));
-        } else {
+        } else if (redirect.equals("allSelfDeliveries")) {
+            response = httpClient.get("/deliveries/current");
+        }
+        else {
             response = httpClient.get("/deliveries");
         }
         return response.readEntity(new GenericType<>() {
