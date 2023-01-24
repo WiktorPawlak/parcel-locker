@@ -3,9 +3,12 @@ package pl.pas.parcellocker.beans;
 import java.io.Serializable;
 import java.util.Map;
 
+import jakarta.annotation.PostConstruct;
 import jakarta.enterprise.context.ConversationScoped;
 import jakarta.inject.Named;
 import jakarta.ws.rs.client.Entity;
+import jakarta.ws.rs.core.GenericType;
+import jakarta.ws.rs.core.Response;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -20,9 +23,16 @@ import pl.pas.parcellocker.model.user.User;
 @NoArgsConstructor
 public class EditSelfBean implements Serializable {
 
-    UserDto currentUser = new UserDto();
+    UserDto currentUser;
     String userType;
     HttpClient httpClient = new HttpClient();
+
+    @PostConstruct
+    public void getUser() {
+        Response response = httpClient.get("/clients/self");
+        currentUser = response.readEntity(new GenericType<>() {
+        });
+    }
 
     public String edit() {
         User userBasedOnType = Utils.prepareUserBasedOnType(currentUser, "Client");
@@ -34,6 +44,6 @@ public class EditSelfBean implements Serializable {
 
         httpClient.put("/clients/self", Entity.json(clientDto), Map.of("id", String.valueOf(currentUser.getId())));
 
-        return "allUsers";
+        return "index";
     }
 }

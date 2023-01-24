@@ -62,7 +62,6 @@ public class AllUsersBean extends Conversational implements Serializable {
     public String editUser(UserDto user) {
         beginNewConversation();
         editClientBean.setCurrentUser(user);
-        editClientBean.edit();
         return "editUser";
     }
 

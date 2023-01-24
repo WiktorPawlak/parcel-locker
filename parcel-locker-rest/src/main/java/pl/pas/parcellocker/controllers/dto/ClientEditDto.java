@@ -1,6 +1,7 @@
 package pl.pas.parcellocker.controllers.dto;
 
 import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -19,6 +20,5 @@ public class ClientEditDto {
     @NotEmpty
     public String lastName;
 
-    @NotEmpty
     public String password;
 }

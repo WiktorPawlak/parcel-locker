@@ -88,6 +88,9 @@ public class UserManager {
             User userToEdit = userToEditOptional.get();
             userToEdit.setFirstName(clientDto.getFirstName());
             userToEdit.setLastName(clientDto.getLastName());
+            if ((clientDto.getPassword() != null) && !clientDto.getPassword().isEmpty()) {
+                userToEdit.setPassword(clientDto.getPassword());
+            }
             clientRepository.update(userToEdit);
         }
     }

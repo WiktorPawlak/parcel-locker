@@ -125,6 +125,24 @@ public class ClientController {
         }
     }
 
+    @GET
+    @Path("/self")
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes({MediaType.APPLICATION_JSON})
+    @RolesAllowed({"CLIENT", "MODERATOR", "ADMINISTRATOR"})
+    public Response getSelf() {
+        try {
+            Principal callerPrincipal = securityContext.getUserPrincipal();
+            String callerTelNumber = callerPrincipal.getName();
+            User user = userManager.getUser(callerTelNumber);
+            return Response.ok().entity(user).build();
+        } catch (ValidationException | NullPointerException e) {
+            return Response.status(Response.Status.NOT_ACCEPTABLE).build();
+        } catch (ClientManagerException e) {
+            return Response.status(Response.Status.NOT_FOUND).entity(e.getMessage()).build();
+        }
+    }
+
     @PUT
     @Path("/self")
     @Produces(MediaType.APPLICATION_JSON)
