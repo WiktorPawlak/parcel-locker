@@ -89,9 +89,9 @@ public class HttpClient {
     private Invocation.Builder getInvocationBuilder(String path, Map<String, String> params) {
         WebTarget webTarget = client.target(SERVICE_CONTEXT + path);
         for (Map.Entry<String, String> param : params.entrySet()) {
-            webTarget.queryParam(param.getKey(), param.getValue());
+            webTarget = webTarget.queryParam(param.getKey(), param.getValue());
         }
 
-        return webTarget.request(MediaType.APPLICATION_JSON);
+        return webTarget.request();
     }
 }

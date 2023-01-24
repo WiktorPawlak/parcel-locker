@@ -1,11 +1,5 @@
 package pl.pas.parcellocker.beans;
 
-import static pl.pas.parcellocker.DeliveriesUtils.updateDeliveries;
-
-import java.io.Serializable;
-import java.util.List;
-import java.util.Map;
-
 import jakarta.enterprise.context.ConversationScoped;
 import jakarta.inject.Named;
 import jakarta.ws.rs.client.Entity;
@@ -14,6 +8,12 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import pl.pas.parcellocker.delivery.http.HttpClient;
 import pl.pas.parcellocker.model.delivery.Delivery;
+
+import java.io.Serializable;
+import java.util.List;
+import java.util.Map;
+
+import static pl.pas.parcellocker.DeliveriesUtils.updateDeliveries;
 
 @Named
 @ConversationScoped
@@ -31,10 +31,11 @@ public class PutInDeliveryBean extends Conversational implements Serializable {
     public String putIn() {
         httpClient.put(
                 "/deliveries/" + currentDelivery.getId() + "/put-in",
-                Entity.text(""),
+                Entity.json(""),
                 Map.of("lockerId", currentDelivery.getLocker().getIdentityNumber(), "accessCode", accessCode));
+
         deliveries.clear();
-        deliveries.addAll(updateDeliveries());
+        deliveries.addAll(updateDeliveries(redirect, currentDelivery));
 
         return redirect;
     }
