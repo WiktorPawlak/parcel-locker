@@ -26,7 +26,7 @@ public class LockerController {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    @RolesAllowed({"MODERATOR", "ADMINISTRATOR"})
+    @RolesAllowed({"ADMINISTRATOR"})
     public Response getLockers() {
         try {
             return Response.ok().entity(lockerManager.getAllLockers()).build();
@@ -38,7 +38,7 @@ public class LockerController {
     @GET
     @Path("/{identityNumber}")
     @Produces(MediaType.APPLICATION_JSON)
-    @RolesAllowed({"MODERATOR", "ADMINISTRATOR"})
+    @RolesAllowed({"ADMINISTRATOR"})
     public Response getLocker(@PathParam("identityNumber") String identityNumber) {
         try {
             return Response.ok().entity(lockerManager.getLocker(identityNumber)).build();
@@ -50,7 +50,7 @@ public class LockerController {
     @GET
     @Path("/{identityNumber}/empty")
     @Produces(MediaType.APPLICATION_JSON)
-    @RolesAllowed({"MODERATOR", "ADMINISTRATOR"})
+    @RolesAllowed({"ADMINISTRATOR"})
     public Response getLockerEmptyBoxesCount(@PathParam("identityNumber") String identityNumber) {
         try {
             return Response.ok().entity(lockerManager.getEmptyBoxesCount(identityNumber)).build();

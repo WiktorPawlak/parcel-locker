@@ -1,6 +1,9 @@
 package pl.pas.parcellocker.controllers;
 
 
+import java.security.Principal;
+import java.util.UUID;
+
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.inject.Inject;
 import jakarta.persistence.NoResultException;
@@ -15,6 +18,7 @@ import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.QueryParam;
 import jakarta.ws.rs.core.Context;
+import jakarta.ws.rs.core.EntityTag;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.SecurityContext;
@@ -23,15 +27,17 @@ import pl.pas.parcellocker.controllers.dto.ClientEditDto;
 import pl.pas.parcellocker.exceptions.ClientManagerException;
 import pl.pas.parcellocker.managers.UserManager;
 import pl.pas.parcellocker.model.user.User;
-
-import java.security.Principal;
-import java.util.UUID;
+import pl.pas.parcellocker.security.EntityTagSignatureProvider;
+import pl.pas.parcellocker.security.EtagValidatorFilterBinding;
 
 @Path(value = "/clients")
 public class ClientController {
 
     @Context
     private SecurityContext securityContext;
+
+    @Inject
+    private EntityTagSignatureProvider entityTagSignatureProvider;
 
     @Inject
     private UserManager userManager;
@@ -134,8 +140,13 @@ public class ClientController {
         try {
             Principal callerPrincipal = securityContext.getUserPrincipal();
             String callerTelNumber = callerPrincipal.getName();
+
             User user = userManager.getUser(callerTelNumber);
-            return Response.ok().entity(user).build();
+            String dataToSign = user.getId().toString() + user.getTelNumber() + user.getVersion().toString();
+
+            String signature = entityTagSignatureProvider.sign(dataToSign);
+
+            return Response.ok().entity(user).tag(new EntityTag(signature)).build();
         } catch (ValidationException | NullPointerException e) {
             return Response.status(Response.Status.NOT_ACCEPTABLE).build();
         } catch (ClientManagerException e) {
@@ -147,14 +158,18 @@ public class ClientController {
     @Path("/self")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes({MediaType.APPLICATION_JSON})
+    @EtagValidatorFilterBinding
     @RolesAllowed({"CLIENT", "MODERATOR", "ADMINISTRATOR"})
     public Response editSelf(@Valid ClientEditDto clientEditDto) {
         try {
-            Principal callerPrincipal = securityContext.getUserPrincipal();
-            String callerTelNumber = callerPrincipal.getName();
-            User user = userManager.getUser(callerTelNumber);
-            userManager.edit(user.getId(), clientEditDto);
-            return Response.ok().entity(user).build();
+            String dataToSign = clientEditDto.id + clientEditDto.telNumber + clientEditDto.version;
+            if (!entityTagSignatureProvider.verifyIntegrity(dataToSign)) {
+                return Response.status(Response.Status.PRECONDITION_FAILED).build();
+            }
+
+            userManager.edit(UUID.fromString(clientEditDto.getId()), clientEditDto);
+            
+            return Response.status(Response.Status.NO_CONTENT).build();
         } catch (ValidationException | NullPointerException e) {
             return Response.status(Response.Status.NOT_ACCEPTABLE).build();
         } catch (ClientManagerException e) {

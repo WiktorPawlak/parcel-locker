@@ -1,6 +1,6 @@
 package pl.pas.parcellocker.controllers.dto;
 
-import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -14,11 +14,22 @@ import lombok.NoArgsConstructor;
 @Getter
 public class ClientEditDto {
 
-    @NotEmpty
+    @NotBlank
+    public String id;
+
+    @NotBlank
+    @Pattern(regexp = "^\\d{9}$")
+    public String telNumber;
+
+    @NotBlank
+    public String version;
+
+    @NotBlank
     public String firstName;
 
-    @NotEmpty
+    @NotBlank
     public String lastName;
 
+    @NotBlank
     public String password;
 }

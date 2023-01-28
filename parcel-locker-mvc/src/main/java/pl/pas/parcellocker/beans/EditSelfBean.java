@@ -1,7 +1,6 @@
 package pl.pas.parcellocker.beans;
 
 import java.io.Serializable;
-import java.util.Map;
 
 import jakarta.annotation.PostConstruct;
 import jakarta.enterprise.context.ConversationScoped;
@@ -25,24 +24,30 @@ public class EditSelfBean implements Serializable {
 
     UserDto currentUser;
     String userType;
+
     HttpClient httpClient = new HttpClient();
+    String eTag;
 
     @PostConstruct
     public void getUser() {
         Response response = httpClient.get("/clients/self");
         currentUser = response.readEntity(new GenericType<>() {
         });
+        eTag = response.getEntityTag().getValue();
     }
 
     public String edit() {
         User userBasedOnType = Utils.prepareUserBasedOnType(currentUser, "Client");
         final UserDto clientDto = UserDto.builder()
+                .id(userBasedOnType.getId())
+                .telNumber(userBasedOnType.getTelNumber())
+                .version(userBasedOnType.getVersion())
                 .password(userBasedOnType.getPassword())
                 .firstName(userBasedOnType.getFirstName())
                 .lastName(userBasedOnType.getLastName())
                 .build();
 
-        httpClient.put("/clients/self", Entity.json(clientDto), Map.of("id", String.valueOf(currentUser.getId())));
+        httpClient.signedPut("/clients/self", Entity.json(clientDto), eTag);
 
         return "index";
     }

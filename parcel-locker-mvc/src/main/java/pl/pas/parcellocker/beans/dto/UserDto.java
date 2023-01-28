@@ -15,9 +15,10 @@ import lombok.Setter;
 @Setter
 public class UserDto {
     private UUID id;
+    private Long version;
+    private String telNumber;
     private String firstName;
     private String lastName;
-    private String telNumber;
     private String password;
     private boolean admin;
     private boolean moderator;

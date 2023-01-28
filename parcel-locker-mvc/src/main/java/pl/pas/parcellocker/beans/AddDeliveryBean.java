@@ -64,7 +64,7 @@ public class AddDeliveryBean {
     private String prepareShipperTel() {
         String shipperTel;
         if (identityHandler.isUserInRole("CLIENT")) {
-            shipperTel = identityHandler.getUserLogin();
+            shipperTel = identityHandler.getUserTelNumber();
         } else {
             shipperTel = currentDelivery.shipperTel;
         }

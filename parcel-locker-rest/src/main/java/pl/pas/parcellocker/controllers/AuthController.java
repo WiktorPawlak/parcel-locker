@@ -44,7 +44,7 @@ public class AuthController {
             NewCookie jwtCookie = new NewCookie(JWT_COOKIE_NAME, "Bearer " + jwt, "/", null,
                 null, COOKIE_AGE, true, true);
 
-            return Response.accepted().cookie(jwtCookie).header("Authentication", "Bearer " + jwt).build();
+            return Response.accepted().cookie(jwtCookie).header("Authorization", "Bearer " + jwt).build();
         } else {
             return Response.status(Response.Status.UNAUTHORIZED).build();
         }

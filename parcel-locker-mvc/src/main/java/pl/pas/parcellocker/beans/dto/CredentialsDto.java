@@ -8,7 +8,8 @@ import lombok.Data;
 @Data
 public class CredentialsDto {
 
-    @NotBlank @Pattern(regexp = "^\\d{9}$")
+    @NotBlank
+    @Pattern(regexp = "^\\d{9}$")
     String telNumber;
 
     @NotBlank

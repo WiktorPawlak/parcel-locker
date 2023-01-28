@@ -9,7 +9,6 @@ import java.util.regex.Pattern;
 
 import jakarta.annotation.security.DeclareRoles;
 import jakarta.enterprise.context.RequestScoped;
-import jakarta.inject.Inject;
 import jakarta.security.enterprise.AuthenticationException;
 import jakarta.security.enterprise.AuthenticationStatus;
 import jakarta.security.enterprise.authentication.mechanism.http.HttpAuthenticationMechanism;
@@ -17,7 +16,6 @@ import jakarta.security.enterprise.authentication.mechanism.http.HttpMessageCont
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import pl.pas.parcellocker.beans.IdentityHandler;
 
 @RequestScoped
 @DeclareRoles({"ADMINISTRATOR", "MODERATOR", "CLIENT", "UNAUTHORIZED"})
@@ -25,9 +23,6 @@ public class AuthenticationMvcFilter implements HttpAuthenticationMechanism {
 
     private static final Pattern TOKEN_PATTERN = Pattern.compile("^Bearer *([^ ]+) *$", Pattern.CASE_INSENSITIVE);
     public static final int JWT_TOKEN_PART = 1;
-
-    @Inject
-    private IdentityHandler identityHandler;
 
     @Override
     public AuthenticationStatus validateRequest(
@@ -53,8 +48,6 @@ public class AuthenticationMvcFilter implements HttpAuthenticationMechanism {
 
         if (optionalJwtData.isPresent()) {
             JwtData jwtData = optionalJwtData.get();
-            identityHandler.setRoles(jwtData.getRoles());
-            identityHandler.setUserLogin(jwtData.getTelNumber());
             return httpMessageContext.notifyContainerAboutLogin(jwtData.getTelNumber(), jwtData.getRoles());
         } else {
             return httpMessageContext.doNothing();

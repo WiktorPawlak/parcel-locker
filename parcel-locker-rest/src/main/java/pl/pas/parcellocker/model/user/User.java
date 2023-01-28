@@ -9,11 +9,11 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.Inheritance;
 import jakarta.persistence.InheritanceType;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import pl.pas.parcellocker.exceptions.ClientException;
 import pl.pas.parcellocker.model.EntityModel;
 
 @Data
@@ -23,24 +23,29 @@ import pl.pas.parcellocker.model.EntityModel;
 @Table(name = "Users")
 @AllArgsConstructor
 @NoArgsConstructor
-@EqualsAndHashCode
 public abstract class User extends EntityModel {
 
+    @NotBlank
     private String firstName;
+
+    @NotBlank
     private String lastName;
+
     @Column(unique = true)
+    @NotBlank
+    @Pattern(regexp = "^\\d{9}$")
     private String telNumber;
+
     @JsonbTransient
     private String password;
+
     private boolean active;
+
     @Enumerated(EnumType.STRING)
     private UserRole role;
 
-    protected User(String firstName, String lastName, String telNumber, String password) {
-        validateName(firstName);
-        validateName(lastName);
-        validateTelNumber(telNumber);
 
+    protected User(String firstName, String lastName, String telNumber, String password) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.telNumber = telNumber;
@@ -49,54 +54,13 @@ public abstract class User extends EntityModel {
         active = true;
     }
 
-    public User(User user) {
+    protected User(User user) {
         this.id = user.getId();
         this.telNumber = user.getTelNumber();
         this.firstName = user.getFirstName();
         this.lastName = user.getLastName();
         this.active = user.isActive();
-    }
-
-    public boolean isAdmin() {
-        return this instanceof Administrator;
-    }
-
-    public boolean isModerator() {
-        return this instanceof Moderator;
-    }
-
-    private void validateName(String name) {
-        if (name.isEmpty())
-            throw new ClientException("Empty lastName variable!");
-    }
-
-    private void validateTelNumber(String telNumber) {
-        if (telNumber.isEmpty())
-            throw new ClientException("Empty lastName variable!");
-    }
-
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public String getTelNumber() {
-        return telNumber;
-    }
-
-    public boolean isActive() {
-        return active;
-    }
-
-    public void setActive(boolean active) {
-        this.active = active;
-    }
-
-    @Override
-    public String toString() {
-        return firstName + " " + lastName + " phone: " + telNumber + (active ? " Actual" : " Archived");
+        this.password = user.getPassword();
+        this.role = user.getRole();
     }
 }

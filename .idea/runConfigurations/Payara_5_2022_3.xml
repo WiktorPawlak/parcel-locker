@@ -1,6 +1,6 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="Payara 5.2022.3" type="PayaraServerConfiguration" factoryName="Local" APPLICATION_SERVER_NAME="Payara 5.2022.3" ALTERNATIVE_JRE_ENABLED="true" ALTERNATIVE_JRE_PATH="11" nameIsGenerated="true">
-    <option name="OPEN_IN_BROWSER_URL" value="https://localhost:8181/parcel-locker-mvc-1.0-SNAPSHOT/faces/logIn.xhtml" />
+  <configuration default="false" name="Payara 5.2022.3" type="PayaraServerConfiguration" factoryName="Local" APPLICATION_SERVER_NAME="Payara 5.2022.3" ALTERNATIVE_JRE_ENABLED="true" ALTERNATIVE_JRE_PATH="11">
+    <option name="OPEN_IN_BROWSER_URL" value="https://localhost:8181/mvc/faces/logIn.xhtml" />
     <option name="UPDATING_POLICY" value="redeploy-artifacts" />
     <deployment>
       <artifact name="parcel-locker-mvc:war exploded">

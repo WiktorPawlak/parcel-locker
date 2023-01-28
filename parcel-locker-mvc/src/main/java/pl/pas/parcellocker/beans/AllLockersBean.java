@@ -7,8 +7,6 @@ import jakarta.annotation.PostConstruct;
 import jakarta.faces.view.ViewScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
-import jakarta.ws.rs.client.Client;
-import jakarta.ws.rs.client.ClientBuilder;
 import jakarta.ws.rs.core.GenericType;
 import jakarta.ws.rs.core.Response;
 import lombok.Getter;
@@ -27,7 +25,6 @@ public class AllLockersBean extends Conversational implements Serializable {
     @Inject
     AllLockerDeliveriesBean allLockerDeliveriesBean;
     List<Locker> currentLockers;
-    Client client = ClientBuilder.newClient();
     HttpClient httpClient = new HttpClient();
 
     @PostConstruct

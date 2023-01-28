@@ -1,43 +1,56 @@
 package pl.pas.parcellocker.beans;
 
-import jakarta.enterprise.context.SessionScoped;
-import jakarta.inject.Named;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-
 import java.io.Serializable;
-import java.util.List;
-import java.util.Set;
+
+import jakarta.enterprise.context.SessionScoped;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
+import jakarta.servlet.http.HttpServletRequest;
+import lombok.NoArgsConstructor;
 
 @Named
 @SessionScoped
-@Getter
-@Setter
 @NoArgsConstructor
 public class IdentityHandler implements Serializable {
 
-    private final List<String> LOGGED_ROLES = List.of("ADMINISTRATOR", "MODERATOR", "CLIENT");
-
-    private Set<String> roles = Set.of();
-
-    private String userLogin;
+    @Inject
+    private HttpServletRequest request;
 
     public String userIdentification() {
         String msg;
-        if (userLogin == null) {
+        if (request.getUserPrincipal() == null) {
             msg = "Brak zalogowanego uzytkownika";
         } else {
-            msg = "Zalogowany uzytkownik: " + this.userLogin;
+            msg = "Zalogowany uzytkownik: " + request.getUserPrincipal().getName();
         }
         return msg;
     }
 
+    public String getUserTelNumber() {
+        return request.getUserPrincipal().getName();
+    }
+
     public boolean isUserInRole(String role) {
-        return this.roles.stream().anyMatch(it -> it.equals(role) );
+        return request.isUserInRole(role);
+    }
+
+    public boolean isAdministrator() {
+        return request.isUserInRole("ADMINISTRATOR");
     }
 
     public boolean isUserLogged() {
-        return  LOGGED_ROLES.stream().anyMatch(it -> roles.contains(it));
+        return request.getUserPrincipal() != null;
+    }
+
+    public String getUserRole() {
+        if (request.isUserInRole("ADMINISTRATOR")) {
+            return "ADMINISTRATOR";
+        } else if (request.isUserInRole("MODERATOR")) {
+            return "MODERATOR";
+        } else if (request.isUserInRole("CLIENT")) {
+            return "CLIENT";
+        } else {
+            return "UNAUTHORIZED";
+        }
     }
 }

@@ -15,8 +15,9 @@ import jakarta.ws.rs.client.WebTarget;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 
-public class HttpClient {
+public class HttpClient implements AutoCloseable {
 
+    public static final String IF_MATCH_HEADER_NAME = "If-Match";
     private final String SERVICE_CONTEXT = "http://localhost:8080/parcel-locker-rest-1.0-SNAPSHOT/api";
     private final String COOKIE_NAME = "jwt";
     Client client = ClientBuilder.newClient();
@@ -70,6 +71,19 @@ public class HttpClient {
         return invocationBuilder.put(entity);
     }
 
+    public Response signedPut(String path, Entity entity, String eTag) {
+        Invocation.Builder invocationBuilder = getInvocationBuilder(path, Collections.emptyMap());
+
+        Cookie cookie = getCookie();
+        if (cookie != null) {
+            invocationBuilder.cookie(jakartaToJaxRs(cookie));
+        }
+
+        invocationBuilder.header(IF_MATCH_HEADER_NAME, eTag);
+
+        return invocationBuilder.put(entity);
+    }
+
     public Response delete(String path) {
         Invocation.Builder invocationBuilder = getInvocationBuilder(path, Collections.emptyMap());
 
@@ -93,5 +107,10 @@ public class HttpClient {
         }
 
         return webTarget.request(MediaType.APPLICATION_JSON_TYPE);
+    }
+
+    @Override
+    public void close() {
+        this.client.close();
     }
 }

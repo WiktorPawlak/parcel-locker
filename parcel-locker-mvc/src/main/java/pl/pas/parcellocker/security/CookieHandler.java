@@ -1,10 +1,10 @@
 package pl.pas.parcellocker.security;
 
-import jakarta.ws.rs.core.Cookie;
-
-import javax.faces.context.FacesContext;
 import java.util.HashMap;
 import java.util.Map;
+
+import jakarta.faces.context.FacesContext;
+import jakarta.ws.rs.core.Cookie;
 
 public class CookieHandler {
     public static void save(Cookie cookie) {

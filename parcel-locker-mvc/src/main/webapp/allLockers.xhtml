@@ -3,14 +3,13 @@
 <ui:composition xmlns:ui="http://java.sun.com/jsf/facelets"
                 xmlns="http://www.w3.org/1999/xhtml"
                 xmlns:f="http://java.sun.com/jsf/core"
-                xmlns:a="http://xmlns.jcp.org/jsf/passthrough"
                 template="templates/MainTemplate.xhtml"
                 xmlns:h="http://java.sun.com/jsf/html">
 
-    <ui:define name="top">Lista wszystkich użytkowników</ui:define>
+    <ui:define name="top">Lista wszystkich paczkomatów</ui:define>
 
     <ui:define name="left">
-        <ui:include src="./templates/menu.xhtml" />
+        <ui:include src="./templates/menu.xhtml"/>
     </ui:define>
 
     <ui:define name="content">
@@ -30,7 +29,8 @@
                 </h:column>
                 <h:column>
                     <f:facet name="header">Akcje</f:facet>
-                    <h:commandButton id="listDeliveriesLockerBtn" action="#{allLockersBean.searchLockerDeliveries(locker)}" class="negative_btn" value="Pokaż dostawy"/>
+                    <h:commandButton id="listDeliveriesLockerBtn" action="#{allLockersBean.searchLockerDeliveries(locker)}" class="negative_btn"
+                                     value="Pokaż dostawy"/>
                 </h:column>
             </h:dataTable>
         </h:form>
