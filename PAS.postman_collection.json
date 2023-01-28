@@ -1,0 +1,110 @@
+{
+	"info": {
+		"_postman_id": "0a0f757a-934c-40db-bf55-15b960bebeae",
+		"name": "PAS",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "LOGIN",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"telNumber\": 123456789,\r\n    \"password\": \"P@ssw0rd\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/parcel-locker-rest-1.0-SNAPSHOT/api/auth/login",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"parcel-locker-rest-1.0-SNAPSHOT",
+						"api",
+						"auth",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET-SELF",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJyb2xlcyI6WyJDTElFTlQiXSwiaXNzIjoicGFyY2VsTG9ja2VyIiwiZXhwIjoxNjc0OTQzNTMwLCJpYXQiOjE2NzQ5Mzk5MzAsImp0aSI6IjEyMzQ1Njc4OSJ9.Nrgpzrg86EQz_uOa0QjMFq2kwNt_DjPLbylI1Zx2y4g",
+						"type": "default"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:8080/parcel-locker-rest-1.0-SNAPSHOT/api/clients/self",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"parcel-locker-rest-1.0-SNAPSHOT",
+						"api",
+						"clients",
+						"self"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "PUT-SELF",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "If-Match",
+						"value": "eyJhbGciOiJIUzI1NiJ9.NzYzNWJmYjMtYzhhMS00ZDhlLTg2ZWMtZDM0MmQ1NzNmNGVjMTIzNDU2Nzg5MQ.wdBtLmhJrK6c4roBIt-4cekttk4Oi6aftcvDUI_L1QQ",
+						"type": "default"
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJyb2xlcyI6WyJDTElFTlQiXSwiaXNzIjoicGFyY2VsTG9ja2VyIiwiZXhwIjoxNjc0OTQyMTk5LCJpYXQiOjE2NzQ5Mzg1OTksImp0aSI6IjEyMzQ1Njc4OSJ9.CxuMGlK-qPBLpeVIijzw0-L-5JTeuBUAU6IWloMADRc",
+						"type": "default"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"id\": \"7635bfb3-c8a1-4d8e-86ec-d342d573f4ec\",\r\n    \"version\": 1,\r\n    \"firstName\": \"Tak\",\r\n    \"lastName\": \"Jackson\",\r\n    \"password\": \"P@ssw0rd\",\r\n    \"telNumber\": \"123456789\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/parcel-locker-rest-1.0-SNAPSHOT/api/clients/self",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"parcel-locker-rest-1.0-SNAPSHOT",
+						"api",
+						"clients",
+						"self"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
